@@ -1,6 +1,5 @@
 {{.head}}
 
-
 package {{.filePackage}}
 
 import (
@@ -9,6 +8,7 @@ import (
 	{{.package}}
 
 	"github.com/tal-tech/go-zero/zrpc"
+	"google.golang.org/grpc"
 )
 
 type (
