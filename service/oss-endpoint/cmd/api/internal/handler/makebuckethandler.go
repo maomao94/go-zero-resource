@@ -3,11 +3,10 @@ package handler
 import (
 	"net/http"
 
+	"github.com/tal-tech/go-zero/rest/httpx"
 	"go-zero-resource/service/oss-endpoint/cmd/api/internal/logic"
 	"go-zero-resource/service/oss-endpoint/cmd/api/internal/svc"
 	"go-zero-resource/service/oss-endpoint/cmd/api/internal/types"
-
-	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
 func makeBucketHandler(ctx *svc.ServiceContext) http.HandlerFunc {
