@@ -1,16 +1,22 @@
 package api
 
+import (
+	"net/http"
+
+	"github.com/tal-tech/go-zero/rest/httpx"
+)
+
 const (
 	SUCCESS = 200
 )
 
-type Response struct {
+type Body struct {
 	Code int         `json:"code"`
 	Msg  string      `json:"msg"`
-	Data interface{} `json:"data"`
+	Data interface{} `json:"data",omitempty`
 }
 
-func (r *Response) IsSuccess() bool {
+func (r *Body) IsSuccess() bool {
 	if r.Code == SUCCESS {
 		return true
 	} else {
@@ -18,27 +24,27 @@ func (r *Response) IsSuccess() bool {
 	}
 }
 
-func Result(code int, msg string, data interface{}) *Response {
-	return &Response{
+func Result(code int, msg string, data interface{}) *Body {
+	return &Body{
 		Code: code,
 		Msg:  msg,
 		Data: data,
 	}
 }
 
-func Ok() *Response {
+func Ok() *Body {
 	return Result(SUCCESS, "操作成功", map[string]interface{}{})
 }
 
-func OkWithMessage(message string) *Response {
+func OkWithMessage(message string) *Body {
 	return Result(SUCCESS, message, map[string]interface{}{})
 }
 
-func OkWithData(data interface{}) *Response {
+func OkWithData(data interface{}) *Body {
 	return Result(SUCCESS, "操作成功", data)
 }
 
-func OkWithDetailed(data interface{}, message string) *Response {
+func OkWithDetailed(data interface{}, message string) *Body {
 	return Result(SUCCESS, message, data)
 }
 
@@ -47,4 +53,16 @@ type PageResult struct {
 	Total    int64       `json:"total"`
 	Page     int         `json:"page"`
 	PageSize int         `json:"pageSize"`
+}
+
+func Response(w http.ResponseWriter, resp interface{}, err error) {
+	var body Body
+	if err != nil {
+		body.Code = -1
+		body.Msg = err.Error()
+	} else {
+		body.Msg = "OK"
+		body.Data = resp
+	}
+	httpx.OkJson(w, body)
 }

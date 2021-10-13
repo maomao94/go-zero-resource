@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"go-zero-resource/common/common/api"
 	"net/http"
 
 	"go-zero-resource/service/oss-endpoint/cmd/api/internal/logic"
@@ -20,10 +21,6 @@ func makeBucketHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 
 		l := logic.NewMakeBucketLogic(r.Context(), ctx)
 		resp, err := l.MakeBucket(req)
-		if err != nil {
-			httpx.Error(w, err)
-		} else {
-			httpx.OkJson(w, resp)
-		}
+		api.Response(w, resp, err)
 	}
 }

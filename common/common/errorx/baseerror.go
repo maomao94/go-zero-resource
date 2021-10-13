@@ -5,7 +5,7 @@ const defaultCode = 500
 type CodeError struct {
 	Code int         `json:"code"`
 	Msg  string      `json:"msg"`
-	Data interface{} `json:"data"`
+	Data interface{} `json:"data",omitempty`
 }
 
 type CodeErrorResponse struct {
