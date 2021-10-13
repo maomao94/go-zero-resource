@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"go-zero-resource/common/common/errorx"
 	"go-zero-resource/service/oss-endpoint/cmd/api/internal/svc"
 	"go-zero-resource/service/oss-endpoint/cmd/api/internal/types"
 
@@ -24,8 +25,8 @@ func NewMakeBucketLogic(ctx context.Context, svcCtx *svc.ServiceContext) MakeBuc
 
 func (l *MakeBucketLogic) MakeBucket(req types.MakeBucketReq) (*types.EmptyReply, error) {
 	// todo: add your logic here and delete this line
-	//if true {
-	//	return nil, errorx.NewDefaultError("error")
-	//}
+	if true {
+		return nil, errorx.NewDefaultError("error")
+	}
 	return &types.EmptyReply{}, nil
 }

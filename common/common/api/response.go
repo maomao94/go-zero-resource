@@ -1,11 +1,5 @@
 package api
 
-import (
-	"net/http"
-
-	"github.com/tal-tech/go-zero/rest/httpx"
-)
-
 const (
 	SUCCESS = 200
 )
@@ -53,16 +47,4 @@ type PageResult struct {
 	Total    int64       `json:"total"`
 	Page     int         `json:"page"`
 	PageSize int         `json:"pageSize"`
-}
-
-func Response(w http.ResponseWriter, resp interface{}, err error) {
-	var body Body
-	if err != nil {
-		body.Code = -1
-		body.Msg = err.Error()
-	} else {
-		body.Msg = "OK"
-		body.Data = resp
-	}
-	httpx.OkJson(w, body)
 }
