@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"errors"
+	"go-zero-resource/common/errorx"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -22,7 +22,7 @@ var CustomizeMap = make(map[string]Rules)
 
 func RegisterRule(key string, rule Rules) (err error) {
 	if CustomizeMap[key] != nil {
-		return errors.New(key + "已注册,无法重复注册")
+		return errorx.NewDefaultError(key + "已注册,无法重复注册")
 	} else {
 		CustomizeMap[key] = rule
 		return nil
@@ -129,7 +129,7 @@ func Verify(st interface{}, roleMap Rules) (err error) {
 
 	kd := val.Kind() // 获取到st对应的类别
 	if kd != reflect.Struct {
-		return errors.New("expect struct")
+		return errorx.NewDefaultError("expect struct")
 	}
 	num := val.NumField()
 	// 遍历结构体的所有字段
@@ -141,15 +141,15 @@ func Verify(st interface{}, roleMap Rules) (err error) {
 				switch {
 				case v == "notEmpty":
 					if isBlank(val) {
-						return errors.New(tagVal.Name + "值不能为空")
+						return errorx.NewDefaultError(tagVal.Name + "值不能为空")
 					}
 				case strings.Split(v, "=")[0] == "regexp":
 					if !regexpMatch(strings.Split(v, "=")[1], val.String()) {
-						return errors.New(tagVal.Name + "格式校验不通过")
+						return errorx.NewDefaultError(tagVal.Name + "格式校验不通过")
 					}
 				case compareMap[strings.Split(v, "=")[0]]:
 					if !compareVerify(val, v) {
-						return errors.New(tagVal.Name + "长度或值不在合法范围," + v)
+						return errorx.NewDefaultError(tagVal.Name + "长度或值不在合法范围," + v)
 					}
 				}
 			}
