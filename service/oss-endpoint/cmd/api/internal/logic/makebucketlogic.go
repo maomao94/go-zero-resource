@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"go-zero-resource/common/common/errorx"
+	"go-zero-resource/common/errorx"
 
 	"go-zero-resource/service/oss-endpoint/cmd/api/internal/svc"
 	"go-zero-resource/service/oss-endpoint/cmd/api/internal/types"

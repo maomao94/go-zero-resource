@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"go-zero-resource/common/common/errorx"
+	"go-zero-resource/common/errorx"
 	"net/http"
 
 	"github.com/tal-tech/go-zero/rest/httpx"
