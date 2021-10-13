@@ -1,6 +1,5 @@
-package util
+package utils
 
 var (
 	PageInfoVerify = Rules{"Page": {NotEmpty()}, "PageSize": {NotEmpty()}}
-	IdVerify       = Rules{"ID": {NotEmpty()}}
 )
