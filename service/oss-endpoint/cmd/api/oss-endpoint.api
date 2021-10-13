@@ -1,0 +1,16 @@
+syntax = "v1"
+
+import (
+	"base.api"
+)
+
+type (
+	MakeBucketReq {
+		BucketName string `json:"bucketName"`
+	}
+)
+
+service oss-endpoint-api {
+	@handler makeBucket
+	post /make-bucket (MakeBucketReq) returns (EmptyReply)
+}
