@@ -4,13 +4,13 @@ const (
 	SUCCESS = 200
 )
 
-type Body struct {
+type Response struct {
 	Code int         `json:"code"`
 	Msg  string      `json:"msg"`
 	Data interface{} `json:"data",omitempty`
 }
 
-func (r *Body) IsSuccess() bool {
+func (r *Response) IsSuccess() bool {
 	if r.Code == SUCCESS {
 		return true
 	} else {
@@ -18,27 +18,27 @@ func (r *Body) IsSuccess() bool {
 	}
 }
 
-func Result(code int, msg string, data interface{}) *Body {
-	return &Body{
+func Result(code int, msg string, data interface{}) *Response {
+	return &Response{
 		Code: code,
 		Msg:  msg,
 		Data: data,
 	}
 }
 
-func Ok() *Body {
+func Ok() *Response {
 	return Result(SUCCESS, "操作成功", map[string]interface{}{})
 }
 
-func OkWithMessage(message string) *Body {
+func OkWithMessage(message string) *Response {
 	return Result(SUCCESS, message, map[string]interface{}{})
 }
 
-func OkWithData(data interface{}) *Body {
+func OkWithData(data interface{}) *Response {
 	return Result(SUCCESS, "操作成功", data)
 }
 
-func OkWithDetailed(data interface{}, message string) *Body {
+func OkWithDetailed(data interface{}, message string) *Response {
 	return Result(SUCCESS, message, data)
 }
 
