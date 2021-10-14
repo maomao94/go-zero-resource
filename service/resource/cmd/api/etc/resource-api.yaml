@@ -1,3 +1,14 @@
 Name: resource-api
 Host: 0.0.0.0
 Port: 8888
+Mysql:
+  DataSource: root:123456@tcp(127.0.0.1:3306)/resource?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  MaxIdleConns: 10
+  MaxOpenConns: 100
+  # 支持的日志级别 silent,error,warn,info
+  LogMode: info
+  Logx: false
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass:
+    Type: node

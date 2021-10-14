@@ -4,12 +4,16 @@ go 1.17
 
 require (
 	github.com/tal-tech/go-zero v1.2.2
+	gorm.io/driver/mysql v1.1.2
 	gorm.io/gorm v1.21.16
 )
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
+	github.com/go-redis/redis v6.15.7+incompatible // indirect
+	github.com/go-sql-driver/mysql v1.6.0 // indirect
+	github.com/go-xorm/builder v0.3.4 // indirect
 	github.com/golang-jwt/jwt v3.2.1+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.1.2 // indirect
@@ -28,7 +32,7 @@ require (
 	go.opentelemetry.io/otel/exporters/zipkin v1.0.1 // indirect
 	go.opentelemetry.io/otel/sdk v1.0.1 // indirect
 	go.opentelemetry.io/otel/trace v1.0.1 // indirect
-	go.uber.org/automaxprocs v1.4.0 // indirect
+	go.uber.org/automaxprocs v1.3.0 // indirect
 	golang.org/x/sys v0.0.0-20211002104244-808efd93c36d // indirect
 	google.golang.org/grpc v1.41.0 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
