@@ -2,7 +2,10 @@ module go-zero-resource
 
 go 1.17
 
-require github.com/tal-tech/go-zero v1.2.2
+require (
+	github.com/tal-tech/go-zero v1.2.2
+	gorm.io/gorm v1.21.16
+)
 
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
@@ -10,6 +13,8 @@ require (
 	github.com/golang-jwt/jwt v3.2.1+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/uuid v1.1.2 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.2 // indirect
 	github.com/justinas/alice v1.2.0 // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/openzipkin/zipkin-go v0.2.5 // indirect
