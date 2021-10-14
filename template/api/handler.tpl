@@ -20,7 +20,7 @@ func {{.HandlerName}}(ctx *svc.ServiceContext) http.HandlerFunc {
 		if err != nil {
 			httpx.Error(w, err)
 		} else {
-			{{if .HasResp}}httpx.OkJson(w, api.OkWithData(resp){{else}}httpx.Ok(w){{end}}
+			{{if .HasResp}}httpx.OkJson(w, api.OkWithData(resp)){{else}}httpx.OkJson(w,api.Ok()){{end}}
 		}
 	}
 }
