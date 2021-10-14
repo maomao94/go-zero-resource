@@ -9,16 +9,20 @@ import (
 	"github.com/tal-tech/go-zero/tools/goctl/model/sql/test/model"
 )
 
+var (
+	DB *gorm.DB
+)
+
 type ServiceContext struct {
 	Config    config.Config
-	Db        gorm.DB
 	UserModel model.UserModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	//conn := sqlx.NewMysql(c.Mysql.DataSource)
-	Db := gormx.Gormx(c)
-	gormx.MysqlTables(Db)
+	db := gormx.Gormx(c)
+	gormx.MysqlTables(db)
+	DB = db
 	return &ServiceContext{
 		Config: c,
 	}
