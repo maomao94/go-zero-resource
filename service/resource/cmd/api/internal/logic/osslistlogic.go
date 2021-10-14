@@ -6,7 +6,7 @@ import (
 	"go-zero-resource/common/api"
 	"go-zero-resource/common/errorx"
 	"go-zero-resource/service/resource/cmd/api/service"
-	"go-zero-resource/service/resource/model/gorm"
+	"go-zero-resource/service/resource/model/gormx"
 
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
@@ -30,7 +30,7 @@ func NewOssListLogic(ctx context.Context, svcCtx *svc.ServiceContext) OssListLog
 
 func (l *OssListLogic) OssList(req types.OssListReq) (*types.PageResult, error) {
 	// todo: add your logic here and delete this line
-	pageInfo := gorm.ResourceOssSearch{
+	pageInfo := gormx.ResourceOssSearch{
 		PageInfo: api.PageInfo{
 			PageSize: req.PageSize,
 			Page:     req.Page,

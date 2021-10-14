@@ -2,6 +2,7 @@ package gormx
 
 import (
 	"go-zero-resource/service/resource/cmd/api/internal/config"
+	"go-zero-resource/service/resource/model/gormx"
 	"os"
 
 	"github.com/tal-tech/go-zero/core/logx"
@@ -20,7 +21,9 @@ func Gormx(config config.Config) *gorm.DB {
 }
 
 func MysqlTables(db *gorm.DB) {
-	err := db.AutoMigrate()
+	err := db.AutoMigrate(
+		gormx.ResourceOss{},
+	)
 	if err != nil {
 		logx.Errorf("register table failed %s", err)
 		os.Exit(0)
