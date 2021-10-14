@@ -18,8 +18,8 @@ type EmptyReply struct {
 }
 
 type PageInfo struct {
-	Page     int `json:"page,range=[1,100],default=1"`     // 页码
-	PageSize int `json:"pageSize,range=[1,100],default=1"` // 每页大小
+	Page     int `json:"page,range=[1:100],default=1"`     // 页码
+	PageSize int `json:"pageSize,range=[1:100],default=1"` // 每页大小
 }
 
 type PageResult struct {
