@@ -1,6 +1,7 @@
 package {{.PkgName}}
 
 import (
+    "go-zero-resource/common/api"
 	"net/http"
 
 	{{if .After1_1_10}}"github.com/tal-tech/go-zero/rest/httpx"{{end}}

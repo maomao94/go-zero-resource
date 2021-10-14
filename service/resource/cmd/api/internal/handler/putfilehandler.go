@@ -1,11 +1,13 @@
 package handler
 
 import (
+	"go-zero-resource/common/api"
 	"net/http"
 
-	"github.com/tal-tech/go-zero/rest/httpx"
 	"go-zero-resource/service/resource/cmd/api/internal/logic"
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
+
+	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
 func putFileHandler(ctx *svc.ServiceContext) http.HandlerFunc {
