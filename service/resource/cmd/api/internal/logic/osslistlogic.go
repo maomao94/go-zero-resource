@@ -2,7 +2,9 @@ package logic
 
 import (
 	"context"
+	"fmt"
 	"go-zero-resource/common/api"
+	"go-zero-resource/common/errorx"
 	"go-zero-resource/service/resource/cmd/api/service"
 	"go-zero-resource/service/resource/mode"
 
@@ -28,12 +30,20 @@ func NewOssListLogic(ctx context.Context, svcCtx *svc.ServiceContext) OssListLog
 
 func (l *OssListLogic) OssList(req types.OssListReq) (*types.PageResult, error) {
 	// todo: add your logic here and delete this line
-	search := mode.ResourceOssSearch{
+	pageInfo := mode.ResourceOssSearch{
 		PageInfo: api.PageInfo{
 			PageSize: req.PageSize,
 			Page:     req.Page,
 		},
 	}
-	service.ResourceOssApp.GetResourceOssInfoList(search)
-	return &types.PageResult{}, nil
+	if err, list, total := service.ResourceOssApp.GetResourceOssInfoList(pageInfo); err != nil {
+		return nil, errorx.NewDefaultError(fmt.Sprintf("获取失败: %v", err))
+	} else {
+		return &types.PageResult{
+			List:     list,
+			Total:    total,
+			Page:     pageInfo.Page,
+			PageSize: pageInfo.PageSize,
+		}, nil
+	}
 }
