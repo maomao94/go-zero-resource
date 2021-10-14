@@ -26,4 +26,8 @@ service resource-api {
 	@doc "创建存储桶"
 	@handler makeBucket
 	post /oss/endpoint/make-bucket (MakeBucketReq) returns (EmptyReply)
+
+	@doc "上传文件"
+	@handler putFile
+	post /oss/endpoint/put-file () returns ()
 }
