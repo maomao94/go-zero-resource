@@ -16,6 +16,5 @@ create table resource_oss
     app_id      varchar(255)                 null comment '应用ID',
     region      varchar(255)                 null comment '地域简称',
     remark      varchar(255)                 null comment '备注',
-    status      bigint                       null comment '状态',
-    is_deleted  bigint                       null comment '是否已删除'
+    status      bigint                       null comment '状态'
 );

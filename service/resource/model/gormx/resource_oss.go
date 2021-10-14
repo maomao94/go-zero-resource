@@ -11,7 +11,7 @@ import (
 type ResourceOss struct {
 	orm.GVA_MODEL
 	TenantId   string `json:"tenantId" form:"tenantId" gorm:"column:tenant_id;comment:租户ID;type:varchar(12);default:000000"`
-	Category   *int   `json:"category" form:"category" gorm:"column:category;comment:分类;type:int"`
+	Category   int    `json:"category" form:"category" gorm:"column:category;comment:分类;type:int"`
 	OssCode    string `json:"ossCode" form:"ossCode" gorm:"column:oss_code;comment:资源编号;type:varchar(32);"`
 	Endpoint   string `json:"endpoint" form:"endpoint" gorm:"column:endpoint;comment:资源地址;type:varchar(255);"`
 	AccessKey  string `json:"accessKey" form:"accessKey" gorm:"column:access_key;comment:accessKey;type:varchar(255);"`
@@ -20,8 +20,7 @@ type ResourceOss struct {
 	AppId      string `json:"appId" form:"appId" gorm:"column:app_id;comment:应用ID;type:varchar(255);"`
 	Region     string `json:"region" form:"region" gorm:"column:region;comment:地域简称;type:varchar(255);"`
 	Remark     string `json:"remark" form:"remark" gorm:"column:remark;comment:备注;type:varchar(255);"`
-	Status     *int   `json:"status" form:"status" gorm:"column:status;comment:状态;type:int"`
-	IsDeleted  *int   `json:"isDeleted" form:"isDeleted" gorm:"column:is_deleted;comment:是否已删除;type:int"`
+	Status     int    `json:"status" form:"status" gorm:"column:status;comment:状态;type:int"`
 }
 
 // TableName ResourceOss 表名
