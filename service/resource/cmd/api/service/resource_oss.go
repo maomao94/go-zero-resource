@@ -9,6 +9,8 @@ import (
 type ResourceOssService struct {
 }
 
+var ResourceOssApp = new(ResourceOssService)
+
 func (resourceOssService *ResourceOssService) CreateResourceOss(resourceOss mode.ResourceOss) (err error) {
 	err = svc.DB.Create(&resourceOss).Error
 	return err

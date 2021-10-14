@@ -20,8 +20,8 @@ type (
 
 	OssListReq {
 		PageInfo
-		OssReq
 	}
+
 	MakeBucketReq {
 		BucketName string `json:"bucketName"` // 存储桶名称
 	}

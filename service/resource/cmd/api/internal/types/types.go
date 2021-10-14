@@ -16,7 +16,6 @@ type OssReq struct {
 
 type OssListReq struct {
 	PageInfo
-	OssReq
 }
 
 type MakeBucketReq struct {
