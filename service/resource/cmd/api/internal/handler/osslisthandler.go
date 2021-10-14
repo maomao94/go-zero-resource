@@ -1,12 +1,14 @@
 package handler
 
 import (
+	"go-zero-resource/common/api"
 	"net/http"
 
-	"github.com/tal-tech/go-zero/rest/httpx"
 	"go-zero-resource/service/resource/cmd/api/internal/logic"
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
+
+	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
 func ossListHandler(ctx *svc.ServiceContext) http.HandlerFunc {
@@ -22,7 +24,7 @@ func ossListHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 		if err != nil {
 			httpx.Error(w, err)
 		} else {
-			httpx.OkJson(w, resp)
+			httpx.OkJson(w, api.OkWithData(resp))
 		}
 	}
 }
