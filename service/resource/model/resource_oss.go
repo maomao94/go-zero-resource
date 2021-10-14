@@ -1,5 +1,5 @@
 // 自动生成模板ResourceOss
-package mode
+package model
 
 import (
 	"go-zero-resource/common/api"
