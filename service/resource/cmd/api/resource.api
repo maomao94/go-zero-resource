@@ -1,42 +1,42 @@
 syntax = "v1"
 
 import (
-    "base.api"
+	"base.api"
 )
 
 type (
-    OssReq {
-        TenantResult
-        Category int `json:"category"`     // 所属分类
-        OssCode int `json:"ossCode"`       // 资源编号
-        Endpoint int `json:"endpoint"`     // 资源地址
-        AccessKey int `json:"accessKey"`   // accessKey
-        SecretKey int `json:"secretKey"`   // secretKey
-        BucketName int `json:"bucketName"` // 空间名
-        AppId int `json:"appId"`           // 应用ID TencentCOS需要
-        Region int `json:"region"`         // 地域简称 TencentCOS需要
-        Remark int `json:"remark"`         // 所属分类
-    }
+	OssReq {
+		TenantResult
+		Category   int `json:"category"`   // 所属分类
+		OssCode    int `json:"ossCode"`    // 资源编号
+		Endpoint   int `json:"endpoint"`   // 资源地址
+		AccessKey  int `json:"accessKey"`  // accessKey
+		SecretKey  int `json:"secretKey"`  // secretKey
+		BucketName int `json:"bucketName"` // 空间名
+		AppId      int `json:"appId"`      // 应用ID TencentCOS需要
+		Region     int `json:"region"`     // 地域简称 TencentCOS需要
+		Remark     int `json:"remark"`     // 所属分类
+	}
 
-    OssListReq {
-        PageInfo
-        OssReq
-    }
-    MakeBucketReq {
-        BucketName string `json:"bucketName"` // 存储桶名称
-    }
+	OssListReq {
+		PageInfo
+		OssReq
+	}
+	MakeBucketReq {
+		BucketName string `json:"bucketName"` // 存储桶名称
+	}
 )
 
 service resource-api {
-    @doc "查看存储列表"
-    @handler ossList
-    post /oss/list (OssListReq) returns (PageResult)
-
-    @doc "创建存储桶"
-    @handler makeBucket
-    post /oss/endpoint/make-bucket (MakeBucketReq) returns (EmptyResult)
-
-    @doc "上传文件"
-    @handler putFile
-    post /oss/endpoint/put-file () returns ()
+	@doc "查看存储列表"
+	@handler ossList
+	post /oss/list (OssListReq) returns (PageResult)
+	
+	@doc "创建存储桶"
+	@handler makeBucket
+	post /oss/endpoint/make-bucket (MakeBucketReq) returns (EmptyResult)
+	
+	@doc "上传文件"
+	@handler putFile
+	post /oss/endpoint/put-file () returns ()
 }
