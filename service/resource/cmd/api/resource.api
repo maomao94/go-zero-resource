@@ -21,7 +21,7 @@ type (
 service resource-api {
 	@doc "查看存储列表"
 	@handler ossList
-	post /oss/list (Oss) returns (PageResult)
+	post /oss/list (OssListReq) returns (PageResult)
 	
 	@doc "创建存储桶"
 	@handler makeBucket

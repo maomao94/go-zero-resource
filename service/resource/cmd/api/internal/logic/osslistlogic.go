@@ -23,7 +23,7 @@ func NewOssListLogic(ctx context.Context, svcCtx *svc.ServiceContext) OssListLog
 	}
 }
 
-func (l *OssListLogic) OssList(req types.Oss) (*types.PageResult, error) {
+func (l *OssListLogic) OssList(req types.OssListReq) (*types.PageResult, error) {
 	// todo: add your logic here and delete this line
 
 	return &types.PageResult{}, nil
