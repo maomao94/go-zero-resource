@@ -11,7 +11,7 @@ import (
 
 func ossListHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.OssListReq
+		var req types.Oss
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.Error(w, err)
 			return
