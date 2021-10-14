@@ -8,15 +8,15 @@ import (
 
 	"github.com/tal-tech/go-zero/rest/httpx"
 
-	"go-zero-resource/service/oss-endpoint/cmd/api/internal/config"
-	"go-zero-resource/service/oss-endpoint/cmd/api/internal/handler"
-	"go-zero-resource/service/oss-endpoint/cmd/api/internal/svc"
+	"go-zero-resource/service/resource/cmd/api/internal/config"
+	"go-zero-resource/service/resource/cmd/api/internal/handler"
+	"go-zero-resource/service/resource/cmd/api/internal/svc"
 
 	"github.com/tal-tech/go-zero/core/conf"
 	"github.com/tal-tech/go-zero/rest"
 )
 
-var configFile = flag.String("f", "etc/oss-endpoint-api.yaml", "the config file")
+var configFile = flag.String("f", "etc/resource-api.yaml", "the config file")
 
 func main() {
 	flag.Parse()

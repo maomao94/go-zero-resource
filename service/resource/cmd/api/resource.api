@@ -1,0 +1,29 @@
+syntax = "v1"
+
+import (
+	"base.api"
+)
+
+type (
+	Oss {
+		Category string `json:"category"` // 所属分类
+	}
+
+	OssListReq {
+		PageInfo
+		Oss
+	}
+	MakeBucketReq {
+		BucketName string `json:"bucketName"` // 存储桶名称
+	}
+)
+
+service resource-api {
+	@doc "查看存储列表"
+	@handler ossList
+	post /oss/list (OssListReq) returns (OssListReq)
+	
+	@doc "创建存储桶"
+	@handler makeBucket
+	post /oss/endpoint/make-bucket (MakeBucketReq) returns (EmptyReply)
+}

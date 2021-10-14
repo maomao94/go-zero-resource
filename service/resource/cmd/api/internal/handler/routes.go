@@ -4,7 +4,7 @@ package handler
 import (
 	"net/http"
 
-	"go-zero-resource/service/oss-endpoint/cmd/api/internal/svc"
+	"go-zero-resource/service/resource/cmd/api/internal/svc"
 
 	"github.com/tal-tech/go-zero/rest"
 )
@@ -14,7 +14,12 @@ func RegisterHandlers(engine *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
-				Path:    "/make-bucket",
+				Path:    "/oss/list",
+				Handler: listHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/endpoint/make-bucket",
 				Handler: makeBucketHandler(serverCtx),
 			},
 		},

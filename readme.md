@@ -1,4 +1,4 @@
 // 默认模板
-goctl api go -api oss-endpoint.api -dir .
+goctl api go -api resource.api -dir .
 // 指定模板
-goctl api go -api oss-endpoint.api -dir . -home ../../../../template 
+goctl api go -api resource.api -dir . -home ../../../../template 
