@@ -7,3 +7,15 @@ type MakeBucketReq struct {
 
 type EmptyReply struct {
 }
+
+type PageInfo struct {
+	Page     int `json:"page,range=[1,100],default=1"`     // 页码
+	PageSize int `json:"pageSize,range=[1,100],default=1"` // 每页大小
+}
+
+type PageResult struct {
+	List     interface{} `json:"list"`
+	Total    int64       `json:"total"`
+	Page     int         `json:"page"`
+	PageSize int         `json:"pageSize"`
+}
