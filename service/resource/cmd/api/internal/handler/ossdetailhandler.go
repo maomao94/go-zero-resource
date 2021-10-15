@@ -6,10 +6,11 @@ import (
 	"go-zero-resource/common/errorx"
 	"net/http"
 
-	"github.com/tal-tech/go-zero/rest/httpx"
 	"go-zero-resource/service/resource/cmd/api/internal/logic"
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
+
+	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
 func ossDetailHandler(ctx *svc.ServiceContext) http.HandlerFunc {
@@ -23,7 +24,7 @@ func ossDetailHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 		l := logic.NewOssDetailLogic(r.Context(), ctx)
 		resp, err := l.OssDetail(req)
 		if err != nil {
-			httpx.Error(w, err)
+			httpx.Error(w, errorx.ParseError(err))
 		} else {
 			httpx.OkJson(w, api.OkWithData(resp))
 		}

@@ -1,5 +1,7 @@
 package errorx
 
+import "fmt"
+
 var (
 	DefaultCode = 20000 // 服务不可用
 	AuthCode    = 20001 // 授权权限不足
@@ -35,6 +37,21 @@ type CodeErrorResponse struct {
 	Code int         `json:"code"`
 	Msg  string      `json:"msg"`
 	Data interface{} `json:"data"`
+}
+
+func formatError(err error) error {
+	switch err.(type) {
+	case nil:
+		return NewDefaultError("error is nil")
+	case *CodeError:
+		return err
+	default:
+		return NewDefaultError(fmt.Sprint(err))
+	}
+}
+
+func ParseError(err error) error {
+	return formatError(err)
 }
 
 func NewDefaultError(msg string) error {
