@@ -1,9 +1,10 @@
 package gormx
 
 import (
-	"log"
 	"strings"
 	"time"
+
+	"github.com/tal-tech/go-zero/core/logx"
 
 	"github.com/spf13/cast"
 	"gorm.io/gorm"
@@ -78,7 +79,7 @@ func assertCond(cond interface{}) Cond {
 	}
 
 	// 未识别的类型
-	log.Printf("[assertCond] unrecognized type fail,%+v\n", cond)
+	logx.Error("[assertCond] unrecognized type fail,%+v\n", cond)
 	return Cond{}
 }
 
