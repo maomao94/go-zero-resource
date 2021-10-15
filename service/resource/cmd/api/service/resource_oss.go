@@ -3,9 +3,11 @@ package service
 import (
 	"fmt"
 	"go-zero-resource/common/api"
+	"go-zero-resource/common/errorx"
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/model/gormx"
 
+	"github.com/tal-tech/go-zero/core/stores/sqlc"
 	"gorm.io/gorm"
 )
 
@@ -34,17 +36,28 @@ func (resourceOssService *ResourceOssService) DeleteResourceOssByIds(ids api.Ids
 }
 
 func (resourceOssService *ResourceOssService) UpdateResourceOss(resourceOss gormx.ResourceOss) (err error) {
-	err = svc.CachedDb.Db.Save(&resourceOss).Error
+	// 修改成带缓存
+	resourceOssIdKey := fmt.Sprintf("%s%v", cacheResourceOssIdPrefix, resourceOss.ID)
+	err = svc.CachedDb.Exec(func(db *gorm.DB) error {
+		return svc.CachedDb.Db.Save(&resourceOss).Error
+	}, resourceOssIdKey)
 	return err
 }
 
 func (resourceOssService *ResourceOssService) GetResourceOss(id uint) (err error, resourceOss gormx.ResourceOss) {
 	// 修改成带缓存
 	resourceOssIdKey := fmt.Sprintf("%s%v", cacheResourceOssIdPrefix, id)
-	svc.CachedDb.QueryRow(&resourceOss, resourceOssIdKey, func(db *gorm.DB, v interface{}) error {
+	err = svc.CachedDb.QueryRow(&resourceOss, resourceOssIdKey, func(db *gorm.DB, v interface{}) error {
 		return svc.CachedDb.Db.Where("id = ?", id).First(&resourceOss).Error
 	})
-	return
+	switch err {
+	case nil:
+		return nil, resourceOss
+	case sqlc.ErrNotFound:
+		return errorx.NewDefaultError("not found"), resourceOss
+	default:
+		return err, resourceOss
+	}
 }
 
 func (resourceOssService *ResourceOssService) GetResourceOssInfoList(info gormx.ResourceOssSearch) (err error, list interface{}, total int64) {

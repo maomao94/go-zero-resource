@@ -4,6 +4,7 @@ import (
 	"go-zero-resource/service/resource/cmd/api/internal/config"
 	"go-zero-resource/service/resource/model/gormx"
 	"os"
+	"time"
 
 	"github.com/tal-tech/go-zero/core/stores/cache"
 	"github.com/tal-tech/go-zero/core/syncx"
@@ -13,6 +14,9 @@ import (
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
 )
+
+// see doc/sql-cache.md
+const cacheSafeGapBetweenIndexAndPrimary = time.Second * 5
 
 var (
 	exclusiveCalls = syncx.NewSingleFlight()
@@ -31,11 +35,66 @@ type (
 	}
 )
 
+func (cc CachedConn) DelCache(keys ...string) error {
+	return cc.cache.Del(keys...)
+}
+
+func (cc CachedConn) GetCache(key string, v interface{}) error {
+	return cc.cache.Get(key, v)
+}
+
+func (cc CachedConn) Exec(exec ExecFn, keys ...string) error {
+	err := exec(cc.Db)
+	if err != nil {
+		return err
+	}
+
+	if err := cc.DelCache(keys...); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (cc CachedConn) QueryRow(v interface{}, key string, query QueryFn) error {
 	return cc.cache.Take(v, key, func(v interface{}) error {
 		return query(cc.Db, v)
 	})
 }
+
+func (cc CachedConn) QueryRowIndex(v interface{}, key string, keyer func(primary interface{}) string,
+	indexQuery IndexQueryFn, primaryQuery PrimaryQueryFn) error {
+	var primaryKey interface{}
+	var found bool
+
+	if err := cc.cache.TakeWithExpire(&primaryKey, key, func(val interface{}, expire time.Duration) (err error) {
+		primaryKey, err = indexQuery(cc.Db, v)
+		if err != nil {
+			return
+		}
+
+		found = true
+		return cc.cache.SetWithExpire(keyer(primaryKey), v, expire+cacheSafeGapBetweenIndexAndPrimary)
+	}); err != nil {
+		return err
+	}
+
+	if found {
+		return nil
+	}
+
+	return cc.cache.Take(v, keyer(primaryKey), func(v interface{}) error {
+		return primaryQuery(cc.Db, v, primaryKey)
+	})
+}
+
+func (cc CachedConn) SetCache(key string, v interface{}) error {
+	return cc.cache.Set(key, v)
+}
+
+//func (cc CachedConn) Transact(fn func(sqlx.Session) error) error {
+//	return cc.Db.Transact(fn)
+//}
 
 func Gormx(config config.Config) *CachedConn {
 	switch "mysql" {
