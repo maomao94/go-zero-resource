@@ -3,6 +3,7 @@ module go-zero-resource
 go 1.17
 
 require (
+	github.com/spf13/cast v1.4.1
 	github.com/tal-tech/go-zero v1.2.2
 	gorm.io/driver/mysql v1.1.2
 	gorm.io/gorm v1.21.16
