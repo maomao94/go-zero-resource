@@ -24,6 +24,21 @@ func RegisterHandlers(engine *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
+				Path:    "/oss/create",
+				Handler: createOssHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/update",
+				Handler: updateOssHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/delete",
+				Handler: deleteOssHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
 				Path:    "/oss/endpoint/make-bucket",
 				Handler: makeBucketHandler(serverCtx),
 			},

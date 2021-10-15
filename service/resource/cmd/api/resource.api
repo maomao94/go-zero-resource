@@ -38,9 +38,21 @@ service resource-api {
 	@handler ossList
 	post /oss/list (OssListReq) returns (PageResult)
 	
+	@doc "创建存储"
+	@handler createOss
+	post /oss/create (Oss) returns ()
+	
+	@doc "更新存储"
+	@handler updateOss
+	post /oss/update (Oss) returns ()
+	
+	@doc "删除存储信息"
+	@handler deleteOss
+	post /oss/delete (Oss) returns ()
+	
 	@doc "创建存储桶"
 	@handler makeBucket
-	post /oss/endpoint/make-bucket (MakeBucketReq) returns (EmptyResult)
+	post /oss/endpoint/make-bucket (MakeBucketReq) returns ()
 	
 	@doc "上传文件"
 	@handler putFile
