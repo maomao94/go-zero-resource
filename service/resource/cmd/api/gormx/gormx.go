@@ -24,7 +24,7 @@ var (
 )
 
 type (
-	ExecFn         func(db *gorm.DB) error
+	ExecFn         func(db *gorm.DB) (int64, error)
 	IndexQueryFn   func(db *gorm.DB, v interface{}) (interface{}, error)
 	PrimaryQueryFn func(db *gorm.DB, v, primary interface{}) error
 	QueryFn        func(db *gorm.DB, v interface{}) error
@@ -43,17 +43,17 @@ func (cc CachedConn) GetCache(key string, v interface{}) error {
 	return cc.cache.Get(key, v)
 }
 
-func (cc CachedConn) Exec(exec ExecFn, keys ...string) error {
-	err := exec(cc.Db)
+func (cc CachedConn) Exec(exec ExecFn, keys ...string) (int64, error) {
+	rows, err := exec(cc.Db)
 	if err != nil {
-		return err
+		return rows, err
 	}
 
 	if err := cc.DelCache(keys...); err != nil {
-		return err
+		return rows, err
 	}
 
-	return nil
+	return rows, nil
 }
 
 func (cc CachedConn) QueryRow(v interface{}, key string, query QueryFn) error {
