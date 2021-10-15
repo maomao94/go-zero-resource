@@ -1,19 +1,22 @@
 package handler
 
 import (
+	"fmt"
+	"go-zero-resource/common/errorx"
 	"net/http"
 
-	"github.com/tal-tech/go-zero/rest/httpx"
 	"go-zero-resource/service/resource/cmd/api/internal/logic"
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
+
+	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
 func ossDetailHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.BaseResult
 		if err := httpx.Parse(r, &req); err != nil {
-			httpx.Error(w, err)
+			httpx.Error(w, errorx.NewDefaultError(fmt.Sprint(err)))
 			return
 		}
 

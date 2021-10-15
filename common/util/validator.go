@@ -141,15 +141,15 @@ func Verify(st interface{}, roleMap Rules) (err error) {
 				switch {
 				case v == "notEmpty":
 					if isBlank(val) {
-						return errorx.NewDefaultError(tagVal.Name + "值不能为空")
+						return errorx.NewCodeMsgError(errorx.MissingCode, tagVal.Name+"值不能为空")
 					}
 				case strings.Split(v, "=")[0] == "regexp":
 					if !regexpMatch(strings.Split(v, "=")[1], val.String()) {
-						return errorx.NewDefaultError(tagVal.Name + "格式校验不通过")
+						return errorx.NewCodeMsgError(errorx.InvalidCode, tagVal.Name+"格式校验不通过")
 					}
 				case compareMap[strings.Split(v, "=")[0]]:
 					if !compareVerify(val, v) {
-						return errorx.NewDefaultError(tagVal.Name + "长度或值不在合法范围," + v)
+						return errorx.NewCodeMsgError(errorx.InvalidCode, tagVal.Name+"长度或值不在合法范围,"+v)
 					}
 				}
 			}
