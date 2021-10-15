@@ -7,6 +7,8 @@ import (
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/model/gormx"
 
+	"github.com/tal-tech/go-zero/core/logx"
+
 	"gorm.io/gorm"
 )
 
@@ -42,10 +44,11 @@ func (resourceOssService *ResourceOssService) DeleteResourceOssByIds(ids api.Ids
 func (resourceOssService *ResourceOssService) UpdateResourceOss(resourceOss gormx.ResourceOss) (err error) {
 	// 使用缓存
 	resourceOssIdKey := fmt.Sprintf("%s%v", cacheResourceOssIdPrefix, resourceOss.ID)
-	_, err = svc.CachedDb.Exec(func(db *gorm.DB) (int64, error) {
+	rows, err := svc.CachedDb.Exec(func(db *gorm.DB) (int64, error) {
 		tx := svc.CachedDb.Db.Updates(&resourceOss)
 		return tx.RowsAffected, tx.Error
 	}, resourceOssIdKey)
+	logx.Infof("rows: %v", rows)
 	return err
 }
 
