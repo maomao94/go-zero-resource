@@ -5,13 +5,11 @@ import (
 	"go-zero-resource/service/resource/cmd/api/internal/config"
 	"go-zero-resource/service/resource/model"
 
-	"github.com/tal-tech/go-zero/core/stores/sqlc"
-
 	"github.com/tal-tech/go-zero/core/stores/sqlx"
 )
 
 var (
-	CachedDb *gormx.CachedDb
+	CachedDb *gormx.CachedConn
 )
 
 type ServiceContext struct {
@@ -22,8 +20,6 @@ type ServiceContext struct {
 func NewServiceContext(c config.Config) *ServiceContext {
 	conn := sqlx.NewMysql(c.Mysql.DataSource)
 	CachedDb := gormx.Gormx(c)
-	a := sqlc.NewConn(conn, c.CacheRedis)
-	CachedDb.CachedConn = &a
 	gormx.MysqlTables(CachedDb.Db)
 	return &ServiceContext{
 		Config:           c,

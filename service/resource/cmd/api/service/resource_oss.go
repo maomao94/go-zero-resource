@@ -6,6 +6,10 @@ import (
 	"go-zero-resource/service/resource/model/gormx"
 )
 
+var (
+	cacheResourceOssIdPrefix = "cache:resourceOss:id:"
+)
+
 type ResourceOssService struct {
 }
 
@@ -32,7 +36,8 @@ func (resourceOssService *ResourceOssService) UpdateResourceOss(resourceOss gorm
 }
 
 func (resourceOssService *ResourceOssService) GetResourceOss(id uint) (err error, resourceOss gormx.ResourceOss) {
-	err = svc.CachedDb.Db.Where("id = ?", id).First(&resourceOss).Error
+	// 修改成带缓存
+	//err = svc.CachedDb.Db.Where("id = ?", id).First(&resourceOss).Error
 	return
 }
 

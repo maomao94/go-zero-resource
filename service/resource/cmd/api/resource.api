@@ -30,6 +30,10 @@ type (
 )
 
 service resource-api {
+	@doc "查看存储详情"
+	@handler ossDetail
+	post /oss/detail (BaseResult) returns (Oss)
+	
 	@doc "查看存储列表"
 	@handler ossList
 	post /oss/list (OssListReq) returns (PageResult)

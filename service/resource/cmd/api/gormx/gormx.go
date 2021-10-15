@@ -1,14 +1,13 @@
 package gormx
 
 import (
-	"database/sql"
+	"go-zero-resource/common/errorx"
 	"go-zero-resource/service/resource/cmd/api/internal/config"
 	"go-zero-resource/service/resource/model/gormx"
 	"os"
 
-	"github.com/tal-tech/go-zero/core/stores/sqlc"
-
-	"github.com/tal-tech/go-zero/core/stores/sqlx"
+	"github.com/tal-tech/go-zero/core/stores/cache"
+	"github.com/tal-tech/go-zero/core/syncx"
 
 	"github.com/tal-tech/go-zero/core/logx"
 	"gorm.io/driver/mysql"
@@ -16,23 +15,28 @@ import (
 	"gorm.io/gorm/logger"
 )
 
+var (
+	exclusiveCalls = syncx.NewSingleFlight()
+	stats          = cache.NewStat("sqlc")
+)
+
 type (
 	// ExecFn defines the sql exec method.
-	ExecFn func(conn sqlx.SqlConn) (sql.Result, error)
+	ExecFn func() error
 	// IndexQueryFn defines the query method that based on unique indexes.
-	IndexQueryFn func(conn sqlx.SqlConn, v interface{}) (interface{}, error)
+	IndexQueryFn func(v interface{}) (interface{}, error)
 	// PrimaryQueryFn defines the query method that based on primary keys.
-	PrimaryQueryFn func(conn sqlx.SqlConn, v, primary interface{}) error
+	PrimaryQueryFn func(v, primary interface{}) error
 	// QueryFn defines the query method.
-	QueryFn func(conn sqlx.SqlConn, v interface{}) error
+	QueryFn func(v interface{}) error
 
-	CachedDb struct {
-		CachedConn *sqlc.CachedConn
-		Db         *gorm.DB
+	CachedConn struct {
+		Cache cache.Cache
+		Db    *gorm.DB
 	}
 )
 
-func Gormx(config config.Config) *CachedDb {
+func Gormx(config config.Config) *CachedConn {
 	switch "mysql" {
 	case "mysql":
 		return GormMysql(config)
@@ -52,7 +56,7 @@ func MysqlTables(db *gorm.DB) {
 	logx.Info("register table success")
 }
 
-func GormMysql(config config.Config) *CachedDb {
+func GormMysql(config config.Config) *CachedConn {
 	//dsn := m.Username + ":" + m.Password + "@tcp(" + m.Path + ")/" + m.Dbname + "?" + m.Config
 	mysqlConfig := mysql.Config{
 		DSN:                       config.Mysql.DataSource, // DSN data source name
@@ -68,9 +72,9 @@ func GormMysql(config config.Config) *CachedDb {
 		sqlDB, _ := db.DB()
 		sqlDB.SetMaxIdleConns(config.Mysql.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(config.Mysql.MaxOpenConns)
-		return &CachedDb{
-			CachedConn: nil,
-			Db:         db,
+		return &CachedConn{
+			Cache: cache.New(config.CacheRedis, exclusiveCalls, stats, errorx.NewDefaultError("not found")),
+			Db:    db,
 		}
 	}
 }

@@ -14,6 +14,11 @@ func RegisterHandlers(engine *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
+				Path:    "/oss/detail",
+				Handler: ossDetailHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
 				Path:    "/oss/list",
 				Handler: ossListHandler(serverCtx),
 			},
