@@ -16,7 +16,6 @@ type Oss struct {
 }
 
 type OssCreate struct {
-	BaseResult
 	TenantId   string `json:"tenantId,optional"`        // 租户ID
 	Category   int    `json:"category,options=1|2|3|4"` // 所属分类
 	OssCode    string `json:"ossCode,optional"`         // 资源编号
