@@ -3,11 +3,9 @@ package service
 import (
 	"fmt"
 	"go-zero-resource/common/api"
-	"go-zero-resource/common/errorx"
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/model/gormx"
 
-	"github.com/tal-tech/go-zero/core/stores/sqlc"
 	"gorm.io/gorm"
 )
 
@@ -50,14 +48,7 @@ func (resourceOssService *ResourceOssService) GetResourceOss(id uint) (err error
 	err = svc.CachedDb.QueryRow(&resourceOss, resourceOssIdKey, func(db *gorm.DB, v interface{}) error {
 		return svc.CachedDb.Db.Where("id = ?", id).First(&resourceOss).Error
 	})
-	switch err {
-	case nil:
-		return nil, resourceOss
-	case sqlc.ErrNotFound:
-		return errorx.NewDefaultError("not found"), resourceOss
-	default:
-		return err, resourceOss
-	}
+	return err, resourceOss
 }
 
 func (resourceOssService *ResourceOssService) GetResourceOssInfoList(info gormx.ResourceOssSearch) (err error, list interface{}, total int64) {

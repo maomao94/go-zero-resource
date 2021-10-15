@@ -2,9 +2,7 @@ package logic
 
 import (
 	"context"
-	"fmt"
 	"go-zero-resource/common/api"
-	"go-zero-resource/common/errorx"
 	"go-zero-resource/service/resource/cmd/api/service"
 	"go-zero-resource/service/resource/model/gormx"
 
@@ -36,7 +34,7 @@ func (l *OssListLogic) OssList(req types.OssListReq) (*types.PageResult, error) 
 		},
 	}
 	if err, list, total := service.ResourceOssApp.GetResourceOssInfoList(pageInfo); err != nil {
-		return nil, errorx.NewDefaultError(fmt.Sprintf("获取失败: %v", err))
+		return nil, err
 	} else {
 		return &types.PageResult{
 			List:     list,
