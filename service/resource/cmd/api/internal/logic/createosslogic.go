@@ -39,7 +39,6 @@ func (l *CreateOssLogic) CreateOss(req types.OssCreate) error {
 		Remark:     req.Remark,
 		Status:     req.Status,
 	}
-
 	if err := service.ResourceOssApp.CreateResourceOss(resourceOss); err != nil {
 		return err
 	} else {
