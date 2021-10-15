@@ -42,7 +42,7 @@ func (resourceOssService *ResourceOssService) UpdateResourceOss(resourceOss gorm
 	// 使用缓存
 	resourceOssIdKey := fmt.Sprintf("%s%v", cacheResourceOssIdPrefix, resourceOss.ID)
 	err = svc.CachedDb.Exec(func(db *gorm.DB) error {
-		return svc.CachedDb.Db.Save(&resourceOss).Error
+		return svc.CachedDb.Db.Updates(&resourceOss).Error
 	}, resourceOssIdKey)
 	return err
 }

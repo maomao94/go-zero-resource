@@ -4,7 +4,7 @@ type (
 	EmptyResult {
 	}
 	BaseResult {
-		Id uint `json:"id,range[1]"` // 主键ID
+		Id uint `json:"id"` // 主键ID
 	}
 	TenantResult {
 		BaseResult

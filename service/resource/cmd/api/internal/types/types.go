@@ -62,7 +62,7 @@ type EmptyResult struct {
 }
 
 type BaseResult struct {
-	Id uint `json:"id,range[1]"` // 主键ID
+	Id uint `json:"id"` // 主键ID
 }
 
 type TenantResult struct {
