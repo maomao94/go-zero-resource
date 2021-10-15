@@ -6,9 +6,9 @@ import (
 	"go-zero-resource/service/resource/model/gormx"
 	"os"
 
-	"github.com/tal-tech/go-zero/core/stores/sqlx"
+	"github.com/tal-tech/go-zero/core/stores/sqlc"
 
-	"github.com/tal-tech/go-zero/core/stores/cache"
+	"github.com/tal-tech/go-zero/core/stores/sqlx"
 
 	"github.com/tal-tech/go-zero/core/logx"
 	"gorm.io/driver/mysql"
@@ -27,8 +27,8 @@ type (
 	QueryFn func(conn sqlx.SqlConn, v interface{}) error
 
 	CachedDb struct {
-		Db    *gorm.DB
-		cache *cache.Cache
+		CachedConn *sqlc.CachedConn
+		Db         *gorm.DB
 	}
 )
 
@@ -69,8 +69,8 @@ func GormMysql(config config.Config) *CachedDb {
 		sqlDB.SetMaxIdleConns(config.Mysql.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(config.Mysql.MaxOpenConns)
 		return &CachedDb{
-			Db:    db,
-			cache: nil,
+			CachedConn: nil,
+			Db:         db,
 		}
 	}
 }
