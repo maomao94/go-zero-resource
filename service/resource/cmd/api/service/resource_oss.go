@@ -7,8 +7,6 @@ import (
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/model/gormx"
 
-	"github.com/tal-tech/go-zero/core/stores/sqlc"
-
 	"gorm.io/gorm"
 )
 
@@ -55,7 +53,7 @@ func (resourceOssService *ResourceOssService) GetResourceOss(id uint) (err error
 	switch err {
 	case nil:
 		return nil, resourceOss
-	case sqlc.ErrNotFound:
+	case gorm.ErrRecordNotFound:
 		return errorx.NewCodeError(errorx.NotFound), resourceOss
 	default:
 		return err, resourceOss
