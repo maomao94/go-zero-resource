@@ -25,7 +25,11 @@ func (resourceOssService *ResourceOssService) CreateResourceOss(resourceOss gorm
 }
 
 func (resourceOssService *ResourceOssService) DeleteResourceOss(resourceOss gormx.ResourceOss) (err error) {
-	err = svc.CachedDb.Db.Delete(&resourceOss).Error
+	// 修改成带缓存
+	resourceOssIdKey := fmt.Sprintf("%s%v", cacheResourceOssIdPrefix, resourceOss.ID)
+	err = svc.CachedDb.Exec(func(db *gorm.DB) error {
+		return svc.CachedDb.Db.Delete(&resourceOss).Error
+	}, resourceOssIdKey)
 	return err
 }
 

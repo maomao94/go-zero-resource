@@ -45,6 +45,10 @@ type OssUpdate struct {
 	Status     int    `json:"status,optional"`          // 状态
 }
 
+type OssDelete struct {
+	Id uint `json:"id"` // 主键ID
+}
+
 type OssListReq struct {
 	PageInfo
 	Oss

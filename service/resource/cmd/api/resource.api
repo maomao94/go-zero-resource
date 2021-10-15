@@ -49,6 +49,10 @@ type (
 		Status     int    `json:"status,optional"`          // 状态
 	}
 
+	OssDelete {
+		Id uint `json:"id"` // 主键ID
+	}
+
 	OssListReq {
 		PageInfo
 		Oss
@@ -78,7 +82,7 @@ service resource-api {
 	
 	@doc "删除存储信息"
 	@handler deleteOss
-	post /oss/delete (Oss) returns ()
+	post /oss/delete (OssDelete) returns ()
 	
 	@doc "创建存储桶"
 	@handler makeBucket
