@@ -1,9 +1,14 @@
 package gormx
 
 import (
+	"database/sql"
 	"go-zero-resource/service/resource/cmd/api/internal/config"
 	"go-zero-resource/service/resource/model/gormx"
 	"os"
+
+	"github.com/tal-tech/go-zero/core/stores/sqlx"
+
+	"github.com/tal-tech/go-zero/core/stores/cache"
 
 	"github.com/tal-tech/go-zero/core/logx"
 	"gorm.io/driver/mysql"
@@ -11,7 +16,23 @@ import (
 	"gorm.io/gorm/logger"
 )
 
-func Gormx(config config.Config) *gorm.DB {
+type (
+	// ExecFn defines the sql exec method.
+	ExecFn func(conn sqlx.SqlConn) (sql.Result, error)
+	// IndexQueryFn defines the query method that based on unique indexes.
+	IndexQueryFn func(conn sqlx.SqlConn, v interface{}) (interface{}, error)
+	// PrimaryQueryFn defines the query method that based on primary keys.
+	PrimaryQueryFn func(conn sqlx.SqlConn, v, primary interface{}) error
+	// QueryFn defines the query method.
+	QueryFn func(conn sqlx.SqlConn, v interface{}) error
+
+	CachedDb struct {
+		Db    *gorm.DB
+		cache *cache.Cache
+	}
+)
+
+func Gormx(config config.Config) *CachedDb {
 	switch "mysql" {
 	case "mysql":
 		return GormMysql(config)
@@ -31,7 +52,7 @@ func MysqlTables(db *gorm.DB) {
 	logx.Info("register table success")
 }
 
-func GormMysql(config config.Config) *gorm.DB {
+func GormMysql(config config.Config) *CachedDb {
 	//dsn := m.Username + ":" + m.Password + "@tcp(" + m.Path + ")/" + m.Dbname + "?" + m.Config
 	mysqlConfig := mysql.Config{
 		DSN:                       config.Mysql.DataSource, // DSN data source name
@@ -47,7 +68,10 @@ func GormMysql(config config.Config) *gorm.DB {
 		sqlDB, _ := db.DB()
 		sqlDB.SetMaxIdleConns(config.Mysql.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(config.Mysql.MaxOpenConns)
-		return db
+		return &CachedDb{
+			Db:    db,
+			cache: nil,
+		}
 	}
 }
 
