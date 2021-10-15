@@ -1,7 +1,6 @@
--- auto-generated definition
 create table `resource_oss`
 (
-    `id`          bigint unsigned auto_increment primary key,
+    `id`          bigint unsigned auto_increment,
     `created_at`  datetime                     null,
     `updated_at`  datetime                     null,
     `deleted_at`  datetime                     null,
@@ -15,5 +14,6 @@ create table `resource_oss`
     `app_id`      varchar(255)                 null comment '应用ID',
     `region`      varchar(255)                 null comment '地域简称',
     `remark`      varchar(255)                 null comment '备注',
-    `status`      bigint                       null comment '状态'
+    `status`      bigint                       null comment '状态',
+    primary key (`id`)
 );
