@@ -23,8 +23,8 @@ func NewMakeBucketLogic(ctx context.Context, svcCtx *svc.ServiceContext) MakeBuc
 	}
 }
 
-func (l *MakeBucketLogic) MakeBucket(req types.MakeBucketReq) (*types.EmptyResult, error) {
+func (l *MakeBucketLogic) MakeBucket(req types.MakeBucketReq) error {
 	// todo: add your logic here and delete this line
 
-	return &types.EmptyResult{}, nil
+	return nil
 }
