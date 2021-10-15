@@ -27,7 +27,6 @@ func NewOssDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) OssDetai
 }
 
 func (l *OssDetailLogic) OssDetail(req types.BaseResult) (*types.Oss, error) {
-	// todo: add your logic here and delete this line
 	if err, oss := service.ResourceOssApp.GetResourceOss(req.Id); err != nil {
 		return nil, errorx.NewDefaultError(fmt.Sprintf("获取失败: %v", err))
 	} else {

@@ -29,7 +29,6 @@ func NewOssListLogic(ctx context.Context, svcCtx *svc.ServiceContext) OssListLog
 }
 
 func (l *OssListLogic) OssList(req types.OssListReq) (*types.PageResult, error) {
-	// todo: add your logic here and delete this line
 	pageInfo := gormx.ResourceOssSearch{
 		PageInfo: api.PageInfo{
 			PageSize: req.PageSize,

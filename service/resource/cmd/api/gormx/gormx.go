@@ -20,7 +20,7 @@ const cacheSafeGapBetweenIndexAndPrimary = time.Second * 5
 
 var (
 	exclusiveCalls = syncx.NewSingleFlight()
-	stats          = cache.NewStat("sqlc")
+	stats          = cache.NewStat("gormx")
 )
 
 type (

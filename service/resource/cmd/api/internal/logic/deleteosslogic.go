@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"go-zero-resource/service/resource/cmd/api/service"
+	"go-zero-resource/service/resource/model/gormx"
 
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
@@ -24,7 +26,10 @@ func NewDeleteOssLogic(ctx context.Context, svcCtx *svc.ServiceContext) DeleteOs
 }
 
 func (l *DeleteOssLogic) DeleteOss(req types.Oss) error {
-	// todo: add your logic here and delete this line
-
-	return nil
+	var resourceOss gormx.ResourceOss
+	if err := service.ResourceOssApp.DeleteResourceOss(resourceOss); err != nil {
+		return err
+	} else {
+		return nil
+	}
 }
