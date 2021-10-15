@@ -1,7 +1,7 @@
 package api
 
 const (
-	SUCCESS = 200
+	SUCCESS = 10000
 )
 
 type Response struct {
@@ -27,7 +27,7 @@ func Result(code int, msg string, data interface{}) *Response {
 }
 
 func Ok() *Response {
-	return Result(SUCCESS, "操作成功", map[string]interface{}{})
+	return Result(SUCCESS, "接口调用成功", map[string]interface{}{})
 }
 
 func OkWithMessage(message string) *Response {
@@ -35,7 +35,7 @@ func OkWithMessage(message string) *Response {
 }
 
 func OkWithData(data interface{}) *Response {
-	return Result(SUCCESS, "操作成功", data)
+	return Result(SUCCESS, "接口调用成功", data)
 }
 
 func OkWithDetailed(data interface{}, message string) *Response {

@@ -1,6 +1,12 @@
 package errorx
 
-const defaultCode = 500
+const (
+	defaultCode = 20000 //服务不可用
+	authCode    = 20001 //授权权限不足
+	missingCode = 40001 //缺少必选参数
+	invalidCode = 40001 //非法参数
+	bizCode     = 40004 //业务处理失败
+)
 
 type CodeError struct {
 	Code int         `json:"code"`
