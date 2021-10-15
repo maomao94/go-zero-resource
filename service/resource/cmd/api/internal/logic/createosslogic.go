@@ -25,7 +25,7 @@ func NewCreateOssLogic(ctx context.Context, svcCtx *svc.ServiceContext) CreateOs
 	}
 }
 
-func (l *CreateOssLogic) CreateOss(req types.Oss) error {
+func (l *CreateOssLogic) CreateOss(req types.OssCreate) error {
 	var resourceOss gormx.ResourceOss
 	if err := service.ResourceOssApp.CreateResourceOss(resourceOss); err != nil {
 		return err

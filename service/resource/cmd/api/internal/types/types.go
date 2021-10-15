@@ -15,6 +15,36 @@ type Oss struct {
 	Status     int    `json:"status,optional"`     // 状态
 }
 
+type OssCreate struct {
+	BaseResult
+	TenantId   string `json:"tenantId,optional"`        // 租户ID
+	Category   int    `json:"category,options=1|2|3|4"` // 所属分类
+	OssCode    string `json:"ossCode,optional"`         // 资源编号
+	Endpoint   string `json:"endpoint,optional"`        // 资源地址
+	AccessKey  string `json:"accessKey,optional"`       // accessKey
+	SecretKey  string `json:"secretKey,optional"`       // secretKey
+	BucketName string `json:"bucketName,optional"`      // 空间名
+	AppId      string `json:"appId,optional"`           // 应用ID TencentCOS需要
+	Region     string `json:"region,optional"`          // 地域简称 TencentCOS需要
+	Remark     string `json:"remark,optional"`          // 所属分类
+	Status     int    `json:"status,optional"`          // 状态
+}
+
+type OssUpdate struct {
+	Id         uint   `json:"id"`                       // 主键ID
+	TenantId   string `json:"tenantId,optional"`        // 租户ID
+	Category   int    `json:"category,options=1|2|3|4"` // 所属分类
+	OssCode    string `json:"ossCode,optional"`         // 资源编号
+	Endpoint   string `json:"endpoint,optional"`        // 资源地址
+	AccessKey  string `json:"accessKey,optional"`       // accessKey
+	SecretKey  string `json:"secretKey,optional"`       // secretKey
+	BucketName string `json:"bucketName,optional"`      // 空间名
+	AppId      string `json:"appId,optional"`           // 应用ID TencentCOS需要
+	Region     string `json:"region,optional"`          // 地域简称 TencentCOS需要
+	Remark     string `json:"remark,optional"`          // 所属分类
+	Status     int    `json:"status,optional"`          // 状态
+}
+
 type OssListReq struct {
 	PageInfo
 	Oss

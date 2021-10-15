@@ -67,6 +67,9 @@ func (resourceOssService *ResourceOssService) GetResourceOssInfoList(info gormx.
 	db := svc.CachedDb.Db.Model(&gormx.ResourceOss{})
 	var resourceOsss []gormx.ResourceOss
 	// 如果有条件搜索 下方会自动创建搜索语句
+	if info.Category != 0 {
+		db = db.Where("category = ?", info.Category)
+	}
 	err = db.Count(&total).Error
 	err = db.Limit(limit).Offset(offset).Find(&resourceOsss).Error
 	return err, resourceOsss, total

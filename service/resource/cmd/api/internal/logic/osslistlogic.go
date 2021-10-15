@@ -32,6 +32,19 @@ func (l *OssListLogic) OssList(req types.OssListReq) (*types.PageResult, error) 
 			PageSize: req.PageSize,
 			Page:     req.Page,
 		},
+		ResourceOss: gormx.ResourceOss{
+			TenantId:   req.TenantId,
+			Category:   req.Category,
+			OssCode:    req.OssCode,
+			Endpoint:   req.Endpoint,
+			AccessKey:  req.AccessKey,
+			SecretKey:  req.SecretKey,
+			BucketName: req.BucketName,
+			AppId:      req.AppId,
+			Region:     req.Region,
+			Remark:     req.Remark,
+			Status:     req.Status,
+		},
 	}
 	if err, list, total := service.ResourceOssApp.GetResourceOssInfoList(pageInfo); err != nil {
 		return nil, err

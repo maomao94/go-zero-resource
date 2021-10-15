@@ -25,7 +25,7 @@ func NewUpdateOssLogic(ctx context.Context, svcCtx *svc.ServiceContext) UpdateOs
 	}
 }
 
-func (l *UpdateOssLogic) UpdateOss(req types.Oss) error {
+func (l *UpdateOssLogic) UpdateOss(req types.OssUpdate) error {
 	var resourceOss gormx.ResourceOss
 	if err := service.ResourceOssApp.UpdateResourceOss(resourceOss); err != nil {
 		return err
