@@ -3,10 +3,11 @@ package svc
 import (
 	"go-zero-resource/service/resource/cmd/api/gormx"
 	"go-zero-resource/service/resource/cmd/api/internal/config"
+	"go-zero-resource/service/resource/model"
+
+	"github.com/tal-tech/go-zero/core/stores/sqlx"
 
 	"gorm.io/gorm"
-
-	"github.com/tal-tech/go-zero/tools/goctl/model/sql/test/model"
 )
 
 var (
@@ -14,16 +15,17 @@ var (
 )
 
 type ServiceContext struct {
-	Config    config.Config
-	UserModel model.UserModel
+	Config           config.Config
+	resourceOssModel model.ResourceOssModel
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	//conn := sqlx.NewMysql(c.Mysql.DataSource)
+	conn := sqlx.NewMysql(c.Mysql.DataSource)
 	db := gormx.Gormx(c)
 	gormx.MysqlTables(db)
 	DB = db
 	return &ServiceContext{
-		Config: c,
+		Config:           c,
+		resourceOssModel: model.NewResourceOssModel(conn, c.CacheRedis),
 	}
 }
