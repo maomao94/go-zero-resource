@@ -1,9 +1,12 @@
 package service
 
 import (
+	"fmt"
 	"go-zero-resource/common/api"
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/model/gormx"
+
+	"gorm.io/gorm"
 )
 
 var (
@@ -37,7 +40,10 @@ func (resourceOssService *ResourceOssService) UpdateResourceOss(resourceOss gorm
 
 func (resourceOssService *ResourceOssService) GetResourceOss(id uint) (err error, resourceOss gormx.ResourceOss) {
 	// 修改成带缓存
-	//err = svc.CachedDb.Db.Where("id = ?", id).First(&resourceOss).Error
+	resourceOssIdKey := fmt.Sprintf("%s%v", cacheResourceOssIdPrefix, id)
+	svc.CachedDb.QueryRow(&resourceOss, resourceOssIdKey, func(db *gorm.DB, v interface{}) error {
+		return svc.CachedDb.Db.Where("id = ?", id).First(&resourceOss).Error
+	})
 	return
 }
 

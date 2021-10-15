@@ -21,20 +21,22 @@ var (
 )
 
 type (
-	// ExecFn defines the sql exec method.
-	ExecFn func() error
-	// IndexQueryFn defines the query method that based on unique indexes.
-	IndexQueryFn func(v interface{}) (interface{}, error)
-	// PrimaryQueryFn defines the query method that based on primary keys.
-	PrimaryQueryFn func(v, primary interface{}) error
-	// QueryFn defines the query method.
-	QueryFn func(v interface{}) error
+	ExecFn         func(db *gorm.DB) error
+	IndexQueryFn   func(db *gorm.DB, v interface{}) (interface{}, error)
+	PrimaryQueryFn func(db *gorm.DB, v, primary interface{}) error
+	QueryFn        func(db *gorm.DB, v interface{}) error
 
 	CachedConn struct {
-		Cache cache.Cache
+		cache cache.Cache
 		Db    *gorm.DB
 	}
 )
+
+func (cc CachedConn) QueryRow(v interface{}, key string, query QueryFn) error {
+	return cc.cache.Take(v, key, func(v interface{}) error {
+		return query(cc.Db, v)
+	})
+}
 
 func Gormx(config config.Config) *CachedConn {
 	switch "mysql" {
@@ -73,7 +75,7 @@ func GormMysql(config config.Config) *CachedConn {
 		sqlDB.SetMaxIdleConns(config.Mysql.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(config.Mysql.MaxOpenConns)
 		return &CachedConn{
-			Cache: cache.New(config.CacheRedis, exclusiveCalls, stats, errorx.NewDefaultError("not found")),
+			cache: cache.New(config.CacheRedis, exclusiveCalls, stats, errorx.NewDefaultError("not found")),
 			Db:    db,
 		}
 	}

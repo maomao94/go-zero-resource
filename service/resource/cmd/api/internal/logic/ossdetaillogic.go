@@ -2,6 +2,9 @@ package logic
 
 import (
 	"context"
+	"fmt"
+	"go-zero-resource/common/errorx"
+	"go-zero-resource/service/resource/cmd/api/service"
 
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
@@ -25,6 +28,21 @@ func NewOssDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) OssDetai
 
 func (l *OssDetailLogic) OssDetail(req types.BaseResult) (*types.Oss, error) {
 	// todo: add your logic here and delete this line
-
-	return &types.Oss{}, nil
+	if err, oss := service.ResourceOssApp.GetResourceOss(req.Id); err != nil {
+		return nil, errorx.NewDefaultError(fmt.Sprintf("获取失败: %v", err))
+	} else {
+		return &types.Oss{
+			TenantId:   oss.TenantId,
+			Category:   oss.Category,
+			OssCode:    oss.OssCode,
+			Endpoint:   oss.Endpoint,
+			AccessKey:  oss.AccessKey,
+			SecretKey:  oss.SecretKey,
+			BucketName: oss.BucketName,
+			AppId:      oss.AppId,
+			Region:     oss.Region,
+			Remark:     oss.Remark,
+			Status:     oss.Status,
+		}, nil
+	}
 }
