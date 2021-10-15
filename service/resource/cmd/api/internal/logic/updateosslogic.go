@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"go-zero-resource/common/orm"
 	"go-zero-resource/common/utils"
 	"go-zero-resource/service/resource/cmd/api/service"
 	"go-zero-resource/service/resource/model/gormx"
@@ -32,6 +33,9 @@ func (l *UpdateOssLogic) UpdateOss(req types.OssUpdate) error {
 		return err
 	}
 	resourceOss := gormx.ResourceOss{
+		GVA_MODEL: orm.GVA_MODEL{
+			ID: req.Id,
+		},
 		TenantId:   req.TenantId,
 		Category:   req.Category,
 		OssCode:    req.OssCode,

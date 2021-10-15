@@ -1,6 +1,6 @@
 package utils
 
 var (
-	IdVerify       = Rules{"ID": {NotEmpty()}}
+	IdVerify       = Rules{"Id": {NotEmpty()}}
 	PageInfoVerify = Rules{"Page": {NotEmpty()}, "PageSize": {NotEmpty()}}
 )
