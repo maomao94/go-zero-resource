@@ -21,7 +21,7 @@ func {{.HandlerName}}(ctx *svc.ServiceContext) http.HandlerFunc {
 		{{end}}l := {{.LogicName}}.New{{.LogicType}}(r.Context(), ctx)
 		{{if .HasResp}}resp, {{end}}err := l.{{.Call}}({{if .HasRequest}}req{{end}})
 		if err != nil {
-			httpx.Error(w, err)
+			httpx.Error(w, errorx.ParseError(err))
 		} else {
 			{{if .HasResp}}httpx.OkJson(w, api.OkWithData(resp)){{else}}httpx.OkJson(w,api.Ok()){{end}}
 		}
