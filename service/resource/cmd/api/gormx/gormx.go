@@ -1,7 +1,6 @@
 package gormx
 
 import (
-	"go-zero-resource/common/errorx"
 	"go-zero-resource/service/resource/cmd/api/internal/config"
 	"go-zero-resource/service/resource/model/gormx"
 	"os"
@@ -75,7 +74,7 @@ func GormMysql(config config.Config) *CachedConn {
 		sqlDB.SetMaxIdleConns(config.Mysql.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(config.Mysql.MaxOpenConns)
 		return &CachedConn{
-			cache: cache.New(config.CacheRedis, exclusiveCalls, stats, errorx.NewDefaultError("not found")),
+			cache: cache.New(config.CacheRedis, exclusiveCalls, stats, gorm.ErrRecordNotFound),
 			Db:    db,
 		}
 	}
