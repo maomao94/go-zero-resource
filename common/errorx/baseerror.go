@@ -59,7 +59,7 @@ func NewDefaultError(msg string) error {
 }
 
 func NewCodeError(code int) error {
-	return NewCodeErrorWithData(code, "", map[string]interface{}{})
+	return NewCodeErrorWithData(code, "-", map[string]interface{}{})
 }
 
 func NewCodeMsgError(code int, msg string) error {
