@@ -3,8 +3,9 @@ package logic
 import (
 	"context"
 
-	"github.com/tal-tech/go-zero/core/logx"
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
+
+	"github.com/tal-tech/go-zero/core/logx"
 )
 
 type PutFileLogic struct {
