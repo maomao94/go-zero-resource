@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"go-zero-resource/common/orm"
+	"go-zero-resource/common/utils"
 	"go-zero-resource/service/resource/cmd/api/service"
 	"go-zero-resource/service/resource/model/gormx"
 
@@ -27,6 +28,10 @@ func NewDeleteOssLogic(ctx context.Context, svcCtx *svc.ServiceContext) DeleteOs
 }
 
 func (l *DeleteOssLogic) DeleteOss(req types.OssDelete) error {
+	err := utils.Verify(req, utils.IdVerify)
+	if err != nil {
+		return err
+	}
 	resourceOss := gormx.ResourceOss{
 		GVA_MODEL: orm.GVA_MODEL{
 			ID: req.Id,
