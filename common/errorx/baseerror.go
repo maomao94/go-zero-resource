@@ -5,7 +5,7 @@ import "fmt"
 var (
 	DefaultCode = 20000 // 服务不可用
 	AuthCode    = 20001 // 授权权限不足
-	MissingCode = 40001 // 缺少必选参数
+	MissCode    = 40001 // 缺少必选参数
 	InvalidCode = 40002 // 非法参数
 	BizCode     = 40004 // 业务处理失败
 	NotFound    = 40005 // 记录不存在
@@ -82,7 +82,7 @@ func (e *CodeError) getCode() int {
 }
 
 func (e *CodeError) getMsg() string {
-	if len(e.Msg) == 0 {
+	if e.Msg == "-" {
 		e.Msg = ErrorCodeMsg[e.Code]
 	}
 	return e.Msg
