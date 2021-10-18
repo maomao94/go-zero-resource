@@ -29,6 +29,7 @@ func main() {
 	defer server.Stop()
 
 	handler.RegisterHandlers(server, ctx)
+
 	// 支持跨域
 	server.Use(func(next http.HandlerFunc) http.HandlerFunc {
 		return func(w http.ResponseWriter, r *http.Request) {
