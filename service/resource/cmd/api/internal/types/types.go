@@ -54,7 +54,9 @@ type OssListReq struct {
 }
 
 type MakeBucketReq struct {
-	BucketName string `json:"bucketName"` // 存储桶名称
+	TenantId   string `json:"tenantId,optional"` // 租户ID
+	Code       string `json:"code,optional"`     // 资源编号
+	BucketName string `json:"bucketName"`        // 存储桶名称
 }
 
 type EmptyResult struct {

@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"go-zero-resource/service/resource/cmd/api/ossx"
 
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
@@ -24,7 +25,23 @@ func NewMakeBucketLogic(ctx context.Context, svcCtx *svc.ServiceContext) MakeBuc
 }
 
 func (l *MakeBucketLogic) MakeBucket(req types.MakeBucketReq) error {
-	// todo: add your logic here and delete this line
-
-	return nil
+	template, err := ossx.Template(req.TenantId, req.Code)
+	if err != nil {
+		return err
+	} else {
+		bool, err := template.BucketExists(req.BucketName)
+		if err != nil && !bool {
+			return err
+		}
+		if bool {
+			err = template.MakeBucket(req.BucketName)
+			if err != nil {
+				return err
+			} else {
+				return nil
+			}
+		} else {
+			return nil
+		}
+	}
 }
