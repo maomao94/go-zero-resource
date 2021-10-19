@@ -30,17 +30,17 @@ type (
 	QueryFn        func(db *gorm.DB, v interface{}) error
 
 	CachedConn struct {
-		cache cache.Cache
+		Cache cache.Cache
 		Db    *gorm.DB
 	}
 )
 
 func (cc CachedConn) DelCache(keys ...string) error {
-	return cc.cache.Del(keys...)
+	return cc.Cache.Del(keys...)
 }
 
 func (cc CachedConn) GetCache(key string, v interface{}) error {
-	return cc.cache.Get(key, v)
+	return cc.Cache.Get(key, v)
 }
 
 func (cc CachedConn) Exec(exec ExecFn, keys ...string) (int64, error) {
@@ -57,7 +57,7 @@ func (cc CachedConn) Exec(exec ExecFn, keys ...string) (int64, error) {
 }
 
 func (cc CachedConn) QueryRow(v interface{}, key string, query QueryFn) error {
-	return cc.cache.Take(v, key, func(v interface{}) error {
+	return cc.Cache.Take(v, key, func(v interface{}) error {
 		return query(cc.Db, v)
 	})
 }
@@ -67,14 +67,14 @@ func (cc CachedConn) QueryRowIndex(v interface{}, key string, keyer func(primary
 	var primaryKey interface{}
 	var found bool
 
-	if err := cc.cache.TakeWithExpire(&primaryKey, key, func(val interface{}, expire time.Duration) (err error) {
+	if err := cc.Cache.TakeWithExpire(&primaryKey, key, func(val interface{}, expire time.Duration) (err error) {
 		primaryKey, err = indexQuery(cc.Db, v)
 		if err != nil {
 			return
 		}
 
 		found = true
-		return cc.cache.SetWithExpire(keyer(primaryKey), v, expire+cacheSafeGapBetweenIndexAndPrimary)
+		return cc.Cache.SetWithExpire(keyer(primaryKey), v, expire+cacheSafeGapBetweenIndexAndPrimary)
 	}); err != nil {
 		return err
 	}
@@ -83,13 +83,13 @@ func (cc CachedConn) QueryRowIndex(v interface{}, key string, keyer func(primary
 		return nil
 	}
 
-	return cc.cache.Take(v, keyer(primaryKey), func(v interface{}) error {
+	return cc.Cache.Take(v, keyer(primaryKey), func(v interface{}) error {
 		return primaryQuery(cc.Db, v, primaryKey)
 	})
 }
 
 func (cc CachedConn) SetCache(key string, v interface{}) error {
-	return cc.cache.Set(key, v)
+	return cc.Cache.Set(key, v)
 }
 
 //func (cc CachedConn) Transact(fn func(sqlx.Session) error) error {
@@ -133,7 +133,7 @@ func GormMysql(config config.Config) *CachedConn {
 		sqlDB.SetMaxIdleConns(config.Mysql.MaxIdleConns)
 		sqlDB.SetMaxOpenConns(config.Mysql.MaxOpenConns)
 		return &CachedConn{
-			cache: cache.New(config.CacheRedis, exclusiveCalls, stats, gorm.ErrRecordNotFound),
+			Cache: cache.New(config.CacheRedis, exclusiveCalls, stats, gorm.ErrRecordNotFound),
 			Db:    db,
 		}
 	}
