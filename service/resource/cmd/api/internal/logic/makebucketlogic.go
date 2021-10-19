@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"go-zero-resource/common/utils"
 	"go-zero-resource/service/resource/cmd/api/ossx"
 
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
@@ -25,6 +26,10 @@ func NewMakeBucketLogic(ctx context.Context, svcCtx *svc.ServiceContext) MakeBuc
 }
 
 func (l *MakeBucketLogic) MakeBucket(req types.MakeBucketReq) error {
+	err := utils.Verify(req, utils.TenantIdVerify)
+	if err != nil {
+		return err
+	}
 	template, err := ossx.Template(req.TenantId, req.Code)
 	if err != nil {
 		return err
