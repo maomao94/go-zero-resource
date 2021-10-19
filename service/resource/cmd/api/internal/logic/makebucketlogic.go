@@ -30,7 +30,7 @@ func (l *MakeBucketLogic) MakeBucket(req types.MakeBucketReq) error {
 		return err
 	} else {
 		bool, err := template.BucketExists(req.BucketName)
-		if err != nil && !bool {
+		if err != nil {
 			return err
 		}
 		if !bool {

@@ -8,13 +8,16 @@ import (
 )
 
 type MinioTemplate struct {
-	OssTemplate
 	client        *minio.Client // Minio客户端
 	ossProperties OssProperties // 配置参数
 }
 
 func (m *MinioTemplate) MakeBucket(bucketName string) error {
-	return m.client.MakeBucket(bucketName, "us-east-1")
+	return m.client.MakeBucket(bucketName, "")
+}
+
+func (m *MinioTemplate) RemoveBucket(bucketName string) error {
+	panic("implement me")
 }
 
 func (m *MinioTemplate) BucketExists(bucketName string) (bool, error) {
@@ -22,7 +25,15 @@ func (m *MinioTemplate) BucketExists(bucketName string) (bool, error) {
 }
 
 func (m *MinioTemplate) PutFile(file *multipart.FileHeader) (File, error) {
-	return File{}, nil
+	panic("implement me")
+}
+
+func (m *MinioTemplate) RemoveFile(bucketName string) error {
+	panic("implement me")
+}
+
+func (m *MinioTemplate) RemoveFiles(bucketName []string) error {
+	panic("implement me")
 }
 
 func NewMinioTemplate(Oss *gormx.ResourceOss) *MinioTemplate {
