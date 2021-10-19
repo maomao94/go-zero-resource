@@ -30,7 +30,7 @@ func (l *PutFileLogic) PutFile(req types.PutFileReq, file *multipart.FileHeader)
 	if err != nil {
 		return nil, err
 	} else {
-		f, err := template.PutFile(req.TenantId, file)
+		f, err := template.PutFile(req.TenantId, req.BucketName, file)
 		if err != nil {
 			return nil, err
 		} else {

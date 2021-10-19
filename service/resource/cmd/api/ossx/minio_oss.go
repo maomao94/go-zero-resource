@@ -25,14 +25,17 @@ func (m MinioTemplate) BucketExists(tenantId, bucketName string) (bool, error) {
 	return m.client.BucketExists(m.ossRule.bucketName(tenantId, bucketName))
 }
 
-func (m MinioTemplate) PutFile(tenantId string, file *multipart.FileHeader) (*File, error) {
+func (m MinioTemplate) PutFile(tenantId, bucketName string, file *multipart.FileHeader) (*File, error) {
 	f, err := file.Open()
 	if err != nil {
 		return nil, err
 	}
 	defer f.Close()
 	fileName := m.ossRule.fileName(file.Filename)
-	_, err = m.client.PutObject(m.ossRule.bucketName(tenantId, m.ossProperties.BucketName),
+	if len(bucketName) == 0 {
+		bucketName = m.ossProperties.BucketName
+	}
+	_, err = m.client.PutObject(m.ossRule.bucketName(tenantId, bucketName),
 		fileName, f, file.Size, minio.PutObjectOptions{
 			ContentType: file.Header.Get("content-type"),
 		})
@@ -40,8 +43,8 @@ func (m MinioTemplate) PutFile(tenantId string, file *multipart.FileHeader) (*Fi
 		return nil, err
 	} else {
 		return &File{
-			Link:         m.fileLink(tenantId, m.ossProperties.BucketName, fileName),
-			Domain:       m.getOssHost(tenantId, m.ossProperties.BucketName),
+			Link:         m.fileLink(tenantId, bucketName, fileName),
+			Domain:       m.getOssHost(tenantId, bucketName),
 			Name:         fileName,
 			OriginalName: file.Filename,
 		}, nil
