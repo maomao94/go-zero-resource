@@ -17,7 +17,7 @@ type OssTemplate interface {
 	MakeBucket(tenantId, bucketName string) error                       // 创建存储桶
 	RemoveBucket(tenantId, bucketName string) error                     // 删除存储桶
 	BucketExists(tenantId, bucketName string) (bool, error)             // 存储桶是否存在
-	PutFile(tenantId, string, file *multipart.FileHeader) (File, error) // 上传文件
+	PutFile(tenantId string, file *multipart.FileHeader) (*File, error) // 上传文件
 	RemoveFile(tenantId, bucketName string) error                       // 删除文件
 	RemoveFiles(tenantId string, bucketName []string) error             // 批量删除文件
 }

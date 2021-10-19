@@ -3,10 +3,11 @@ package handler
 import (
 	"net/http"
 
-	"github.com/tal-tech/go-zero/rest/httpx"
 	"go-zero-resource/service/resource/cmd/api/internal/logic"
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
+
+	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
 func putFileHandler(ctx *svc.ServiceContext) http.HandlerFunc {
@@ -18,7 +19,12 @@ func putFileHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := logic.NewPutFileLogic(r.Context(), ctx)
-		resp, err := l.PutFile(req)
+		_, header, err := r.FormFile("file")
+		if err != nil {
+			httpx.Error(w, err)
+			return
+		}
+		resp, err := l.PutFile(req, header)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {
