@@ -10,33 +10,34 @@ import (
 type MinioTemplate struct {
 	client        *minio.Client // Minio客户端
 	ossProperties OssProperties // 配置参数
+	ossRule       OssRule
 }
 
-func (m *MinioTemplate) MakeBucket(bucketName string) error {
-	return m.client.MakeBucket(bucketName, "")
+func (m MinioTemplate) MakeBucket(tenantId, bucketName string) error {
+	return m.client.MakeBucket(m.ossRule.bucketName(tenantId, bucketName), "")
 }
 
-func (m *MinioTemplate) RemoveBucket(bucketName string) error {
+func (m MinioTemplate) RemoveBucket(tenantId, bucketName string) error {
 	panic("implement me")
 }
 
-func (m *MinioTemplate) BucketExists(bucketName string) (bool, error) {
-	return m.client.BucketExists(bucketName)
+func (m MinioTemplate) BucketExists(tenantId, bucketName string) (bool, error) {
+	return m.client.BucketExists(m.ossRule.bucketName(tenantId, bucketName))
 }
 
-func (m *MinioTemplate) PutFile(file *multipart.FileHeader) (File, error) {
+func (m MinioTemplate) PutFile(tenantId, string, file *multipart.FileHeader) (File, error) {
 	panic("implement me")
 }
 
-func (m *MinioTemplate) RemoveFile(bucketName string) error {
+func (m MinioTemplate) RemoveFile(tenantId, bucketName string) error {
 	panic("implement me")
 }
 
-func (m *MinioTemplate) RemoveFiles(bucketName []string) error {
+func (m MinioTemplate) RemoveFiles(tenantId string, bucketName []string) error {
 	panic("implement me")
 }
 
-func NewMinioTemplate(Oss gormx.ResourceOss) *MinioTemplate {
+func NewMinioTemplate(Oss gormx.ResourceOss, ossRule OssRule) *MinioTemplate {
 	ossProperties := OssProperties{
 		Endpoint:   Oss.Endpoint,
 		AccessKey:  Oss.AccessKey,
@@ -49,5 +50,6 @@ func NewMinioTemplate(Oss gormx.ResourceOss) *MinioTemplate {
 	return &MinioTemplate{
 		client:        minioClient,
 		ossProperties: ossProperties,
+		ossRule:       ossRule,
 	}
 }

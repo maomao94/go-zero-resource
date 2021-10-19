@@ -14,12 +14,24 @@ var (
 )
 
 type OssTemplate interface {
-	MakeBucket(bucketName string) error               // 创建存储桶
-	RemoveBucket(bucketName string) error             // 删除存储桶
-	BucketExists(bucketName string) (bool, error)     // 存储桶是否存在
-	PutFile(file *multipart.FileHeader) (File, error) // 上传文件
-	RemoveFile(bucketName string) error               // 删除文件
-	RemoveFiles(bucketName []string) error            // 批量删除文件
+	MakeBucket(tenantId, bucketName string) error                       // 创建存储桶
+	RemoveBucket(tenantId, bucketName string) error                     // 删除存储桶
+	BucketExists(tenantId, bucketName string) (bool, error)             // 存储桶是否存在
+	PutFile(tenantId, string, file *multipart.FileHeader) (File, error) // 上传文件
+	RemoveFile(tenantId, bucketName string) error                       // 删除文件
+	RemoveFiles(tenantId string, bucketName []string) error             // 批量删除文件
+}
+
+type OssRule struct {
+	tenantMode bool
+}
+
+func (o *OssRule) bucketName(tenantId, bucketName string) string {
+	prefix := ""
+	if o.tenantMode {
+		prefix = tenantId + "-" + bucketName
+	}
+	return prefix + bucketName
 }
 
 type File struct {
@@ -52,9 +64,13 @@ func Template(TenantId, Code string) (ossTemplate OssTemplate, err error) {
 	if err != nil {
 		return nil, err
 	} else {
+		// todo 获取规则配置
+		ossRule := OssRule{
+			tenantMode: true,
+		}
 		// todo 缓存template
 		if resourceOss.Category == Category_Minio {
-			ossTemplate = NewMinioTemplate(resourceOss)
+			ossTemplate = NewMinioTemplate(resourceOss, ossRule)
 		}
 		return
 	}

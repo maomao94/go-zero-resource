@@ -34,12 +34,12 @@ func (l *MakeBucketLogic) MakeBucket(req types.MakeBucketReq) error {
 	if err != nil {
 		return err
 	} else {
-		bool, err := template.BucketExists(req.BucketName)
+		bool, err := template.BucketExists(req.TenantId, req.BucketName)
 		if err != nil {
 			return err
 		}
 		if !bool {
-			err = template.MakeBucket(req.BucketName)
+			err = template.MakeBucket(req.TenantId, req.BucketName)
 			if err != nil {
 				return err
 			} else {
