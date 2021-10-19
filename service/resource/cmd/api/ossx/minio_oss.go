@@ -36,7 +36,7 @@ func (m *MinioTemplate) RemoveFiles(bucketName []string) error {
 	panic("implement me")
 }
 
-func NewMinioTemplate(Oss *gormx.ResourceOss) *MinioTemplate {
+func NewMinioTemplate(Oss gormx.ResourceOss) *MinioTemplate {
 	ossProperties := OssProperties{
 		Endpoint:   Oss.Endpoint,
 		AccessKey:  Oss.AccessKey,

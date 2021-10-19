@@ -1,16 +1,12 @@
 package ossx
 
 import (
-	"go-zero-resource/common/errorx"
-	"go-zero-resource/service/resource/cmd/api/internal/svc"
+	"go-zero-resource/service/resource/cmd/api/service"
 	"go-zero-resource/service/resource/model/gormx"
 	"mime/multipart"
 )
 
 var (
-	Enable  = 1
-	Disable = 2
-
 	Category_Minio   = 1
 	Category_Qiniu   = 2
 	Category_Ali     = 3
@@ -47,26 +43,12 @@ type OssProperties struct {
 	Args       map[string]interface{} // 自定义属性
 }
 
-func getOss(tenantId, code string) (oss *gormx.ResourceOss, err error) {
-	resourceOssQuery := gormx.ResourceOss{
-		TenantId: tenantId,
-	}
-	if len(code) != 0 {
-		resourceOssQuery.OssCode = code
-	} else {
-		resourceOssQuery.Status = Enable
-	}
-	tx := svc.CachedDb.Db.Where(&resourceOssQuery).First(&oss)
-	if tx.RowsAffected == 0 {
-		// todo 使用默认配置
-		return nil, errorx.NewDefaultError("查找模板失败")
-	} else {
-		return
-	}
+func getOss(tenantId, code string) (err error, oss gormx.ResourceOss) {
+	return service.ResourceOssApp.GetOss(tenantId, code)
 }
 
 func Template(TenantId, Code string) (ossTemplate OssTemplate, err error) {
-	resourceOss, err := getOss(TenantId, Code)
+	err, resourceOss := getOss(TenantId, Code)
 	if err != nil {
 		return nil, err
 	} else {

@@ -11,7 +11,13 @@ import (
 )
 
 var (
+	enable = 1
+
+	disable = 2
+
 	cacheResourceOssIdPrefix = "cache:resourceOss:id:"
+
+	cacheResourceOssCodePrefix = "cache:resourceOss:code:"
 )
 
 type ResourceOssService struct {
@@ -55,6 +61,48 @@ func (resourceOssService *ResourceOssService) GetResourceOss(id uint) (err error
 	err = svc.CachedDb.QueryRow(&resourceOss, resourceOssIdKey, func(db *gorm.DB, v interface{}) error {
 		return svc.CachedDb.Db.Where("id = ?", id).First(&resourceOss).Error
 	})
+	// 格式化错误
+	switch err {
+	case nil:
+		return nil, resourceOss
+	case gorm.ErrRecordNotFound:
+		return errorx.NewCodeError(errorx.NotFound), resourceOss
+	default:
+		return err, resourceOss
+	}
+}
+
+func (resourceOssService *ResourceOssService) GetOss(tenantId, code string) (err error, resourceOss gormx.ResourceOss) {
+	// 生成基于索引的key
+	indexKey := fmt.Sprintf("%s%v-%v", cacheResourceOssCodePrefix, tenantId, code)
+	// 使用缓存
+	err = svc.CachedDb.QueryRowIndex(&resourceOss, indexKey,
+		// 基于主键生成完整数据缓存的key
+		func(primary interface{}) string {
+			return fmt.Sprintf("%s%v", cacheResourceOssIdPrefix, primary)
+		},
+		// 基于索引的DB查询方法
+		func(db *gorm.DB, v interface{}) (interface{}, error) {
+			resourceOssQuery := gormx.ResourceOss{
+				TenantId: tenantId,
+			}
+			if len(code) != 0 {
+				resourceOssQuery.OssCode = code
+			} else {
+				resourceOssQuery.Status = enable
+			}
+			tx := svc.CachedDb.Db.Where(&resourceOssQuery).First(&v)
+			if tx.RowsAffected == 0 {
+				return nil, gorm.ErrRecordNotFound
+			} else {
+				return resourceOss.ID, nil
+			}
+		},
+		// 基于主键的DB查询方法
+		func(db *gorm.DB, v, primary interface{}) error {
+			return svc.CachedDb.Db.Where("id = ?", primary).First(&resourceOss).Error
+		})
+
 	// 格式化错误
 	switch err {
 	case nil:
