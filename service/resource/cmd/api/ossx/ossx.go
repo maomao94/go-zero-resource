@@ -1,9 +1,15 @@
 package ossx
 
 import (
+	"fmt"
 	"go-zero-resource/service/resource/cmd/api/service"
 	"go-zero-resource/service/resource/model/gormx"
 	"mime/multipart"
+	"path"
+	"strings"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 var (
@@ -32,6 +38,13 @@ func (o *OssRule) bucketName(tenantId, bucketName string) string {
 		prefix = tenantId + "-"
 	}
 	return prefix + bucketName
+}
+
+func (o *OssRule) fileName(originalFileName string) string {
+	u, _ := uuid.NewUUID()
+	return "upload" + "/" + time.Now().Format("20060102") + "/" +
+		strings.Replace(fmt.Sprintf("%s", u), "-", "", -1) +
+		path.Ext(originalFileName)
 }
 
 type File struct {

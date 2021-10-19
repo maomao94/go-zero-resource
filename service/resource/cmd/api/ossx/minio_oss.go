@@ -32,7 +32,7 @@ func (m MinioTemplate) PutFile(tenantId string, file *multipart.FileHeader) (*Fi
 	}
 	defer f.Close()
 	_, err = m.client.PutObject(m.ossRule.bucketName(tenantId, m.ossProperties.BucketName),
-		file.Filename, f, file.Size, minio.PutObjectOptions{
+		m.ossRule.fileName(file.Filename), f, file.Size, minio.PutObjectOptions{
 			ContentType: file.Header.Get("content-type"),
 		})
 	if err != nil {
