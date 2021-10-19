@@ -60,9 +60,9 @@ type MakeBucketReq struct {
 }
 
 type PutFileReq struct {
-	TenantId   string `json:"tenantId,optional"`   // 租户ID
-	Code       string `json:"code,optional"`       // 资源编号
-	BucketName string `json:"bucketName,optional"` // 存储桶名称
+	TenantId   string `form:"tenantId,optional"`   // 租户ID
+	Code       string `form:"code,optional"`       // 资源编号
+	BucketName string `form:"bucketName,optional"` // 存储桶名称
 }
 
 type File struct {
