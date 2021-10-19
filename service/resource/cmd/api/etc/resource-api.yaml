@@ -1,7 +1,7 @@
 Name: resource-api
 Host: 0.0.0.0
 Port: 8888
-MaxBytes: 33554432
+MaxBytes: 0
 Mysql:
   DataSource: root:123456@tcp(127.0.0.1:3306)/resource?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
   MaxIdleConns: 10
