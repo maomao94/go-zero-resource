@@ -59,6 +59,20 @@ type MakeBucketReq struct {
 	BucketName string `json:"bucketName"`        // 存储桶名称
 }
 
+type PutFileReq struct {
+	TenantId   string `json:"tenantId,optional"`   // 租户ID
+	Code       string `json:"code,optional"`       // 资源编号
+	BucketName string `json:"bucketName,optional"` // 存储桶名称
+}
+
+type File struct {
+	Link         string `json:"link"`         // 文件地址
+	Domain       string `json:"domain"`       // 域名地址
+	Name         string `json:"name"`         // 文件名
+	OriginalName string `json:"originalName"` // 初始文件名
+	AttachId     string `json:"attachId"`     // 附件表ID
+}
+
 type EmptyResult struct {
 }
 

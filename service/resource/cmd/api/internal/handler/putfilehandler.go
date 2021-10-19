@@ -1,24 +1,28 @@
 package handler
 
 import (
-	"go-zero-resource/common/api"
-	"go-zero-resource/common/errorx"
 	"net/http"
 
+	"github.com/tal-tech/go-zero/rest/httpx"
 	"go-zero-resource/service/resource/cmd/api/internal/logic"
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
-
-	"github.com/tal-tech/go-zero/rest/httpx"
+	"go-zero-resource/service/resource/cmd/api/internal/types"
 )
 
 func putFileHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		var req types.PutFileReq
+		if err := httpx.Parse(r, &req); err != nil {
+			httpx.Error(w, err)
+			return
+		}
+
 		l := logic.NewPutFileLogic(r.Context(), ctx)
-		err := l.PutFile()
+		resp, err := l.PutFile(req)
 		if err != nil {
-			httpx.Error(w, errorx.ParseError(err))
+			httpx.Error(w, err)
 		} else {
-			httpx.OkJson(w, api.Ok())
+			httpx.OkJson(w, resp)
 		}
 	}
 }
