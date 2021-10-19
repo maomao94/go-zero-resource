@@ -31,19 +31,19 @@ func (m MinioTemplate) PutFile(tenantId string, file *multipart.FileHeader) (*Fi
 		return nil, err
 	}
 	defer f.Close()
+	fileName := m.ossRule.fileName(file.Filename)
 	_, err = m.client.PutObject(m.ossRule.bucketName(tenantId, m.ossProperties.BucketName),
-		m.ossRule.fileName(file.Filename), f, file.Size, minio.PutObjectOptions{
+		fileName, f, file.Size, minio.PutObjectOptions{
 			ContentType: file.Header.Get("content-type"),
 		})
 	if err != nil {
 		return nil, err
 	} else {
 		return &File{
-			Link:         "a",
-			Domain:       "a",
-			Name:         "a",
-			OriginalName: "a",
-			AttachId:     "a",
+			Link:         m.fileLink(tenantId, m.ossProperties.BucketName, fileName),
+			Domain:       m.getOssHost(tenantId, m.ossProperties.BucketName),
+			Name:         fileName,
+			OriginalName: file.Filename,
 		}, nil
 	}
 }
@@ -54,6 +54,14 @@ func (m MinioTemplate) RemoveFile(tenantId, bucketName string) error {
 
 func (m MinioTemplate) RemoveFiles(tenantId string, bucketName []string) error {
 	panic("implement me")
+}
+
+func (m MinioTemplate) getOssHost(tenantId, bucketName string) string {
+	return m.ossProperties.Endpoint + "/" + m.ossRule.bucketName(tenantId, bucketName)
+}
+
+func (m MinioTemplate) fileLink(tenantId, bucketName, fileName string) string {
+	return m.ossProperties.Endpoint + "/" + m.ossRule.bucketName(tenantId, bucketName) + "/" + fileName
 }
 
 func NewMinioTemplate(Oss gormx.ResourceOss, ossRule OssRule) *MinioTemplate {
