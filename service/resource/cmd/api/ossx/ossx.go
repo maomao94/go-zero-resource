@@ -29,7 +29,7 @@ type OssRule struct {
 func (o *OssRule) bucketName(tenantId, bucketName string) string {
 	prefix := ""
 	if o.tenantMode {
-		prefix = tenantId + "-" + bucketName
+		prefix = tenantId + "-"
 	}
 	return prefix + bucketName
 }
