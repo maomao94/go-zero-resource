@@ -9,6 +9,6 @@ import (
 
 type Config struct {
 	rest.RestConf
-	gormx.MysqlConf
-	cache.CacheConf
+	Mysql      gormx.MysqlConf
+	CacheRedis cache.CacheConf
 }

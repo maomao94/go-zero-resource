@@ -3,13 +3,12 @@ package gorm_model
 
 import (
 	"go-zero-resource/common/api"
-	"go-zero-resource/common/gormx"
 )
 
 // ResourceOss 结构体
 // 如果含有time.Time 请自行import time包
 type ResourceOss struct {
-	gormx.GVA_MODEL
+	GVA_MODEL
 	TenantId   string `json:"tenantId" form:"tenantId" gorm:"column:tenant_id;comment:租户ID;type:varchar(12);default:000000"`
 	Category   int    `json:"category" form:"category" gorm:"column:category;comment:分类;type:int"`
 	OssCode    string `json:"ossCode" form:"ossCode" gorm:"column:oss_code;comment:资源编号;type:varchar(32);"`

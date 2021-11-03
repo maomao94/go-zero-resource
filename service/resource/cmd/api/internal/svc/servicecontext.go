@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	CachedDb *gormx.CachedConn
+	CachedConn *gormx.CachedConn
 )
 
 type ServiceContext struct {
@@ -18,11 +18,11 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	conn := sqlx.NewMysql(c.DataSource)
-	CachedDb = gormx.Gormx(c.MysqlConf, c.CacheConf)
-	gormx.MysqlTables(CachedDb.Db)
+	conn := sqlx.NewMysql(c.Mysql.DataSource)
+	CachedConn = gormx.Gormx(c.Mysql, c.CacheRedis)
+	gormx.MysqlTables(CachedConn.Db)
 	return &ServiceContext{
 		Config:           c,
-		resourceOssModel: model.NewResourceOssModel(conn, c.CacheConf),
+		resourceOssModel: model.NewResourceOssModel(conn, c.CacheRedis),
 	}
 }
