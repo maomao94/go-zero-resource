@@ -1,15 +1,13 @@
 package gormx
 
 import (
-	"go-zero-resource/service/resource/cmd/api/internal/config"
-	"go-zero-resource/service/resource/model/gormx"
+	"go-zero-resource/service/resource/model/gorm_model"
 	"os"
 	"time"
 
+	"github.com/tal-tech/go-zero/core/logx"
 	"github.com/tal-tech/go-zero/core/stores/cache"
 	"github.com/tal-tech/go-zero/core/syncx"
-
-	"github.com/tal-tech/go-zero/core/logx"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -20,7 +18,7 @@ const cacheSafeGapBetweenIndexAndPrimary = time.Second * 5
 
 var (
 	exclusiveCalls = syncx.NewSingleFlight()
-	stats          = cache.NewStat("gormx")
+	stats          = cache.NewStat("gorm_model")
 )
 
 type (
@@ -32,6 +30,14 @@ type (
 	CachedConn struct {
 		Cache cache.Cache
 		Db    *gorm.DB
+	}
+
+	MysqlConf struct {
+		DataSource   string
+		MaxIdleConns int    // 空闲中的最大连接数
+		MaxOpenConns int    // 打开到数据库的最大连接数
+		LogMode      string // 是否开启Gorm全局日志
+		Logx         bool   // 是否通过log-zero写入日志文件
 	}
 )
 
@@ -96,18 +102,18 @@ func (cc CachedConn) SetCache(key string, v interface{}) error {
 //	return cc.Db.Transact(fn)
 //}
 
-func Gormx(config config.Config) *CachedConn {
+func Gormx(config MysqlConf, cacheConf cache.CacheConf) *CachedConn {
 	switch "mysql" {
 	case "mysql":
-		return GormMysql(config)
+		return GormMysql(config, cacheConf)
 	default:
-		return GormMysql(config)
+		return GormMysql(config, cacheConf)
 	}
 }
 
 func MysqlTables(db *gorm.DB) {
 	err := db.AutoMigrate(
-		gormx.ResourceOss{},
+		gorm_model.ResourceOss{},
 	)
 	if err != nil {
 		logx.Errorf("register table failed %s", err)
@@ -116,24 +122,24 @@ func MysqlTables(db *gorm.DB) {
 	logx.Info("register table success")
 }
 
-func GormMysql(config config.Config) *CachedConn {
+func GormMysql(config MysqlConf, cacheConf cache.CacheConf) *CachedConn {
 	//dsn := m.Username + ":" + m.Password + "@tcp(" + m.Path + ")/" + m.Dbname + "?" + m.Config
 	mysqlConfig := mysql.Config{
-		DSN:                       config.Mysql.DataSource, // DSN data source name
-		DefaultStringSize:         191,                     // string 类型字段的默认长度
-		DisableDatetimePrecision:  true,                    // 禁用 datetime 精度，MySQL 5.6 之前的数据库不支持
-		DontSupportRenameIndex:    true,                    // 重命名索引时采用删除并新建的方式，MySQL 5.7 之前的数据库和 MariaDB 不支持重命名索引
-		DontSupportRenameColumn:   true,                    // 用 `change` 重命名列，MySQL 8 之前的数据库和 MariaDB 不支持重命名列
-		SkipInitializeWithVersion: false,                   // 根据版本自动配置
+		DSN:                       config.DataSource, // DSN data source name
+		DefaultStringSize:         191,               // string 类型字段的默认长度
+		DisableDatetimePrecision:  true,              // 禁用 datetime 精度，MySQL 5.6 之前的数据库不支持
+		DontSupportRenameIndex:    true,              // 重命名索引时采用删除并新建的方式，MySQL 5.7 之前的数据库和 MariaDB 不支持重命名索引
+		DontSupportRenameColumn:   true,              // 用 `change` 重命名列，MySQL 8 之前的数据库和 MariaDB 不支持重命名列
+		SkipInitializeWithVersion: false,             // 根据版本自动配置
 	}
-	if db, err := gorm.Open(mysql.New(mysqlConfig), gormConfig(config.Mysql.LogMode, config.Mysql.Logx)); err != nil {
+	if db, err := gorm.Open(mysql.New(mysqlConfig), gormConfig(config.LogMode, config.Logx)); err != nil {
 		return nil
 	} else {
 		sqlDB, _ := db.DB()
-		sqlDB.SetMaxIdleConns(config.Mysql.MaxIdleConns)
-		sqlDB.SetMaxOpenConns(config.Mysql.MaxOpenConns)
+		sqlDB.SetMaxIdleConns(config.MaxIdleConns)
+		sqlDB.SetMaxOpenConns(config.MaxOpenConns)
 		return &CachedConn{
-			Cache: cache.New(config.CacheRedis, exclusiveCalls, stats, gorm.ErrRecordNotFound),
+			Cache: cache.New(cacheConf, exclusiveCalls, stats, gorm.ErrRecordNotFound),
 			Db:    db,
 		}
 	}

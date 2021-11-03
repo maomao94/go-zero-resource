@@ -5,7 +5,7 @@ import (
 	"go-zero-resource/common/api"
 	"go-zero-resource/common/errorx"
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
-	"go-zero-resource/service/resource/model/gormx"
+	"go-zero-resource/service/resource/model/gorm_model"
 
 	"gorm.io/gorm"
 )
@@ -25,12 +25,12 @@ type ResourceOssService struct {
 
 var ResourceOssApp = new(ResourceOssService)
 
-func (resourceOssService *ResourceOssService) CreateResourceOss(resourceOss gormx.ResourceOss) (err error) {
+func (resourceOssService *ResourceOssService) CreateResourceOss(resourceOss gorm_model.ResourceOss) (err error) {
 	err = svc.CachedDb.Db.Create(&resourceOss).Error
 	return err
 }
 
-func (resourceOssService *ResourceOssService) DeleteResourceOss(resourceOss gormx.ResourceOss) (err error) {
+func (resourceOssService *ResourceOssService) DeleteResourceOss(resourceOss gorm_model.ResourceOss) (err error) {
 	// 使用缓存
 	resourceOssIdKey := fmt.Sprintf("%s%v", cacheResourceOssIdPrefix, resourceOss.ID)
 	_, err = svc.CachedDb.Exec(func(db *gorm.DB) (int64, error) {
@@ -41,11 +41,11 @@ func (resourceOssService *ResourceOssService) DeleteResourceOss(resourceOss gorm
 }
 
 func (resourceOssService *ResourceOssService) DeleteResourceOssByIds(ids api.IdsReq) (err error) {
-	err = svc.CachedDb.Db.Delete(&[]gormx.ResourceOss{}, "id in ?", ids.Ids).Error
+	err = svc.CachedDb.Db.Delete(&[]gorm_model.ResourceOss{}, "id in ?", ids.Ids).Error
 	return err
 }
 
-func (resourceOssService *ResourceOssService) UpdateResourceOss(resourceOss gormx.ResourceOss) (err error) {
+func (resourceOssService *ResourceOssService) UpdateResourceOss(resourceOss gorm_model.ResourceOss) (err error) {
 	// 使用缓存
 	resourceOssIdKey := fmt.Sprintf("%s%v", cacheResourceOssIdPrefix, resourceOss.ID)
 	_, err = svc.CachedDb.Exec(func(db *gorm.DB) (int64, error) {
@@ -55,7 +55,7 @@ func (resourceOssService *ResourceOssService) UpdateResourceOss(resourceOss gorm
 	return err
 }
 
-func (resourceOssService *ResourceOssService) GetResourceOss(id uint) (err error, resourceOss gormx.ResourceOss) {
+func (resourceOssService *ResourceOssService) GetResourceOss(id uint) (err error, resourceOss gorm_model.ResourceOss) {
 	// 使用缓存
 	resourceOssIdKey := fmt.Sprintf("%s%v", cacheResourceOssIdPrefix, id)
 	err = svc.CachedDb.QueryRow(&resourceOss, resourceOssIdKey, func(db *gorm.DB, v interface{}) error {
@@ -72,7 +72,7 @@ func (resourceOssService *ResourceOssService) GetResourceOss(id uint) (err error
 	}
 }
 
-func (resourceOssService *ResourceOssService) GetOss(tenantId, code string) (err error, resourceOss gormx.ResourceOss) {
+func (resourceOssService *ResourceOssService) GetOss(tenantId, code string) (err error, resourceOss gorm_model.ResourceOss) {
 	// 生成基于索引的key
 	indexKey := fmt.Sprintf("%s%v-%v", cacheResourceOssCodePrefix, tenantId, code)
 	// 使用缓存
@@ -83,7 +83,7 @@ func (resourceOssService *ResourceOssService) GetOss(tenantId, code string) (err
 		},
 		// 基于索引的DB查询方法
 		func(db *gorm.DB, v interface{}) (interface{}, error) {
-			resourceOssQuery := gormx.ResourceOss{
+			resourceOssQuery := gorm_model.ResourceOss{
 				TenantId: tenantId,
 			}
 			if len(code) != 0 {
@@ -114,12 +114,12 @@ func (resourceOssService *ResourceOssService) GetOss(tenantId, code string) (err
 	}
 }
 
-func (resourceOssService *ResourceOssService) GetResourceOssInfoList(info gormx.ResourceOssSearch) (err error, list interface{}, total int64) {
+func (resourceOssService *ResourceOssService) GetResourceOssInfoList(info gorm_model.ResourceOssSearch) (err error, list interface{}, total int64) {
 	limit := info.PageSize
 	offset := info.PageSize * (info.Page - 1)
 	// 创建db
-	db := svc.CachedDb.Db.Model(&gormx.ResourceOss{})
-	var resourceOsss []gormx.ResourceOss
+	db := svc.CachedDb.Db.Model(&gorm_model.ResourceOss{})
+	var resourceOsss []gorm_model.ResourceOss
 	// 如果有条件搜索 下方会自动创建搜索语句
 	if info.Category != 0 {
 		db = db.Where("category = ?", info.Category)

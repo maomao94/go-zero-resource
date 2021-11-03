@@ -7,7 +7,7 @@ import (
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
 	"go-zero-resource/service/resource/cmd/api/service"
-	"go-zero-resource/service/resource/model/gormx"
+	"go-zero-resource/service/resource/model/gorm_model"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )
@@ -31,7 +31,7 @@ func (l *UpdateOssLogic) UpdateOss(req types.OssUpdate) error {
 	if err != nil {
 		return err
 	}
-	resourceOss := gormx.ResourceOss{
+	resourceOss := gorm_model.ResourceOss{
 		GVA_MODEL: gormx2.GVA_MODEL{
 			ID: req.Id,
 		},

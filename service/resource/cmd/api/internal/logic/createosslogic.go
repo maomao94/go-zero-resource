@@ -5,7 +5,7 @@ import (
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
 	"go-zero-resource/service/resource/cmd/api/service"
-	"go-zero-resource/service/resource/model/gormx"
+	"go-zero-resource/service/resource/model/gorm_model"
 
 	"github.com/tal-tech/go-zero/core/logx"
 )
@@ -25,7 +25,7 @@ func NewCreateOssLogic(ctx context.Context, svcCtx *svc.ServiceContext) CreateOs
 }
 
 func (l *CreateOssLogic) CreateOss(req types.OssCreate) error {
-	resourceOss := gormx.ResourceOss{
+	resourceOss := gorm_model.ResourceOss{
 		TenantId:   req.TenantId,
 		Category:   req.Category,
 		OssCode:    req.OssCode,

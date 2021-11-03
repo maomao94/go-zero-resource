@@ -3,7 +3,7 @@ package ossx
 import (
 	"fmt"
 	"go-zero-resource/service/resource/cmd/api/service"
-	"go-zero-resource/service/resource/model/gormx"
+	"go-zero-resource/service/resource/model/gorm_model"
 	"mime/multipart"
 	"path"
 	"strings"
@@ -68,7 +68,7 @@ type OssProperties struct {
 	Args       map[string]interface{} // 自定义属性
 }
 
-func getOss(tenantId, code string) (err error, oss gormx.ResourceOss) {
+func getOss(tenantId, code string) (err error, oss gorm_model.ResourceOss) {
 	return service.ResourceOssApp.GetOss(tenantId, code)
 }
 

@@ -1,5 +1,5 @@
 // 自动生成模板ResourceOss
-package gormx
+package gorm_model
 
 import (
 	"go-zero-resource/common/api"

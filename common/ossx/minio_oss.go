@@ -1,7 +1,7 @@
 package ossx
 
 import (
-	"go-zero-resource/service/resource/model/gormx"
+	"go-zero-resource/service/resource/model/gorm_model"
 	"mime/multipart"
 
 	"github.com/minio/minio-go"
@@ -67,7 +67,7 @@ func (m MinioTemplate) fileLink(tenantId, bucketName, fileName string) string {
 	return m.ossProperties.Endpoint + "/" + m.ossRule.bucketName(tenantId, bucketName) + "/" + fileName
 }
 
-func NewMinioTemplate(Oss gormx.ResourceOss, ossRule OssRule) *MinioTemplate {
+func NewMinioTemplate(Oss gorm_model.ResourceOss, ossRule OssRule) *MinioTemplate {
 	ossProperties := OssProperties{
 		Endpoint:   Oss.Endpoint,
 		AccessKey:  Oss.AccessKey,

@@ -18,11 +18,11 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	conn := sqlx.NewMysql(c.Mysql.DataSource)
-	CachedDb = gormx.Gormx(c)
+	conn := sqlx.NewMysql(c.DataSource)
+	CachedDb = gormx.Gormx(c.MysqlConf, c.CacheConf)
 	gormx.MysqlTables(CachedDb.Db)
 	return &ServiceContext{
 		Config:           c,
-		resourceOssModel: model.NewResourceOssModel(conn, c.CacheRedis),
+		resourceOssModel: model.NewResourceOssModel(conn, c.CacheConf),
 	}
 }
