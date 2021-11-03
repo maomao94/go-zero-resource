@@ -2,9 +2,8 @@ package logic
 
 import (
 	"context"
+	"go-zero-resource/common/ossx"
 	"go-zero-resource/common/utils"
-	"go-zero-resource/service/resource/cmd/api/ossx"
-
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
 

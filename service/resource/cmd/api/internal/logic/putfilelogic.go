@@ -2,7 +2,7 @@ package logic
 
 import (
 	"context"
-	"go-zero-resource/service/resource/cmd/api/ossx"
+	"go-zero-resource/common/ossx"
 	"mime/multipart"
 
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
