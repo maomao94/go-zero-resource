@@ -1,6 +1,9 @@
 package errorx
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/tal-tech/go-zero/core/logx"
+)
 
 var (
 	DefaultCode = 20000 // 服务不可用
@@ -40,9 +43,8 @@ type CodeErrorResponse struct {
 }
 
 func formatError(err error) error {
+	logx.ErrorStackf("error: %s;", err.Error())
 	switch err.(type) {
-	case nil:
-		return NewDefaultError("error is nil")
 	case *CodeError:
 		return err
 	default:
