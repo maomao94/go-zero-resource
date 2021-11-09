@@ -39,7 +39,7 @@ type CodeError struct {
 type CodeErrorResponse struct {
 	Code int         `json:"code"`
 	Msg  string      `json:"msg"`
-	Data interface{} `json:"data"`
+	Data interface{} `json:"data,omitempty"`
 }
 
 func ParseError(err error) error {
