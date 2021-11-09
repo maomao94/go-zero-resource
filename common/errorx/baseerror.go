@@ -42,18 +42,14 @@ type CodeErrorResponse struct {
 	Data interface{} `json:"data"`
 }
 
-func formatError(err error) error {
+func ParseError(err error) error {
 	logx.ErrorStackf("error: %s;", err.Error())
 	switch err.(type) {
 	case *CodeError:
 		return err
 	default:
-		return NewDefaultError(fmt.Sprint(err))
+		return NewDefaultError(fmt.Sprintf("error: %s;", err))
 	}
-}
-
-func ParseError(err error) error {
-	return formatError(err)
 }
 
 func NewDefaultError(msg string) error {
