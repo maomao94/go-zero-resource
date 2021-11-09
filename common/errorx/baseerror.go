@@ -11,12 +11,12 @@ var (
 	NotFound    = 40005 // 记录不存在
 
 	ErrorCodeMsg = map[int]string{
-		20000: "服务不可用",
-		20001: "授权权限不足",
-		40001: "缺少必选参数",
-		40002: "非法参数",
-		40004: "业务处理失败",
-		40005: "记录不存在",
+		DefaultCode: "服务不可用",
+		AuthCode:    "授权权限不足",
+		MissCode:    "缺少必选参数",
+		InvalidCode: "非法参数",
+		NotFound:    "业务处理失败",
+		NotFound:    "记录不存在",
 	}
 	//ErrCode_value = map[string]int{
 	//	"服务不可用":  20000,
