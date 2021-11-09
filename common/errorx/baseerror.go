@@ -6,12 +6,12 @@ import (
 )
 
 var (
-	DefaultCode  = 20000 // 服务不可用
-	AuthCode     = 20001 // 授权权限不足
-	MissCode     = 40001 // 缺少必选参数
-	InvalidCode  = 40002 // 非法参数
-	BizCode      = 40004 // 业务处理失败
-	NotFoundCode = 40005 // 记录不存在
+	DefaultCode  = -20000 // 服务不可用
+	AuthCode     = -20001 // 授权权限不足
+	MissCode     = -40001 // 缺少必选参数
+	InvalidCode  = -40002 // 非法参数
+	BizCode      = -40004 // 业务处理失败
+	NotFoundCode = -40005 // 记录不存在
 
 	ErrorCodeMsg = map[int]string{
 		DefaultCode:  "服务不可用",

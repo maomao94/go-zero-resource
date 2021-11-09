@@ -66,7 +66,7 @@ func (resourceOssService *ResourceOssService) GetResourceOss(id uint) (err error
 	case nil:
 		return nil, resourceOss
 	case gorm.ErrRecordNotFound:
-		return errorx.NewCodeError(errorx.NotFound), resourceOss
+		return errorx.NewCodeError(errorx.NotFoundCode), resourceOss
 	default:
 		return err, resourceOss
 	}
@@ -108,7 +108,7 @@ func (resourceOssService *ResourceOssService) GetOss(tenantId, code string) (err
 	case nil:
 		return nil, resourceOss
 	case gorm.ErrRecordNotFound:
-		return errorx.NewCodeError(errorx.NotFound), resourceOss
+		return errorx.NewCodeError(errorx.NotFoundCode), resourceOss
 	default:
 		return err, resourceOss
 	}
