@@ -30,6 +30,7 @@ func (m MinioTemplate) StatFile(tenantId, bucketName, fileName string) (*OssFile
 			Link:        m.fileLink(tenantId, bucketName, object.Key),
 			Name:        object.Key,
 			Length:      object.Size,
+			PutTime:     object.LastModified,
 			ContentType: object.ContentType,
 		}, nil
 	}

@@ -57,10 +57,11 @@ type File struct {
 }
 
 type OssFile struct {
-	Link        string // 文件地址
-	Name        string // 文件名
-	Length      int64  // 文件大小
-	ContentType string // 文件contentType
+	Link        string    // 文件地址
+	Name        string    // 文件名
+	Length      int64     // 文件大小
+	PutTime     time.Time // 文件上传时间
+	ContentType string    // 文件contentType
 }
 
 type OssProperties struct {
