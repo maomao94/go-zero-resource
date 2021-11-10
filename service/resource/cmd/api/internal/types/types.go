@@ -53,6 +53,13 @@ type OssListReq struct {
 	Oss
 }
 
+type OssFile struct {
+	Link        string `json:"link"`        // 文件地址
+	Name        string `json:"name"`        // 文件名
+	Length      int64  `json:"length"`      // 文件大小
+	ContentType string `json:"contentType"` // 文件contentType
+}
+
 type MakeBucketReq struct {
 	TenantId   string `json:"tenantId,optional"` // 租户ID
 	Code       string `json:"code,optional"`     // 资源编号

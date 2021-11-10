@@ -21,11 +21,11 @@ func statFileHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := logic.NewStatFileLogic(r.Context(), ctx)
-		err := l.StatFile(req)
+		resp, err := l.StatFile(req)
 		if err != nil {
 			httpx.Error(w, errorx.ParseError(err))
 		} else {
-			httpx.OkJson(w, api.Ok())
+			httpx.OkJson(w, api.OkWithData(resp))
 		}
 	}
 }

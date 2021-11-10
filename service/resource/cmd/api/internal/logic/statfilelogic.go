@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"go-zero-resource/common/ossx"
 
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
@@ -23,8 +24,21 @@ func NewStatFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) StatFileL
 	}
 }
 
-func (l *StatFileLogic) StatFile(req types.StatFileReq) error {
-	// todo: add your logic here and delete this line
-
-	return nil
+func (l *StatFileLogic) StatFile(req types.StatFileReq) (*types.OssFile, error) {
+	template, err := ossx.Template(req.TenantId, req.Code)
+	if err != nil {
+		return nil, err
+	} else {
+		file, err := template.StatFile(req.TenantId, req.BucketName, req.FileName)
+		if err != nil {
+			return nil, err
+		} else {
+			return &types.OssFile{
+				Link:        file.Link,
+				Name:        file.Name,
+				Length:      file.Length,
+				ContentType: file.ContentType,
+			}, nil
+		}
+	}
 }

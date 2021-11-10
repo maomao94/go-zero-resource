@@ -21,6 +21,20 @@ func (m MinioTemplate) RemoveBucket(tenantId, bucketName string) error {
 	return m.client.RemoveBucket(m.ossRule.bucketName(tenantId, bucketName))
 }
 
+func (m MinioTemplate) StatFile(tenantId, bucketName, fileName string) (*OssFile, error) {
+	object, err := m.client.StatObject(m.ossRule.bucketName(tenantId, bucketName), fileName, minio.StatObjectOptions{})
+	if err != nil {
+		return nil, err
+	} else {
+		return &OssFile{
+			Link:        m.fileLink(tenantId, bucketName, object.Key),
+			Name:        object.Key,
+			Length:      object.Size,
+			ContentType: object.ContentType,
+		}, nil
+	}
+}
+
 func (m MinioTemplate) BucketExists(tenantId, bucketName string) (bool, error) {
 	return m.client.BucketExists(m.ossRule.bucketName(tenantId, bucketName))
 }

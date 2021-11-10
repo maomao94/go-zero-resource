@@ -22,6 +22,7 @@ var (
 type OssTemplate interface {
 	MakeBucket(tenantId, bucketName string) error                                   // 创建存储桶
 	RemoveBucket(tenantId, bucketName string) error                                 // 删除存储桶
+	StatFile(tenantId, bucketName, fileName string) (*OssFile, error)               // 获取文件信息
 	BucketExists(tenantId, bucketName string) (bool, error)                         // 存储桶是否存在
 	PutFile(tenantId, bucketName string, file *multipart.FileHeader) (*File, error) // 上传文件
 	RemoveFile(tenantId, bucketName, fileName string) error                         // 删除文件
@@ -53,6 +54,13 @@ type File struct {
 	Name         string // 文件名
 	OriginalName string // 初始文件名
 	AttachId     string // 附件表ID
+}
+
+type OssFile struct {
+	Link        string // 文件地址
+	Name        string // 文件名
+	Length      int64  // 文件大小
+	ContentType string // 文件contentType
 }
 
 type OssProperties struct {
