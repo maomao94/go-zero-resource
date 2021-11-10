@@ -37,7 +37,10 @@ func (l *GetFileLogic) GetFile(req types.GetFileReq, w http.ResponseWriter) erro
 			return err
 		} else {
 			fileHeader := make([]byte, 512)
-			fileStat, _ := object.Stat()
+			fileStat, err := object.Stat()
+			if err != nil {
+				return err
+			}
 			object.Read(fileHeader)
 			w.Header().Set("Content-Disposition", "attachment; filename=\""+fileStat.Key+"\"")
 			w.Header().Set("Content-Type", http.DetectContentType(fileHeader))
