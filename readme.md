@@ -10,3 +10,4 @@ go get -u github.com/tal-tech/go-zero/tools/goctl
 goctl api plugin -plugin goctl-swagger="swagger" -api resource.api -dir .
 goctl api plugin -plugin goctl-swagger="swagger -filename resource.json -host 127.0.0.1:8888 -basepath /" -api resource.api -dir .
 docker run --rm -p 8083:8080 -e SWAGGER_JSON=/foo/resource.json -v $PWD:/foo swaggerapi/swagger-ui
+访问swagger地址 http://localhost:18006/doc.html#/home
