@@ -24,8 +24,8 @@ type OssTemplate interface {
 	RemoveBucket(tenantId, bucketName string) error                                 // 删除存储桶
 	BucketExists(tenantId, bucketName string) (bool, error)                         // 存储桶是否存在
 	PutFile(tenantId, bucketName string, file *multipart.FileHeader) (*File, error) // 上传文件
-	RemoveFile(tenantId, bucketName string) error                                   // 删除文件
-	RemoveFiles(tenantId string, bucketName []string) error                         // 批量删除文件
+	RemoveFile(tenantId, bucketName, fileName string) error                         // 删除文件
+	RemoveFiles(tenantId string, bucketName string, fileNames []string) error       // 批量删除文件
 }
 
 type OssRule struct {

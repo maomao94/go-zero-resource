@@ -1,10 +1,10 @@
 package ossx
 
 import (
+	"github.com/minio/minio-go"
+	"github.com/tal-tech/go-zero/core/fx"
 	"go-zero-resource/service/resource/model/gorm_model"
 	"mime/multipart"
-
-	"github.com/minio/minio-go"
 )
 
 type MinioTemplate struct {
@@ -18,7 +18,7 @@ func (m MinioTemplate) MakeBucket(tenantId, bucketName string) error {
 }
 
 func (m MinioTemplate) RemoveBucket(tenantId, bucketName string) error {
-	panic("implement me")
+	return m.client.RemoveBucket(m.ossRule.bucketName(tenantId, bucketName))
 }
 
 func (m MinioTemplate) BucketExists(tenantId, bucketName string) (bool, error) {
@@ -51,12 +51,26 @@ func (m MinioTemplate) PutFile(tenantId, bucketName string, file *multipart.File
 	}
 }
 
-func (m MinioTemplate) RemoveFile(tenantId, bucketName string) error {
-	panic("implement me")
+func (m MinioTemplate) RemoveFile(tenantId, bucketName, fileName string) error {
+	return m.client.RemoveObject(m.ossRule.bucketName(tenantId, bucketName), m.ossRule.fileName(fileName))
 }
 
-func (m MinioTemplate) RemoveFiles(tenantId string, bucketName []string) error {
-	panic("implement me")
+func (m MinioTemplate) RemoveFiles(tenantId string, bucketName string, fileNames []string) error {
+	objectsCh := make(chan string)
+	go func() {
+		defer close(objectsCh)
+		fx.Just(fileNames).ForEach(func(item interface{}) {
+			objectsCh <- m.ossRule.fileName(item.(string))
+		})
+	}()
+	errorCh := m.client.RemoveObjects(m.ossRule.bucketName(tenantId, bucketName), objectsCh)
+	select {
+	case resp, flag := <-errorCh:
+		if flag {
+			return resp.Err
+		}
+	}
+	return nil
 }
 
 func (m MinioTemplate) getOssHost(tenantId, bucketName string) string {
