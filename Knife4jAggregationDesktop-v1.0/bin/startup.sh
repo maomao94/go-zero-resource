@@ -1,1 +1,0 @@
-nohup java -jar knife4j-aggregation-desktop-1.0.jar &

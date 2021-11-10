@@ -397,7 +397,10 @@
           "description": " 文件名"
         }
       },
-      "title": "GetFileReq"
+      "title": "GetFileReq",
+      "required": [
+        "fileName"
+      ]
     },
     "MakeBucketReq": {
       "type": "object",
