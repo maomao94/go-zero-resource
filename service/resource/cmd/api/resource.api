@@ -90,6 +90,13 @@ type (
 		BucketName string `form:"bucketName,optional"` // 存储桶名称
 	}
 
+	GetFileReq {
+		TenantId   string `json:"tenantId,optional"`   // 租户ID
+		Code       string `json:"code,optional"`       // 资源编号
+		BucketName string `json:"bucketName,optional"` // 存储桶名称
+		FileName   string `json:"fileName"`            // 文件名
+	}
+
 	RemoveFileReq {
 		TenantId   string `json:"tenantId,optional"`   // 租户ID
 		Code       string `json:"code,optional"`       // 资源编号
@@ -149,6 +156,10 @@ service resource-api {
 	@doc "上传文件"
 	@handler putFile
 	post /oss/endpoint/put-file (PutFileReq) returns (File)
+	
+	@doc "下载文件"
+	@handler getFile
+	post /oss/endpoint/get-file (GetFileReq) returns ()
 	
 	@doc "删除文件"
 	@handler removeFile

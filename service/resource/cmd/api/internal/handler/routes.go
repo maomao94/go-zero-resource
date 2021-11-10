@@ -59,6 +59,11 @@ func RegisterHandlers(engine *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
+				Path:    "/oss/endpoint/get-file",
+				Handler: getFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
 				Path:    "/oss/endpoint/remove-file",
 				Handler: removeFileHandler(serverCtx),
 			},

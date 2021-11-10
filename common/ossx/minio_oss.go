@@ -66,6 +66,10 @@ func (m MinioTemplate) PutFile(tenantId, bucketName string, file *multipart.File
 	}
 }
 
+func (m MinioTemplate) GetObject(tenantId, bucketName, fileName string) (*minio.Object, error) {
+	return m.client.GetObject(m.ossRule.bucketName(tenantId, bucketName), fileName, minio.GetObjectOptions{})
+}
+
 func (m MinioTemplate) RemoveFile(tenantId, bucketName, fileName string) error {
 	if len(bucketName) == 0 {
 		bucketName = m.ossProperties.BucketName

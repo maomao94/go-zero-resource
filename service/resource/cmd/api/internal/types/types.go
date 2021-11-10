@@ -86,6 +86,13 @@ type PutFileReq struct {
 	BucketName string `form:"bucketName,optional"` // 存储桶名称
 }
 
+type GetFileReq struct {
+	TenantId   string `json:"tenantId,optional"`   // 租户ID
+	Code       string `json:"code,optional"`       // 资源编号
+	BucketName string `json:"bucketName,optional"` // 存储桶名称
+	FileName   string `json:"fileName"`            // 文件名
+}
+
 type RemoveFileReq struct {
 	TenantId   string `json:"tenantId,optional"`   // 租户ID
 	Code       string `json:"code,optional"`       // 资源编号
