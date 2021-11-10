@@ -94,6 +94,31 @@
         ]
       }
     },
+    "/oss/endpoint/get-file": {
+      "post": {
+        "summary": "下载文件",
+        "operationId": "getFile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetFileReq"
+            }
+          }
+        ],
+        "tags": [
+          "resource-api"
+        ]
+      }
+    },
     "/oss/endpoint/make-bucket": {
       "post": {
         "summary": "创建存储桶",
@@ -352,6 +377,31 @@
         "attachId"
       ]
     },
+    "GetFileReq": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string",
+          "description": " 租户ID"
+        },
+        "code": {
+          "type": "string",
+          "description": " 资源编号"
+        },
+        "bucketName": {
+          "type": "string",
+          "description": " 存储桶名称"
+        },
+        "fileName": {
+          "type": "string",
+          "description": " 文件名"
+        }
+      },
+      "title": "GetFileReq",
+      "required": [
+        "fileName"
+      ]
+    },
     "MakeBucketReq": {
       "type": "object",
       "properties": {
@@ -509,6 +559,10 @@
           "format": "int64",
           "description": " 文件大小"
         },
+        "putTime": {
+          "type": "string",
+          "description": " 文件上传时间"
+        },
         "contentType": {
           "type": "string",
           "description": " 文件contentType"
@@ -519,6 +573,7 @@
         "link",
         "name",
         "length",
+        "putTime",
         "contentType"
       ]
     },
