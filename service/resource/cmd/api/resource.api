@@ -69,6 +69,20 @@ type (
 		BucketName string `form:"bucketName,optional"` // 存储桶名称
 	}
 
+	RemoveFileReq {
+		TenantId   string `json:"tenantId,optional"`   // 租户ID
+		Code       string `json:"code,optional"`       // 资源编号
+		BucketName string `json:"bucketName,optional"` // 存储桶名称
+		fileName string `json:"fileName"` // 文件名
+	}
+
+	RemoveFilesReq {
+		TenantId   string `form:"tenantId,optional"`   // 租户ID
+		Code       string `form:"code,optional"`       // 资源编号
+		BucketName string `form:"bucketName,optional"` // 存储桶名称
+		fileNames []string `json:"fileNames"` // 文件名集合
+	}
+
 	File {
 		Link         string `json:"link"`               // 文件地址
 		Domain       string `json:"domain"`             // 域名地址
@@ -106,4 +120,12 @@ service resource-api {
 	@doc "上传文件"
 	@handler putFile
 	post /oss/endpoint/put-file (PutFileReq) returns (File)
+
+	@doc "删除文件"
+	@handler removeFile
+	post /oss/endpoint/remove-file (RemoveFileReq) returns ()
+
+	@doc "批量删除文件"
+	@handler removeFiles
+	post /oss/endpoint/remove-files (RemoveFilesReq) returns ()
 }

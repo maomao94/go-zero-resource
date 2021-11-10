@@ -1,10 +1,11 @@
 package ossx
 
 import (
-	"github.com/minio/minio-go"
-	"github.com/tal-tech/go-zero/core/fx"
 	"go-zero-resource/service/resource/model/gorm_model"
 	"mime/multipart"
+
+	"github.com/minio/minio-go"
+	"github.com/tal-tech/go-zero/core/fx"
 )
 
 type MinioTemplate struct {
@@ -52,10 +53,16 @@ func (m MinioTemplate) PutFile(tenantId, bucketName string, file *multipart.File
 }
 
 func (m MinioTemplate) RemoveFile(tenantId, bucketName, fileName string) error {
+	if len(bucketName) == 0 {
+		bucketName = m.ossProperties.BucketName
+	}
 	return m.client.RemoveObject(m.ossRule.bucketName(tenantId, bucketName), m.ossRule.fileName(fileName))
 }
 
 func (m MinioTemplate) RemoveFiles(tenantId string, bucketName string, fileNames []string) error {
+	if len(bucketName) == 0 {
+		bucketName = m.ossProperties.BucketName
+	}
 	objectsCh := make(chan string)
 	go func() {
 		defer close(objectsCh)
