@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"go-zero-resource/common/ossx"
 
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
@@ -24,7 +25,15 @@ func NewRemoveFilesLogic(ctx context.Context, svcCtx *svc.ServiceContext) Remove
 }
 
 func (l *RemoveFilesLogic) RemoveFiles(req types.RemoveFilesReq) error {
-	// todo: add your logic here and delete this line
-
-	return nil
+	template, err := ossx.Template(req.TenantId, req.Code)
+	if err != nil {
+		return err
+	} else {
+		err := template.RemoveFiles(req.TenantId, req.BucketName, req.FileNames)
+		if err != nil {
+			return err
+		} else {
+			return nil
+		}
+	}
 }

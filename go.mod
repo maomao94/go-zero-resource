@@ -12,24 +12,17 @@ require (
 )
 
 require (
-	github.com/antlr/antlr4/runtime/Go/antlr v0.0.0-20211106181442-e4c1a74c66bd // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
-	github.com/emicklei/proto v1.9.1 // indirect
-	github.com/fatih/structtag v1.2.0 // indirect
 	github.com/go-ini/ini v1.63.2 // indirect
 	github.com/go-redis/redis v6.15.7+incompatible // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/go-xorm/builder v0.3.4 // indirect
 	github.com/golang-jwt/jwt v3.2.1+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
-	github.com/iancoleman/strcase v0.2.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.2 // indirect
 	github.com/justinas/alice v1.2.0 // indirect
-	github.com/lib/pq v1.10.4 // indirect
-	github.com/logrusorgru/aurora v2.0.3+incompatible // indirect
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
 	github.com/openzipkin/zipkin-go v0.2.5 // indirect
@@ -37,12 +30,7 @@ require (
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.26.0 // indirect
 	github.com/prometheus/procfs v0.6.0 // indirect
-	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
-	github.com/urfave/cli v1.22.5 // indirect
-	github.com/zeromicro/antlr v0.0.1 // indirect
-	github.com/zeromicro/ddl-parser v0.0.0-20210712021150-63520aca7348 // indirect
-	github.com/zeromicro/protobuf v0.0.0-20210921042113-636cd51f0c35 // indirect
 	go.opentelemetry.io/otel v1.1.0 // indirect
 	go.opentelemetry.io/otel/exporters/jaeger v1.0.1 // indirect
 	go.opentelemetry.io/otel/exporters/zipkin v1.0.1 // indirect

@@ -5,7 +5,6 @@ import (
 	"mime/multipart"
 
 	"github.com/minio/minio-go"
-	"github.com/tal-tech/go-zero/core/fx"
 )
 
 type MinioTemplate struct {
@@ -56,7 +55,7 @@ func (m MinioTemplate) RemoveFile(tenantId, bucketName, fileName string) error {
 	if len(bucketName) == 0 {
 		bucketName = m.ossProperties.BucketName
 	}
-	return m.client.RemoveObject(m.ossRule.bucketName(tenantId, bucketName), m.ossRule.fileName(fileName))
+	return m.client.RemoveObject(m.ossRule.bucketName(tenantId, bucketName), fileName)
 }
 
 func (m MinioTemplate) RemoveFiles(tenantId string, bucketName string, fileNames []string) error {
@@ -66,9 +65,9 @@ func (m MinioTemplate) RemoveFiles(tenantId string, bucketName string, fileNames
 	objectsCh := make(chan string)
 	go func() {
 		defer close(objectsCh)
-		fx.Just(fileNames).ForEach(func(item interface{}) {
-			objectsCh <- m.ossRule.fileName(item.(string))
-		})
+		for _, f := range fileNames {
+			objectsCh <- f
+		}
 	}()
 	errorCh := m.client.RemoveObjects(m.ossRule.bucketName(tenantId, bucketName), objectsCh)
 	select {
