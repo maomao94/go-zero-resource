@@ -63,6 +63,19 @@ type (
 		BucketName string `json:"bucketName"`        // 存储桶名称
 	}
 
+	RemoveBucketReq {
+		TenantId   string `json:"tenantId,optional"` // 租户ID
+		Code       string `json:"code,optional"`     // 资源编号
+		BucketName string `json:"bucketName"`        // 存储桶名称
+	}
+
+	StatFileReq {
+		TenantId   string `json:"tenantId,optional"`   // 租户ID
+		Code       string `json:"code,optional"`       // 资源编号
+		BucketName string `json:"bucketName,optional"` // 存储桶名称
+		FileName   string `json:"fileName"`            // 文件名
+	}
+
 	PutFileReq {
 		TenantId   string `form:"tenantId,optional"`   // 租户ID
 		Code       string `form:"code,optional"`       // 资源编号
@@ -116,6 +129,14 @@ service resource-api {
 	@doc "创建存储桶"
 	@handler makeBucket
 	post /oss/endpoint/make-bucket (MakeBucketReq) returns ()
+	
+	@doc "删除存储桶"
+	@handler removeBucket
+	post /oss/endpoint/remove-bucket (RemoveBucketReq) returns ()
+	
+	@doc "获取文件信息"
+	@handler statFile
+	post /oss/endpoint/stat-file (StatFileReq) returns ()
 	
 	@doc "上传文件"
 	@handler putFile

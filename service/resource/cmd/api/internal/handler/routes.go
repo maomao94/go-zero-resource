@@ -44,6 +44,16 @@ func RegisterHandlers(engine *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 			{
 				Method:  http.MethodPost,
+				Path:    "/oss/endpoint/remove-bucket",
+				Handler: removeBucketHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/endpoint/stat-file",
+				Handler: statFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
 				Path:    "/oss/endpoint/put-file",
 				Handler: putFileHandler(serverCtx),
 			},
