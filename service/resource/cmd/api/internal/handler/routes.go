@@ -47,6 +47,16 @@ func RegisterHandlers(engine *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/oss/endpoint/put-file",
 				Handler: putFileHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/endpoint/remove-file",
+				Handler: removeFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/endpoint/remove-files",
+				Handler: removeFilesHandler(serverCtx),
+			},
 		},
 	)
 }

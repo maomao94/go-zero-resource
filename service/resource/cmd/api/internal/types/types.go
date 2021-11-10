@@ -65,6 +65,20 @@ type PutFileReq struct {
 	BucketName string `form:"bucketName,optional"` // 存储桶名称
 }
 
+type RemoveFileReq struct {
+	TenantId   string `json:"tenantId,optional"`   // 租户ID
+	Code       string `json:"code,optional"`       // 资源编号
+	BucketName string `json:"bucketName,optional"` // 存储桶名称
+	FileName   string `json:"fileName"`            // 文件名
+}
+
+type RemoveFilesReq struct {
+	TenantId   string   `form:"tenantId,optional"`   // 租户ID
+	Code       string   `form:"code,optional"`       // 资源编号
+	BucketName string   `form:"bucketName,optional"` // 存储桶名称
+	FileNames  []string `json:"fileNames"`           // 文件名集合
+}
+
 type File struct {
 	Link         string `json:"link"`               // 文件地址
 	Domain       string `json:"domain"`             // 域名地址
