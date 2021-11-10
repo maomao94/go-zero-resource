@@ -5,6 +5,7 @@ import (
 	"go-zero-resource/common/ossx"
 	"io"
 	"net/http"
+	"path"
 	"strconv"
 
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
@@ -42,7 +43,13 @@ func (l *GetFileLogic) GetFile(req types.GetFileReq, w http.ResponseWriter) erro
 				return err
 			}
 			object.Read(fileHeader)
-			w.Header().Set("Content-Disposition", "attachment; filename=\""+fileStat.Key+"\"")
+			//获取文件名称带后缀
+			//fileNameWithSuffix := path.Base(fileStat.Key)
+			//获取文件的后缀(文件类型)
+			//fileType := path.Ext(fileNameWithSuffix)
+			//获取文件名称(不带后缀)
+			//fileNameOnly := strings.TrimSuffix(fileNameWithSuffix, fileType)
+			w.Header().Set("Content-Disposition", "attachment; filename=\""+path.Base(fileStat.Key)+"\"")
 			w.Header().Set("Content-Type", http.DetectContentType(fileHeader))
 			w.Header().Set("Content-Length", strconv.FormatInt(fileStat.Size, 10))
 			object.Seek(0, 0)
