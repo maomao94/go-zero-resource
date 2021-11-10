@@ -6,10 +6,11 @@ import (
 	"go-zero-resource/common/errorx"
 	"net/http"
 
-	"github.com/tal-tech/go-zero/rest/httpx"
 	"go-zero-resource/service/resource/cmd/api/internal/logic"
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
+
+	"github.com/tal-tech/go-zero/rest/httpx"
 )
 
 func getFileHandler(ctx *svc.ServiceContext) http.HandlerFunc {
@@ -21,7 +22,7 @@ func getFileHandler(ctx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := logic.NewGetFileLogic(r.Context(), ctx)
-		err := l.GetFile(req)
+		err := l.GetFile(req, w)
 		if err != nil {
 			httpx.Error(w, errorx.ParseError(err))
 		} else {
