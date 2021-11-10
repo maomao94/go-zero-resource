@@ -1,0 +1,790 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "",
+    "version": ""
+  },
+  "host": "127.0.0.1:8888",
+  "basePath": "/",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/oss/create": {
+      "post": {
+        "summary": "创建存储",
+        "operationId": "createOss",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OssCreate"
+            }
+          }
+        ],
+        "tags": [
+          "resource-api"
+        ]
+      }
+    },
+    "/oss/delete": {
+      "post": {
+        "summary": "删除存储信息",
+        "operationId": "deleteOss",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OssDelete"
+            }
+          }
+        ],
+        "tags": [
+          "resource-api"
+        ]
+      }
+    },
+    "/oss/detail": {
+      "post": {
+        "summary": "查看存储详情",
+        "operationId": "ossDetail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/Oss"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/BaseResult"
+            }
+          }
+        ],
+        "tags": [
+          "resource-api"
+        ]
+      }
+    },
+    "/oss/endpoint/make-bucket": {
+      "post": {
+        "summary": "创建存储桶",
+        "operationId": "makeBucket",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MakeBucketReq"
+            }
+          }
+        ],
+        "tags": [
+          "resource-api"
+        ]
+      }
+    },
+    "/oss/endpoint/put-file": {
+      "post": {
+        "summary": "上传文件",
+        "operationId": "putFile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/File"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PutFileReq"
+            }
+          }
+        ],
+        "tags": [
+          "resource-api"
+        ]
+      }
+    },
+    "/oss/endpoint/remove-bucket": {
+      "post": {
+        "summary": "删除存储桶",
+        "operationId": "removeBucket",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RemoveBucketReq"
+            }
+          }
+        ],
+        "tags": [
+          "resource-api"
+        ]
+      }
+    },
+    "/oss/endpoint/remove-file": {
+      "post": {
+        "summary": "删除文件",
+        "operationId": "removeFile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RemoveFileReq"
+            }
+          }
+        ],
+        "tags": [
+          "resource-api"
+        ]
+      }
+    },
+    "/oss/endpoint/remove-files": {
+      "post": {
+        "summary": "批量删除文件",
+        "operationId": "removeFiles",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/RemoveFilesReq"
+            }
+          }
+        ],
+        "tags": [
+          "resource-api"
+        ]
+      }
+    },
+    "/oss/endpoint/stat-file": {
+      "post": {
+        "summary": "获取文件信息",
+        "operationId": "statFile",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/OssFile"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StatFileReq"
+            }
+          }
+        ],
+        "tags": [
+          "resource-api"
+        ]
+      }
+    },
+    "/oss/list": {
+      "post": {
+        "summary": "查看存储列表",
+        "operationId": "ossList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PageResult"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OssListReq"
+            }
+          }
+        ],
+        "tags": [
+          "resource-api"
+        ]
+      }
+    },
+    "/oss/update": {
+      "post": {
+        "summary": "更新存储",
+        "operationId": "updateOss",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {}
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OssUpdate"
+            }
+          }
+        ],
+        "tags": [
+          "resource-api"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "BaseResult": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/uint",
+          "description": " 主键ID"
+        }
+      },
+      "title": "BaseResult",
+      "required": [
+        "id"
+      ]
+    },
+    "EmptyResult": {
+      "type": "object",
+      "title": "EmptyResult"
+    },
+    "File": {
+      "type": "object",
+      "properties": {
+        "link": {
+          "type": "string",
+          "description": " 文件地址"
+        },
+        "domain": {
+          "type": "string",
+          "description": " 域名地址"
+        },
+        "name": {
+          "type": "string",
+          "description": " 文件名"
+        },
+        "originalName": {
+          "type": "string",
+          "description": " 初始文件名"
+        },
+        "attachId": {
+          "type": "string",
+          "description": " 附件表ID"
+        }
+      },
+      "title": "File",
+      "required": [
+        "link",
+        "domain",
+        "name",
+        "originalName",
+        "attachId"
+      ]
+    },
+    "MakeBucketReq": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string",
+          "description": " 租户ID"
+        },
+        "code": {
+          "type": "string",
+          "description": " 资源编号"
+        },
+        "bucketName": {
+          "type": "string",
+          "description": " 存储桶名称"
+        }
+      },
+      "title": "MakeBucketReq",
+      "required": [
+        "bucketName"
+      ]
+    },
+    "Oss": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string",
+          "description": " 租户ID"
+        },
+        "category": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 所属分类"
+        },
+        "ossCode": {
+          "type": "string",
+          "description": " 资源编号"
+        },
+        "endpoint": {
+          "type": "string",
+          "description": " 资源地址"
+        },
+        "accessKey": {
+          "type": "string",
+          "description": " accessKey"
+        },
+        "secretKey": {
+          "type": "string",
+          "description": " secretKey"
+        },
+        "bucketName": {
+          "type": "string",
+          "description": " 空间名"
+        },
+        "appId": {
+          "type": "string",
+          "description": " 应用ID TencentCOS需要"
+        },
+        "region": {
+          "type": "string",
+          "description": " 地域简称 TencentCOS需要"
+        },
+        "remark": {
+          "type": "string",
+          "description": " 所属分类"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 状态"
+        }
+      },
+      "title": "Oss"
+    },
+    "OssCreate": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string",
+          "description": " 租户ID"
+        },
+        "category": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 所属分类"
+        },
+        "ossCode": {
+          "type": "string",
+          "description": " 资源编号"
+        },
+        "endpoint": {
+          "type": "string",
+          "description": " 资源地址"
+        },
+        "accessKey": {
+          "type": "string",
+          "description": " accessKey"
+        },
+        "secretKey": {
+          "type": "string",
+          "description": " secretKey"
+        },
+        "bucketName": {
+          "type": "string",
+          "description": " 空间名"
+        },
+        "appId": {
+          "type": "string",
+          "description": " 应用ID TencentCOS需要"
+        },
+        "region": {
+          "type": "string",
+          "description": " 地域简称 TencentCOS需要"
+        },
+        "remark": {
+          "type": "string",
+          "description": " 所属分类"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 状态"
+        }
+      },
+      "title": "OssCreate",
+      "required": [
+        "category"
+      ]
+    },
+    "OssDelete": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/uint",
+          "description": " 主键ID"
+        }
+      },
+      "title": "OssDelete",
+      "required": [
+        "id"
+      ]
+    },
+    "OssFile": {
+      "type": "object",
+      "properties": {
+        "link": {
+          "type": "string",
+          "description": " 文件地址"
+        },
+        "name": {
+          "type": "string",
+          "description": " 文件名"
+        },
+        "length": {
+          "type": "integer",
+          "format": "int64",
+          "description": " 文件大小"
+        },
+        "contentType": {
+          "type": "string",
+          "description": " 文件contentType"
+        }
+      },
+      "title": "OssFile",
+      "required": [
+        "link",
+        "name",
+        "length",
+        "contentType"
+      ]
+    },
+    "OssListReq": {
+      "type": "object",
+      "properties": {
+        "": {
+          "$ref": "#/definitions/PageInfo"
+        },
+        "": {
+          "$ref": "#/definitions/Oss"
+        }
+      },
+      "title": "OssListReq"
+    },
+    "OssUpdate": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/uint",
+          "description": " 主键ID"
+        },
+        "tenantId": {
+          "type": "string",
+          "description": " 租户ID"
+        },
+        "category": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 所属分类"
+        },
+        "ossCode": {
+          "type": "string",
+          "description": " 资源编号"
+        },
+        "endpoint": {
+          "type": "string",
+          "description": " 资源地址"
+        },
+        "accessKey": {
+          "type": "string",
+          "description": " accessKey"
+        },
+        "secretKey": {
+          "type": "string",
+          "description": " secretKey"
+        },
+        "bucketName": {
+          "type": "string",
+          "description": " 空间名"
+        },
+        "appId": {
+          "type": "string",
+          "description": " 应用ID TencentCOS需要"
+        },
+        "region": {
+          "type": "string",
+          "description": " 地域简称 TencentCOS需要"
+        },
+        "remark": {
+          "type": "string",
+          "description": " 所属分类"
+        },
+        "status": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 状态"
+        }
+      },
+      "title": "OssUpdate",
+      "required": [
+        "id",
+        "category"
+      ]
+    },
+    "PageInfo": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "integer",
+          "format": "int32",
+          "default": "1",
+          "description": " 页码"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32",
+          "default": "10",
+          "description": " 每页大小"
+        }
+      },
+      "title": "PageInfo",
+      "required": [
+        "page",
+        "pageSize"
+      ]
+    },
+    "PageResult": {
+      "type": "object",
+      "properties": {
+        "list": {
+          "$ref": "#/definitions/interface{}"
+        },
+        "total": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "page": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 页码"
+        },
+        "pageSize": {
+          "type": "integer",
+          "format": "int32",
+          "description": " 每页大小"
+        }
+      },
+      "title": "PageResult",
+      "required": [
+        "list",
+        "total",
+        "page",
+        "pageSize"
+      ]
+    },
+    "PutFileReq": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string",
+          "description": " 租户ID"
+        },
+        "code": {
+          "type": "string",
+          "description": " 资源编号"
+        },
+        "bucketName": {
+          "type": "string",
+          "description": " 存储桶名称"
+        }
+      },
+      "title": "PutFileReq"
+    },
+    "RemoveBucketReq": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string",
+          "description": " 租户ID"
+        },
+        "code": {
+          "type": "string",
+          "description": " 资源编号"
+        },
+        "bucketName": {
+          "type": "string",
+          "description": " 存储桶名称"
+        }
+      },
+      "title": "RemoveBucketReq",
+      "required": [
+        "bucketName"
+      ]
+    },
+    "RemoveFileReq": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string",
+          "description": " 租户ID"
+        },
+        "code": {
+          "type": "string",
+          "description": " 资源编号"
+        },
+        "bucketName": {
+          "type": "string",
+          "description": " 存储桶名称"
+        },
+        "fileName": {
+          "type": "string",
+          "description": " 文件名"
+        }
+      },
+      "title": "RemoveFileReq",
+      "required": [
+        "fileName"
+      ]
+    },
+    "RemoveFilesReq": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string",
+          "description": " 租户ID"
+        },
+        "code": {
+          "type": "string",
+          "description": " 资源编号"
+        },
+        "bucketName": {
+          "type": "string",
+          "description": " 存储桶名称"
+        },
+        "fileNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": " 文件名集合"
+        }
+      },
+      "title": "RemoveFilesReq",
+      "required": [
+        "fileNames"
+      ]
+    },
+    "StatFileReq": {
+      "type": "object",
+      "properties": {
+        "tenantId": {
+          "type": "string",
+          "description": " 租户ID"
+        },
+        "code": {
+          "type": "string",
+          "description": " 资源编号"
+        },
+        "bucketName": {
+          "type": "string",
+          "description": " 存储桶名称"
+        },
+        "fileName": {
+          "type": "string",
+          "description": " 文件名"
+        }
+      },
+      "title": "StatFileReq",
+      "required": [
+        "fileName"
+      ]
+    },
+    "TenantResult": {
+      "type": "object",
+      "properties": {
+        "": {
+          "$ref": "#/definitions/BaseResult"
+        },
+        "tenantId": {
+          "$ref": "#/definitions/uint",
+          "description": " 租户ID"
+        }
+      },
+      "title": "TenantResult",
+      "required": [
+        "tenantId"
+      ]
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}
