@@ -36,11 +36,18 @@ func (l *GetFileLogic) GetFile(req types.GetFileReq, w http.ResponseWriter) erro
 		if err != nil {
 			return err
 		} else {
+			fileHeader := make([]byte, 512)
 			fileStat, _ := object.Stat()
+			object.Read(fileHeader)
 			w.Header().Set("Content-Disposition", "attachment; filename="+fileStat.Key)
-			w.Header().Set("Content-type", fileStat.ContentType)
+			w.Header().Set("Content-type", http.DetectContentType(fileHeader))
 			w.Header().Set("Content-Length", strconv.FormatInt(fileStat.Size, 10))
-			io.Copy(w, object)
+			object.Seek(0, 0)
+			if _, err := io.Copy(w, object); err != nil {
+				if err != nil {
+					return err
+				}
+			}
 			return nil
 		}
 	}
