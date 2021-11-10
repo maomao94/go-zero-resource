@@ -57,6 +57,7 @@ type OssFile struct {
 	Link        string `json:"link"`        // 文件地址
 	Name        string `json:"name"`        // 文件名
 	Length      int64  `json:"length"`      // 文件大小
+	PutTime     string `json:"putTime"`     // 文件上传时间
 	ContentType string `json:"contentType"` // 文件contentType
 }
 

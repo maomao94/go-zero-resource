@@ -37,6 +37,7 @@ func (l *StatFileLogic) StatFile(req types.StatFileReq) (*types.OssFile, error) 
 				Link:        file.Link,
 				Name:        file.Name,
 				Length:      file.Length,
+				PutTime:     file.PutTime.Format("2006-01-02 15:04:05"),
 				ContentType: file.ContentType,
 			}, nil
 		}
