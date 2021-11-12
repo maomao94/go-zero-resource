@@ -22,8 +22,8 @@ var (
 	Category_Ali     = 3
 	Category_Tencent = 4
 
-	templatePool map[string]OssTemplate
-	ossPool      map[string]*gorm_model.ResourceOss
+	templatePool = make(map[string]OssTemplate)
+	ossPool      = make(map[string]*gorm_model.ResourceOss)
 	lock         sync.Mutex
 )
 
@@ -93,16 +93,16 @@ func getOss(tenantId, code string) (err error, oss gorm_model.ResourceOss) {
 func Template(TenantId, Code string) (ossTemplate OssTemplate, err error) {
 	err, resourceOss := getOss(TenantId, Code)
 	ossCached := ossPool[TenantId]
-	template := templatePool[TenantId]
+	ossTemplate = templatePool[TenantId]
 	if err != nil {
 		return nil, err
 	} else {
-		if ossCached == nil || template == nil ||
+		if ossCached == nil || ossTemplate == nil ||
 			(resourceOss.Endpoint != ossCached.Endpoint) ||
 			(resourceOss.AccessKey != ossCached.AccessKey) {
 			lock.Lock()
 			defer lock.Unlock()
-			if ossCached == nil || template == nil ||
+			if ossCached == nil || ossTemplate == nil ||
 				(resourceOss.Endpoint != ossCached.Endpoint) ||
 				(resourceOss.AccessKey != ossCached.AccessKey) {
 				// todo 判断配置文件是否开启多租户模式
