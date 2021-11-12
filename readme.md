@@ -1,3 +1,5 @@
+## 介绍
+go-zero练手项目，包装了多种资源，整合成统一接口对外提供服务
 ## 默认模板
 goctl api go -api resource.api -dir .
 ## 指定模板
