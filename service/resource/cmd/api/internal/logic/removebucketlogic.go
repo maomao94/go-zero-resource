@@ -25,7 +25,7 @@ func NewRemoveBucketLogic(ctx context.Context, svcCtx *svc.ServiceContext) Remov
 }
 
 func (l *RemoveBucketLogic) RemoveBucket(req types.RemoveBucketReq) error {
-	template, err := ossx.Template(req.TenantId, req.Code)
+	template, err := ossx.Template(req.TenantId, req.Code, l.svcCtx.Config.Oss.TenantMode)
 	if err != nil {
 		return err
 	} else {

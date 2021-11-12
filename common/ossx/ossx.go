@@ -90,7 +90,7 @@ func getOss(tenantId, code string) (err error, oss gorm_model.ResourceOss) {
 	return service.ResourceOssApp.GetOss(tenantId, code)
 }
 
-func Template(TenantId, Code string) (ossTemplate OssTemplate, err error) {
+func Template(TenantId, Code string, tenantMode bool) (ossTemplate OssTemplate, err error) {
 	err, resourceOss := getOss(TenantId, Code)
 	ossCached := ossPool[TenantId]
 	ossTemplate = templatePool[TenantId]
@@ -105,9 +105,8 @@ func Template(TenantId, Code string) (ossTemplate OssTemplate, err error) {
 			if ossCached == nil || ossTemplate == nil ||
 				(resourceOss.Endpoint != ossCached.Endpoint) ||
 				(resourceOss.AccessKey != ossCached.AccessKey) {
-				// todo 判断配置文件是否开启多租户模式
 				ossRule := OssRule{}
-				if false {
+				if tenantMode {
 					ossRule = OssRule{
 						tenantMode: true,
 					}

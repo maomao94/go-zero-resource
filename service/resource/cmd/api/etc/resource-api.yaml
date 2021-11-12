@@ -13,6 +13,9 @@ Mysql:
   LogMode: info
   # 是否使用logx框架记录日志
   Logx: false
+Oss:
+  # 是否开启租户模式
+  TenantMode: true
 CacheRedis:
   - Host: 134.175.188.108:6379
     Pass:

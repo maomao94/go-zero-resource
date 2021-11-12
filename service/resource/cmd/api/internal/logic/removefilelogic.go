@@ -25,7 +25,7 @@ func NewRemoveFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) RemoveF
 }
 
 func (l *RemoveFileLogic) RemoveFile(req types.RemoveFileReq) error {
-	template, err := ossx.Template(req.TenantId, req.Code)
+	template, err := ossx.Template(req.TenantId, req.Code, l.svcCtx.Config.Oss.TenantMode)
 	if err != nil {
 		return err
 	} else {

@@ -25,7 +25,7 @@ func NewStatFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) StatFileL
 }
 
 func (l *StatFileLogic) StatFile(req types.StatFileReq) (*types.OssFile, error) {
-	template, err := ossx.Template(req.TenantId, req.Code)
+	template, err := ossx.Template(req.TenantId, req.Code, l.svcCtx.Config.Oss.TenantMode)
 	if err != nil {
 		return nil, err
 	} else {

@@ -26,7 +26,7 @@ func NewPutFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) PutFileLog
 }
 
 func (l *PutFileLogic) PutFile(req types.PutFileReq, file *multipart.FileHeader) (*types.File, error) {
-	template, err := ossx.Template(req.TenantId, req.Code)
+	template, err := ossx.Template(req.TenantId, req.Code, l.svcCtx.Config.Oss.TenantMode)
 	if err != nil {
 		return nil, err
 	} else {

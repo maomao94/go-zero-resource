@@ -29,7 +29,7 @@ func (l *MakeBucketLogic) MakeBucket(req types.MakeBucketReq) error {
 	if err != nil {
 		return err
 	}
-	template, err := ossx.Template(req.TenantId, req.Code)
+	template, err := ossx.Template(req.TenantId, req.Code, l.svcCtx.Config.Oss.TenantMode)
 	if err != nil {
 		return err
 	} else {

@@ -29,7 +29,7 @@ func NewGetFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) GetFileLog
 }
 
 func (l *GetFileLogic) GetFile(req types.GetFileReq, w http.ResponseWriter) error {
-	template, err := ossx.Template(req.TenantId, req.Code)
+	template, err := ossx.Template(req.TenantId, req.Code, l.svcCtx.Config.Oss.TenantMode)
 	if err != nil {
 		return err
 	} else {
