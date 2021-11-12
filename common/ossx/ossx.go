@@ -2,11 +2,13 @@ package ossx
 
 import (
 	"fmt"
+	"go-zero-resource/common/errorx"
 	"go-zero-resource/service/resource/cmd/api/service"
 	"go-zero-resource/service/resource/model/gorm_model"
 	"mime/multipart"
 	"path"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/minio/minio-go"
@@ -19,6 +21,10 @@ var (
 	Category_Qiniu   = 2
 	Category_Ali     = 3
 	Category_Tencent = 4
+
+	templatePool map[string]OssTemplate
+	ossPool      map[string]*gorm_model.ResourceOss
+	lock         sync.Mutex
 )
 
 type OssTemplate interface {
@@ -86,16 +92,39 @@ func getOss(tenantId, code string) (err error, oss gorm_model.ResourceOss) {
 
 func Template(TenantId, Code string) (ossTemplate OssTemplate, err error) {
 	err, resourceOss := getOss(TenantId, Code)
+	ossCached := ossPool[TenantId]
+	template := templatePool[TenantId]
 	if err != nil {
 		return nil, err
 	} else {
-		// todo 获取规则配置
-		ossRule := OssRule{
-			tenantMode: true,
-		}
-		// todo 缓存template
-		if resourceOss.Category == Category_Minio {
-			ossTemplate = NewMinioTemplate(resourceOss, ossRule)
+		if ossCached == nil || template == nil ||
+			(resourceOss.Endpoint != ossCached.Endpoint) ||
+			(resourceOss.AccessKey != ossCached.AccessKey) {
+			lock.Lock()
+			defer lock.Unlock()
+			if ossCached == nil || template == nil ||
+				(resourceOss.Endpoint != ossCached.Endpoint) ||
+				(resourceOss.AccessKey != ossCached.AccessKey) {
+				// todo 判断配置文件是否开启多租户模式
+				ossRule := OssRule{}
+				if false {
+					ossRule = OssRule{
+						tenantMode: true,
+					}
+				} else {
+					ossRule = OssRule{
+						tenantMode: false,
+					}
+				}
+				if resourceOss.Category == Category_Minio {
+					ossTemplate = NewMinioTemplate(resourceOss, ossRule)
+				} else {
+					return nil, errorx.NewDefaultError("oss type error")
+				}
+				templatePool[TenantId] = ossTemplate
+				ossPool[TenantId] = &resourceOss
+				return
+			}
 		}
 		return
 	}
