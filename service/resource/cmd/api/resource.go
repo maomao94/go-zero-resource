@@ -18,6 +18,7 @@ import (
 
 var configFile = flag.String("f", "etc/resource-api.yaml", "the config file")
 
+//go:generate goctl api go -api resource.api -dir . -home ../../../../template
 func main() {
 	flag.Parse()
 
