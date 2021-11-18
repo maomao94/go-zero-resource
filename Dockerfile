@@ -22,5 +22,5 @@ ENV TZ Asia/Shanghai
 
 WORKDIR /app
 COPY --from=builder /app/resource /app/resource
-
-CMD ["./resource"]
+COPY --from=builder /build/zero/service/resource/cmd/api/etc /app/etc
+CMD ["./resource", "-f", "etc/resource-api.yaml"]
