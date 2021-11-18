@@ -20,5 +20,5 @@ CacheRedis:
   - Host: 134.175.188.108:6379
     Pass:
     Type: node
-Log:
-  Mode: file
+#Log:
+#  Mode: file
