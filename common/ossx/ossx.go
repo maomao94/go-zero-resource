@@ -38,6 +38,8 @@ type OssTemplate interface {
 	RemoveFiles(tenantId string, bucketName string, fileNames []string) error       // 批量删除文件
 }
 
+var _ OssTemplate = (*MinioTemplate)(nil)
+
 type OssRule struct {
 	tenantMode bool
 }
