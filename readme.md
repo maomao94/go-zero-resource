@@ -16,3 +16,5 @@ go-zero练手项目，包装了多种资源，整合成统一接口对外提供�
 - goctl docker -go ./service/resource/cmd/api/resource.go
 - docker build -t resource:v1 .
 - docker tag resource:v1 hehanpeng/public/resource:v1
+## 接口地址
+https://www.apifox.cn/apidoc/shared-6c1c58fe-fc04-45f9-abac-a4b7b71bbc62
