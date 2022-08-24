@@ -33,5 +33,5 @@ message OssDetailResp{
 
 service Resource {
   rpc ping (Empty) returns (PingResp);
-  rpc ossDetail (OssDetailReq) returns (OssDetailResp);
+  rpc ossDetail (OssDetailReq) returns (OssDetailResp); // 查看存储详情
 }
