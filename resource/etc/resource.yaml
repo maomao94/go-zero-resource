@@ -10,11 +10,10 @@ Log:
 #链路追踪
 Telemetry:
   Name: api
-  Endpoint: http://localhost:14268/api/traces
+  Endpoint: http://127.0.0.1:14268/api/traces
   Sampler: 1.0
   Batcher: jaeger
 DB:
   DataSource: root:123456@tcp(mysql:3306)/resource?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 Cache:
-  - Host: redis:6379
-    Pass: G62m50oigInC30sf
+  - Host: 127.0.0.1:6379

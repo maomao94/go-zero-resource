@@ -1,4 +1,4 @@
-create table `resource_oss`
+create table `t_oss`
 (
     `id`          bigint unsigned auto_increment,
     `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
