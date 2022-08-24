@@ -18,28 +18,28 @@ type (
 	EmptyResult {
 	}
 	BaseResult {
-		Id uint `json:"id"` // 主键ID
+		Id int64 `json:"id"` // 主键ID
 	}
 	TenantResult {
-		BaseResult
-		TenantId uint `json:"tenantId"` // 租户ID
+		Id       int64  `json:"id"`       // 主键ID
+		TenantId string `json:"tenantId"` // 租户ID
 	}
 	PageInfo {
-		Page     int `json:"page,range=[1:100],default=1"`      // 页码
-		PageSize int `json:"pageSize,range=[1:100],default=10"` // 每页大小
+		Page     int64 `json:"page,range=[1:100],default=1"`      // 页码
+		PageSize int64 `json:"pageSize,range=[1:100],default=10"` // 每页大小
 	}
 	PageResult {
 		List     interface{} `json:"list"`
 		Total    int64       `json:"total"`
-		Page     int         `json:"page"`     // 页码
-		PageSize int         `json:"pageSize"` // 每页大小
+		Page     int64       `json:"page"`     // 页码
+		PageSize int64       `json:"pageSize"` // 每页大小
 	}
 )
 
 type (
 	Oss {
 		TenantId   string `json:"tenantId,optional"`   // 租户ID
-		Category   int    `json:"category,optional"`   // 所属分类
+		Category   int64  `json:"category,optional"`   // 所属分类
 		OssCode    string `json:"ossCode,optional"`    // 资源编号
 		Endpoint   string `json:"endpoint,optional"`   // 资源地址
 		AccessKey  string `json:"accessKey,optional"`  // accessKey
@@ -48,12 +48,12 @@ type (
 		AppId      string `json:"appId,optional"`      // 应用ID TencentCOS需要
 		Region     string `json:"region,optional"`     // 地域简称 TencentCOS需要
 		Remark     string `json:"remark,optional"`     // 所属分类
-		Status     int    `json:"status,optional"`     // 状态
+		Status     int64  `json:"status,optional"`     // 状态
 	}
 
 	OssCreate {
 		TenantId   string `json:"tenantId,optional"`        // 租户ID
-		Category   int    `json:"category,options=1|2|3|4"` // 所属分类
+		Category   int64  `json:"category,options=1|2|3|4"` // 所属分类
 		OssCode    string `json:"ossCode,optional"`         // 资源编号
 		Endpoint   string `json:"endpoint,optional"`        // 资源地址
 		AccessKey  string `json:"accessKey,optional"`       // accessKey
@@ -62,13 +62,13 @@ type (
 		AppId      string `json:"appId,optional"`           // 应用ID TencentCOS需要
 		Region     string `json:"region,optional"`          // 地域简称 TencentCOS需要
 		Remark     string `json:"remark,optional"`          // 所属分类
-		Status     int    `json:"status,optional"`          // 状态
+		Status     int64  `json:"status,optional"`          // 状态
 	}
 
 	OssUpdate {
-		Id         uint   `json:"id"`                                // 主键ID
+		Id         int64  `json:"id"`                                // 主键ID
 		TenantId   string `json:"tenantId,optional"`                 // 租户ID
-		Category   int    `json:"category,options=1|2|3|4,optional"` // 所属分类
+		Category   int64  `json:"category,options=1|2|3|4,optional"` // 所属分类
 		OssCode    string `json:"ossCode,optional"`                  // 资源编号
 		Endpoint   string `json:"endpoint,optional"`                 // 资源地址
 		AccessKey  string `json:"accessKey,optional"`                // accessKey
@@ -77,18 +77,18 @@ type (
 		AppId      string `json:"appId,optional"`                    // 应用ID TencentCOS需要
 		Region     string `json:"region,optional"`                   // 地域简称 TencentCOS需要
 		Remark     string `json:"remark,optional"`                   // 所属分类
-		Status     int    `json:"status,optional"`                   // 状态
+		Status     int64  `json:"status,optional"`                   // 状态
 	}
 
 	OssDelete {
-		Id uint `json:"id"` // 主键ID
+		Id int64 `json:"id"` // 主键ID
 	}
 
 	OssListReq {
-		Page     int    `json:"page,range=[1:100],default=1"`      // 页码
-		PageSize int    `json:"pageSize,range=[1:100],default=10"` // 每页大小
+		Page     int64  `json:"page,range=[1:100],default=1"`      // 页码
+		PageSize int64  `json:"pageSize,range=[1:100],default=10"` // 每页大小
 		TenantId string `json:"tenantId,optional"`                 // 租户ID
-		Category int    `json:"category,options=0|1|2|3|4"`        // 所属分类
+		Category int64  `json:"category,options=0|1|2|3|4"`        // 所属分类
 	}
 
 	OssFile {

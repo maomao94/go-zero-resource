@@ -13,11 +13,15 @@ import (
 )
 
 type (
-	Empty    = pb.Empty
-	PingResp = pb.PingResp
+	Empty         = pb.Empty
+	Oss           = pb.Oss
+	OssDetailReq  = pb.OssDetailReq
+	OssDetailResp = pb.OssDetailResp
+	PingResp      = pb.PingResp
 
 	Resource interface {
 		Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
+		OssDetail(ctx context.Context, in *OssDetailReq, opts ...grpc.CallOption) (*OssDetailResp, error)
 	}
 
 	defaultResource struct {
@@ -34,4 +38,9 @@ func NewResource(cli zrpc.Client) Resource {
 func (m *defaultResource) Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error) {
 	client := pb.NewResourceClient(m.cli.Conn())
 	return client.Ping(ctx, in, opts...)
+}
+
+func (m *defaultResource) OssDetail(ctx context.Context, in *OssDetailReq, opts ...grpc.CallOption) (*OssDetailResp, error) {
+	client := pb.NewResourceClient(m.cli.Conn())
+	return client.OssDetail(ctx, in, opts...)
 }

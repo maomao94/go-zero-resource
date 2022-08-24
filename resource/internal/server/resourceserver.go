@@ -26,3 +26,8 @@ func (s *ResourceServer) Ping(ctx context.Context, in *pb.Empty) (*pb.PingResp, 
 	l := logic.NewPingLogic(ctx, s.svcCtx)
 	return l.Ping(in)
 }
+
+func (s *ResourceServer) OssDetail(ctx context.Context, in *pb.OssDetailReq) (*pb.OssDetailResp, error) {
+	l := logic.NewOssDetailLogic(ctx, s.svcCtx)
+	return l.OssDetail(in)
+}

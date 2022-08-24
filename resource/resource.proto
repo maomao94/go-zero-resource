@@ -9,6 +9,29 @@ message PingResp{
   string msg = 1;
 }
 
+message Oss{
+  string TenantId = 1;  // 租户ID
+  int64 Category = 2 ;// 所属分类
+  string OssCode = 3 ;   // 资源编号
+  string  Endpoint = 4 ;   // 资源地址
+  string AccessKey = 5; // accessKey
+  string SecretKey = 6;   // secretKey
+  string BucketName = 7; // 空间名
+  string AppId = 8;// 应用ID TencentCOS需要
+  string Region = 9;     // 地域简称 TencentCOS需要
+  string Remark = 10;   // 所属分类
+  int64 Status = 11 ; // 状态
+}
+
+message OssDetailReq{
+  int64 id = 1;
+}
+
+message OssDetailResp{
+  Oss oss =1;
+}
+
 service Resource {
   rpc ping (Empty) returns (PingResp);
+  rpc ossDetail (OssDetailReq) returns (OssDetailResp);
 }
