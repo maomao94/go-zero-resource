@@ -2,6 +2,7 @@ package gtw
 
 import (
 	"context"
+	"gtw/resource/resource"
 
 	"gtw/gtw/internal/svc"
 	"gtw/gtw/internal/types"
@@ -24,6 +25,11 @@ func NewPingLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PingLogic {
 }
 
 func (l *PingLogic) Ping() (resp *types.PingReply, err error) {
-	resp.Msg = "hello"
-	return
+	pingResp, err := l.svcCtx.ResourceRpc.Ping(l.ctx, &resource.Empty{})
+	if err != nil {
+		return nil, err
+	}
+	return &types.PingReply{
+		Msg: pingResp.Msg,
+	}, nil
 }
