@@ -1,0 +1,25 @@
+syntax = "v1"
+
+info(
+	title: "网关服务"
+	desc: "网关服务"
+	author: "hehanpeng"
+	email: "hehanpengyy@163.com"
+	version: "v1"
+)
+
+type (
+	PingReply {
+		Msg string `json:"msg"`
+	}
+)
+
+@server(
+	prefix: gtw/v1
+	group: gtw
+)
+service gtw {
+	@doc "ping"
+	@handler ping
+	get /ping returns (PingReply)
+}
