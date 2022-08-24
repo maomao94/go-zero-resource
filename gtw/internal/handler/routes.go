@@ -18,6 +18,66 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/ping",
 				Handler: gtw.PingHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/detail",
+				Handler: gtw.OssDetailHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/list",
+				Handler: gtw.OssListHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/create",
+				Handler: gtw.CreateOssHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/update",
+				Handler: gtw.UpdateOssHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/delete",
+				Handler: gtw.DeleteOssHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/endpoint/makeBucket",
+				Handler: gtw.MakeBucketHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/endpoint/removeBucket",
+				Handler: gtw.RemoveBucketHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/endpoint/statFile",
+				Handler: gtw.StatFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/endpoint/putFile",
+				Handler: gtw.PutFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/endpoint/getFile",
+				Handler: gtw.GetFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/endpoint/removeFile",
+				Handler: gtw.RemoveFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/oss/endpoint/removeFiles",
+				Handler: gtw.RemoveFilesHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/gtw/v1"),
 	)
