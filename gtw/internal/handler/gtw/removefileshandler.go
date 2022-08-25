@@ -18,11 +18,11 @@ func RemoveFilesHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := gtw.NewRemoveFilesLogic(r.Context(), svcCtx)
-		err := l.RemoveFiles(&req)
+		resp, err := l.RemoveFiles(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {
-			httpx.Ok(w)
+			httpx.OkJson(w, resp)
 		}
 	}
 }

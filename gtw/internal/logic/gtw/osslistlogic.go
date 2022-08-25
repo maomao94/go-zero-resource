@@ -25,7 +25,7 @@ func NewOssListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OssListLo
 	}
 }
 
-func (l *OssListLogic) OssList(req *types.OssListReq) (resp *types.PageResult, err error) {
+func (l *OssListLogic) OssList(req *types.OssListReq) (resp *types.PageReply, err error) {
 	ossListResp, err := l.svcCtx.ResourceRpc.OssList(l.ctx, &pb.OssListReq{
 		Page:     req.Page,
 		PageSize: req.PageSize,
@@ -47,7 +47,7 @@ func (l *OssListLogic) OssList(req *types.OssListReq) (resp *types.PageResult, e
 		}
 	}
 
-	return &types.PageResult{
+	return &types.PageReply{
 		List:     ossList,
 		Total:    ossListResp.Total,
 		Page:     req.Page,

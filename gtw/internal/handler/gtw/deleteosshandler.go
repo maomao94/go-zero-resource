@@ -18,11 +18,11 @@ func DeleteOssHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := gtw.NewDeleteOssLogic(r.Context(), svcCtx)
-		err := l.DeleteOss(&req)
+		resp, err := l.DeleteOss(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {
-			httpx.Ok(w)
+			httpx.OkJson(w, resp)
 		}
 	}
 }

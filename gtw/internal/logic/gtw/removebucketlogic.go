@@ -23,8 +23,8 @@ func NewRemoveBucketLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Remo
 	}
 }
 
-func (l *RemoveBucketLogic) RemoveBucket(req *types.RemoveBucketReq) error {
+func (l *RemoveBucketLogic) RemoveBucket(req *types.RemoveBucketReq) (resp *types.EmptyReply, err error) {
 	// todo: add your logic here and delete this line
 
-	return nil
+	return
 }

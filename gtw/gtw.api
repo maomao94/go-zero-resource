@@ -15,20 +15,20 @@ type (
 )
 
 type (
-	EmptyResult {
+	EmptyReply {
 	}
-	BaseResult {
+	BaseReq {
 		Id int64 `json:"id"` // 主键ID
 	}
-	TenantResult {
+	TenantReq {
 		Id       int64  `json:"id"`       // 主键ID
 		TenantId string `json:"tenantId"` // 租户ID
 	}
-	PageInfo {
+	PageInfoReq {
 		Page     int64 `json:"page,range=[1:100],default=1"`      // 页码
 		PageSize int64 `json:"pageSize,range=[1:100],default=10"` // 每页大小
 	}
-	PageResult {
+	PageReply {
 		List     interface{} `json:"list"`
 		Total    int64       `json:"total"`
 		Page     int64       `json:"page"`     // 页码
@@ -165,31 +165,31 @@ service gtw {
 	
 	@doc "查看存储详情"
 	@handler ossDetail
-	post /oss/detail (BaseResult) returns (Oss)
+	post /oss/detail (BaseReq) returns (Oss)
 	
 	@doc "查看存储列表"
 	@handler ossList
-	post /oss/list (OssListReq) returns (PageResult)
+	post /oss/list (OssListReq) returns (PageReply)
 	
 	@doc "创建存储"
 	@handler createOss
-	post /oss/create (OssCreate) returns ()
+	post /oss/create (OssCreate) returns (EmptyReply)
 	
 	@doc "更新存储"
 	@handler updateOss
-	post /oss/update (OssUpdate) returns ()
+	post /oss/update (OssUpdate) returns (EmptyReply)
 	
 	@doc "删除存储信息"
 	@handler deleteOss
-	post /oss/delete (OssDelete) returns ()
+	post /oss/delete (OssDelete) returns (EmptyReply)
 	
 	@doc "创建存储桶"
 	@handler makeBucket
-	post /oss/endpoint/makeBucket (MakeBucketReq) returns ()
+	post /oss/endpoint/makeBucket (MakeBucketReq) returns (EmptyReply)
 	
 	@doc "删除存储桶"
 	@handler removeBucket
-	post /oss/endpoint/removeBucket (RemoveBucketReq) returns ()
+	post /oss/endpoint/removeBucket (RemoveBucketReq) returns (EmptyReply)
 	
 	@doc "获取文件信息"
 	@handler statFile
@@ -201,13 +201,13 @@ service gtw {
 	
 	@doc "下载文件"
 	@handler getFile
-	post /oss/endpoint/getFile (GetFileReq) returns ()
+	post /oss/endpoint/getFile (GetFileReq) returns (EmptyReply)
 	
 	@doc "删除文件"
 	@handler removeFile
-	post /oss/endpoint/removeFile (RemoveFileReq) returns ()
+	post /oss/endpoint/removeFile (RemoveFileReq) returns (EmptyReply)
 	
 	@doc "批量删除文件"
 	@handler removeFiles
-	post /oss/endpoint/removeFiles (RemoveFilesReq) returns ()
+	post /oss/endpoint/removeFiles (RemoveFilesReq) returns (EmptyReply)
 }

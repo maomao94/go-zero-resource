@@ -24,14 +24,14 @@ func NewMakeBucketLogic(ctx context.Context, svcCtx *svc.ServiceContext) *MakeBu
 	}
 }
 
-func (l *MakeBucketLogic) MakeBucket(req *types.MakeBucketReq) error {
-	_, err := l.svcCtx.ResourceRpc.MakeBucket(l.ctx, &pb.MakeBucketReq{
+func (l *MakeBucketLogic) MakeBucket(req *types.MakeBucketReq) (resp *types.EmptyReply, err error) {
+	_, err = l.svcCtx.ResourceRpc.MakeBucket(l.ctx, &pb.MakeBucketReq{
 		TenantId:   req.TenantId,
 		Code:       req.Code,
 		BucketName: req.BucketName,
 	})
 	if err != nil {
-		return nil
+		return nil, err
 	}
-	return nil
+	return
 }

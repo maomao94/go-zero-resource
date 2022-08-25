@@ -18,11 +18,11 @@ func MakeBucketHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := gtw.NewMakeBucketLogic(r.Context(), svcCtx)
-		err := l.MakeBucket(&req)
+		resp, err := l.MakeBucket(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {
-			httpx.Ok(w)
+			httpx.OkJson(w, resp)
 		}
 	}
 }

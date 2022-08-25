@@ -18,11 +18,11 @@ func RemoveBucketHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := gtw.NewRemoveBucketLogic(r.Context(), svcCtx)
-		err := l.RemoveBucket(&req)
+		resp, err := l.RemoveBucket(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {
-			httpx.Ok(w)
+			httpx.OkJson(w, resp)
 		}
 	}
 }

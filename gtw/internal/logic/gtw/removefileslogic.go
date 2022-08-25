@@ -23,8 +23,8 @@ func NewRemoveFilesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Remov
 	}
 }
 
-func (l *RemoveFilesLogic) RemoveFiles(req *types.RemoveFilesReq) error {
+func (l *RemoveFilesLogic) RemoveFiles(req *types.RemoveFilesReq) (resp *types.EmptyReply, err error) {
 	// todo: add your logic here and delete this line
 
-	return nil
+	return
 }

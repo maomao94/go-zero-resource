@@ -18,11 +18,11 @@ func UpdateOssHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 
 		l := gtw.NewUpdateOssLogic(r.Context(), svcCtx)
-		err := l.UpdateOss(&req)
+		resp, err := l.UpdateOss(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {
-			httpx.Ok(w)
+			httpx.OkJson(w, resp)
 		}
 	}
 }

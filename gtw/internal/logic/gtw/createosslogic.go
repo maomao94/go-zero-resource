@@ -23,8 +23,8 @@ func NewCreateOssLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateO
 	}
 }
 
-func (l *CreateOssLogic) CreateOss(req *types.OssCreate) error {
+func (l *CreateOssLogic) CreateOss(req *types.OssCreate) (resp *types.EmptyReply, err error) {
 	// todo: add your logic here and delete this line
 
-	return nil
+	return
 }

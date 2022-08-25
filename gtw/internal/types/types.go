@@ -5,24 +5,24 @@ type PingReply struct {
 	Msg string `json:"msg"`
 }
 
-type EmptyResult struct {
+type EmptyReply struct {
 }
 
-type BaseResult struct {
+type BaseReq struct {
 	Id int64 `json:"id"` // 主键ID
 }
 
-type TenantResult struct {
+type TenantReq struct {
 	Id       int64  `json:"id"`       // 主键ID
 	TenantId string `json:"tenantId"` // 租户ID
 }
 
-type PageInfo struct {
+type PageInfoReq struct {
 	Page     int64 `json:"page,range=[1:100],default=1"`      // 页码
 	PageSize int64 `json:"pageSize,range=[1:100],default=10"` // 每页大小
 }
 
-type PageResult struct {
+type PageReply struct {
 	List     interface{} `json:"list"`
 	Total    int64       `json:"total"`
 	Page     int64       `json:"page"`     // 页码

@@ -2,12 +2,12 @@ package gtw
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
 	"gtw/resource/pb"
 
 	"gtw/gtw/internal/svc"
 	"gtw/gtw/internal/types"
 
-	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -25,7 +25,7 @@ func NewOssDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OssDeta
 	}
 }
 
-func (l *OssDetailLogic) OssDetail(req *types.BaseResult) (resp *types.Oss, err error) {
+func (l *OssDetailLogic) OssDetail(req *types.BaseReq) (resp *types.Oss, err error) {
 	ossDetailResp, err := l.svcCtx.ResourceRpc.OssDetail(l.ctx, &pb.OssDetailReq{
 		Id: req.Id,
 	})

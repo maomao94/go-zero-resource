@@ -23,8 +23,8 @@ func NewDeleteOssLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DeleteO
 	}
 }
 
-func (l *DeleteOssLogic) DeleteOss(req *types.OssDelete) error {
+func (l *DeleteOssLogic) DeleteOss(req *types.OssDelete) (resp *types.EmptyReply, err error) {
 	// todo: add your logic here and delete this line
 
-	return nil
+	return
 }
