@@ -2,6 +2,7 @@ package gtw
 
 import (
 	"context"
+	"gtw/resource/pb"
 
 	"gtw/gtw/internal/svc"
 	"gtw/gtw/internal/types"
@@ -24,7 +25,13 @@ func NewMakeBucketLogic(ctx context.Context, svcCtx *svc.ServiceContext) *MakeBu
 }
 
 func (l *MakeBucketLogic) MakeBucket(req *types.MakeBucketReq) error {
-	// todo: add your logic here and delete this line
-
+	_, err := l.svcCtx.ResourceRpc.MakeBucket(l.ctx, &pb.MakeBucketReq{
+		TenantId:   req.TenantId,
+		Code:       req.Code,
+		BucketName: req.BucketName,
+	})
+	if err != nil {
+		return nil
+	}
 	return nil
 }
