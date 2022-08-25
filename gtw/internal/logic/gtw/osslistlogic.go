@@ -39,7 +39,6 @@ func (l *OssListLogic) OssList(req *types.OssListReq) (resp *types.OssListReply,
 	var ossList []types.Oss
 	if len(ossListResp.Oss) > 0 {
 		for _, pbOss := range ossListResp.Oss {
-
 			var oss types.Oss
 			_ = copier.Copy(&oss, pbOss)
 			ossList = append(ossList, oss)

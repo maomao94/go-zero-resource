@@ -20,3 +20,9 @@ create table `t_oss`
     primary key (`id`),
     UNIQUE KEY `idx_tid_code` (`tenant_id`,`oss_code`)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='oss表';
+
+INSERT INTO resource.t_oss (create_time, update_time, delete_time, del_state, version, tenant_id, category, oss_code,
+                            endpoint, access_key, secret_key, bucket_name, app_id, region, remark, status)
+VALUES ('2022-08-25 16:33:42', '2022-08-25 17:20:36', '2022-08-25 16:33:42', 0, 0, '000000', 1, 'minio-1',
+        '127.0.0.1:19000', 'AKIAIOSFODNN7EXAMPLE', 'wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY', 'default', '', '', '',
+        -1);

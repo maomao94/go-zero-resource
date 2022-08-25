@@ -33,5 +33,5 @@ func (l *MakeBucketLogic) MakeBucket(req *types.MakeBucketReq) (resp *types.Empt
 	if err != nil {
 		return nil, err
 	}
-	return
+	return &types.EmptyReply{}, nil
 }
