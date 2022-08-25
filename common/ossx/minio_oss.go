@@ -103,16 +103,16 @@ func (m MinioTemplate) fileLink(tenantId, bucketName, fileName string) string {
 	return m.ossProperties.Endpoint + "/" + m.ossRule.bucketName(tenantId, bucketName) + "/" + fileName
 }
 
-func NewMinioTemplate(Oss model.TOss, ossRule OssRule) *MinioTemplate {
+func NewMinioTemplate(Oss *model.TOss, ossRule OssRule) *MinioTemplate {
 	ossProperties := OssProperties{
-		Endpoint:   Oss.Endpoint.String,
-		AccessKey:  Oss.AccessKey.String,
-		SecretKey:  Oss.SecretKey.String,
-		BucketName: Oss.BucketName.String,
+		Endpoint:   Oss.Endpoint,
+		AccessKey:  Oss.AccessKey,
+		SecretKey:  Oss.SecretKey,
+		BucketName: Oss.BucketName,
 		Args:       nil,
 	}
 	// 初使化 minio client对象。
-	minioClient, _ := minio.New(Oss.Endpoint.String, Oss.AccessKey.String, Oss.SecretKey.String, false)
+	minioClient, _ := minio.New(Oss.Endpoint, Oss.AccessKey, Oss.SecretKey, false)
 	return &MinioTemplate{
 		client:        minioClient,
 		ossProperties: ossProperties,

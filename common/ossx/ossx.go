@@ -85,7 +85,7 @@ type OssProperties struct {
 	Args       map[string]interface{} // 自定义属性
 }
 
-type GetOssFn func(tenantId, code string) (oss model.TOss, err error)
+type GetOssFn func(tenantId, code string) (oss *model.TOss, err error)
 
 func Template(TenantId, Code string, tenantMode bool, getOss GetOssFn) (ossTemplate OssTemplate, err error) {
 	oss, err := getOss(TenantId, Code)
@@ -112,13 +112,13 @@ func Template(TenantId, Code string, tenantMode bool, getOss GetOssFn) (ossTempl
 						tenantMode: false,
 					}
 				}
-				if oss.Category.Int64 == Category_Minio {
+				if oss.Category == Category_Minio {
 					ossTemplate = NewMinioTemplate(oss, ossRule)
 				} else {
 					return nil, errors.New("oss type error")
 				}
 				templatePool[TenantId] = ossTemplate
-				ossPool[TenantId] = &oss
+				ossPool[TenantId] = oss
 				return
 			}
 		}

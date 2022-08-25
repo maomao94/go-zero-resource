@@ -26,8 +26,14 @@ func NewMakeBucketLogic(ctx context.Context, svcCtx *svc.ServiceContext) *MakeBu
 }
 
 func (l *MakeBucketLogic) MakeBucket(in *pb.MakeBucketReq) (*pb.Empty, error) {
-	ossx.Template(in.TenantId, in.Code, l.svcCtx.Config.Oss.TenantMode, func(tenantId, code string) (oss model.TOss, err error) {
-		l.svcCtx.TOssModel.FindOneByTenantIdOssCode(l.ctx, in.TenantId, in.Code)
+	ossTemplate, err := ossx.Template(in.TenantId, in.Code, l.svcCtx.Config.Oss.TenantMode, func(tenantId, code string) (oss *model.TOss, err error) {
+		return l.svcCtx.TOssModel.FindOneByTenantIdOssCode(l.ctx, in.TenantId, in.Code)
 	})
+	if err != nil {
+		return nil, err
+	}
+	if err = ossTemplate.MakeBucket(in.TenantId, in.BucketName); err != nil {
+		return nil, err
+	}
 	return &pb.Empty{}, nil
 }

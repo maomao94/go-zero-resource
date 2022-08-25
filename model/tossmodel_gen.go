@@ -31,7 +31,7 @@ type (
 	tOssModel interface {
 		Insert(ctx context.Context, data *TOss) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*TOss, error)
-		FindOneByTenantIdOssCode(ctx context.Context, tenantId string, ossCode sql.NullString) (*TOss, error)
+		FindOneByTenantIdOssCode(ctx context.Context, tenantId string, ossCode string) (*TOss, error)
 		Update(ctx context.Context, data *TOss) error
 		Delete(ctx context.Context, id int64) error
 		RowBuilder() squirrel.SelectBuilder
@@ -48,23 +48,23 @@ type (
 	}
 
 	TOss struct {
-		Id         int64          `db:"id"`
-		CreateTime time.Time      `db:"create_time"`
-		UpdateTime time.Time      `db:"update_time"`
-		DeleteTime time.Time      `db:"delete_time"`
-		DelState   int64          `db:"del_state"`
-		Version    int64          `db:"version"`     // 乐观锁版本号
-		TenantId   string         `db:"tenant_id"`   // 租户ID
-		Category   sql.NullInt64  `db:"category"`    // 分类
-		OssCode    sql.NullString `db:"oss_code"`    // 资源编号
-		Endpoint   sql.NullString `db:"endpoint"`    // 资源地址
-		AccessKey  sql.NullString `db:"access_key"`  // accessKey
-		SecretKey  sql.NullString `db:"secret_key"`  // secretKey
-		BucketName sql.NullString `db:"bucket_name"` // 空间名
-		AppId      sql.NullString `db:"app_id"`      // 应用ID
-		Region     sql.NullString `db:"region"`      // 地域简称
-		Remark     sql.NullString `db:"remark"`      // 备注
-		Status     sql.NullInt64  `db:"status"`      // 状态
+		Id         int64     `db:"id"`
+		CreateTime time.Time `db:"create_time"`
+		UpdateTime time.Time `db:"update_time"`
+		DeleteTime time.Time `db:"delete_time"`
+		DelState   int64     `db:"del_state"`
+		Version    int64     `db:"version"`     // 乐观锁版本号
+		TenantId   string    `db:"tenant_id"`   // 租户ID
+		Category   int64     `db:"category"`    // 分类
+		OssCode    string    `db:"oss_code"`    // 资源编号
+		Endpoint   string    `db:"endpoint"`    // 资源地址
+		AccessKey  string    `db:"access_key"`  // accessKey
+		SecretKey  string    `db:"secret_key"`  // secretKey
+		BucketName string    `db:"bucket_name"` // 空间名
+		AppId      string    `db:"app_id"`      // 应用ID
+		Region     string    `db:"region"`      // 地域简称
+		Remark     string    `db:"remark"`      // 备注
+		Status     int64     `db:"status"`      // 状态
 	}
 )
 
@@ -107,7 +107,7 @@ func (m *defaultTOssModel) FindOne(ctx context.Context, id int64) (*TOss, error)
 	}
 }
 
-func (m *defaultTOssModel) FindOneByTenantIdOssCode(ctx context.Context, tenantId string, ossCode sql.NullString) (*TOss, error) {
+func (m *defaultTOssModel) FindOneByTenantIdOssCode(ctx context.Context, tenantId string, ossCode string) (*TOss, error) {
 	tOssTenantIdOssCodeKey := fmt.Sprintf("%s%v:%v", cacheTOssTenantIdOssCodePrefix, tenantId, ossCode)
 	var resp TOss
 	err := m.QueryRowIndexCtx(ctx, &resp, tOssTenantIdOssCodeKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) (i interface{}, e error) {
