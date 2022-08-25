@@ -6,10 +6,10 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	"github.com/Masterminds/squirrel"
 	"strings"
 	"time"
 
-	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/builder"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
@@ -23,21 +23,17 @@ var (
 	tOssRowsExpectAutoSet   = strings.Join(stringx.Remove(tOssFieldNames, "`id`", "`create_time`", "`update_time`", "`create_at`", "`update_at`"), ",")
 	tOssRowsWithPlaceHolder = strings.Join(stringx.Remove(tOssFieldNames, "`id`", "`create_time`", "`update_time`", "`create_at`", "`update_at`"), "=?,") + "=?"
 
-	cacheTOssIdPrefix = "cache:tOss:id:"
+	cacheTOssIdPrefix      = "cache:tOss:id:"
+	cacheTOssOssCodePrefix = "cache:tOss:ossCode:"
 )
 
 type (
 	tOssModel interface {
 		Insert(ctx context.Context, data *TOss) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*TOss, error)
+		FindOneByOssCode(ctx context.Context, ossCode sql.NullString) (*TOss, error)
 		Update(ctx context.Context, data *TOss) error
 		Delete(ctx context.Context, id int64) error
-		RowBuilder() squirrel.SelectBuilder
-		CountBuilder(field string) squirrel.SelectBuilder
-		SumBuilder(field string) squirrel.SelectBuilder
-		FindSum(ctx context.Context, sumBuilder squirrel.SelectBuilder) (float64, error)
-		FindCount(ctx context.Context, countBuilder squirrel.SelectBuilder) (int64, error)
-		FindPageListByPage(ctx context.Context, rowBuilder squirrel.SelectBuilder, page, pageSize int64, orderBy string) ([]*TOss, error)
 	}
 
 	defaultTOssModel struct {
@@ -74,11 +70,17 @@ func newTOssModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultTOssModel {
 }
 
 func (m *defaultTOssModel) Delete(ctx context.Context, id int64) error {
+	data, err := m.FindOne(ctx, id)
+	if err != nil {
+		return err
+	}
+
 	tOssIdKey := fmt.Sprintf("%s%v", cacheTOssIdPrefix, id)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	tOssOssCodeKey := fmt.Sprintf("%s%v", cacheTOssOssCodePrefix, data.OssCode)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
 		return conn.ExecCtx(ctx, query, id)
-	}, tOssIdKey)
+	}, tOssIdKey, tOssOssCodeKey)
 	return err
 }
 
@@ -99,21 +101,48 @@ func (m *defaultTOssModel) FindOne(ctx context.Context, id int64) (*TOss, error)
 	}
 }
 
+func (m *defaultTOssModel) FindOneByOssCode(ctx context.Context, ossCode sql.NullString) (*TOss, error) {
+	tOssOssCodeKey := fmt.Sprintf("%s%v", cacheTOssOssCodePrefix, ossCode)
+	var resp TOss
+	err := m.QueryRowIndexCtx(ctx, &resp, tOssOssCodeKey, m.formatPrimary, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) (i interface{}, e error) {
+		query := fmt.Sprintf("select %s from %s where `oss_code` = ? limit 1", tOssRows, m.table)
+		if err := conn.QueryRowCtx(ctx, &resp, query, ossCode); err != nil {
+			return nil, err
+		}
+		return resp.Id, nil
+	}, m.queryPrimary)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlc.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultTOssModel) Insert(ctx context.Context, data *TOss) (sql.Result, error) {
 	tOssIdKey := fmt.Sprintf("%s%v", cacheTOssIdPrefix, data.Id)
+	tOssOssCodeKey := fmt.Sprintf("%s%v", cacheTOssOssCodePrefix, data.OssCode)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, tOssRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.DeleteTime, data.DelState, data.Version, data.TenantId, data.Category, data.OssCode, data.Endpoint, data.AccessKey, data.SecretKey, data.BucketName, data.AppId, data.Region, data.Remark, data.Status)
-	}, tOssIdKey)
+	}, tOssIdKey, tOssOssCodeKey)
 	return ret, err
 }
 
-func (m *defaultTOssModel) Update(ctx context.Context, data *TOss) error {
+func (m *defaultTOssModel) Update(ctx context.Context, newData *TOss) error {
+	data, err := m.FindOne(ctx, newData.Id)
+	if err != nil {
+		return err
+	}
+
 	tOssIdKey := fmt.Sprintf("%s%v", cacheTOssIdPrefix, data.Id)
-	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+	tOssOssCodeKey := fmt.Sprintf("%s%v", cacheTOssOssCodePrefix, data.OssCode)
+	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, tOssRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, data.DeleteTime, data.DelState, data.Version, data.TenantId, data.Category, data.OssCode, data.Endpoint, data.AccessKey, data.SecretKey, data.BucketName, data.AppId, data.Region, data.Remark, data.Status, data.Id)
-	}, tOssIdKey)
+		return conn.ExecCtx(ctx, query, newData.DeleteTime, newData.DelState, newData.Version, newData.TenantId, newData.Category, newData.OssCode, newData.Endpoint, newData.AccessKey, newData.SecretKey, newData.BucketName, newData.AppId, newData.Region, newData.Remark, newData.Status, newData.Id)
+	}, tOssIdKey, tOssOssCodeKey)
 	return err
 }
 
@@ -143,12 +172,10 @@ func (m *defaultTOssModel) SumBuilder(field string) squirrel.SelectBuilder {
 }
 
 func (m *defaultTOssModel) FindSum(ctx context.Context, sumBuilder squirrel.SelectBuilder) (float64, error) {
-
 	query, values, err := sumBuilder.Where("del_state = ?", DelStateNo).ToSql()
 	if err != nil {
 		return 0, err
 	}
-
 	var resp float64
 	err = m.QueryRowNoCacheCtx(ctx, &resp, query, values...)
 	switch err {
@@ -160,12 +187,10 @@ func (m *defaultTOssModel) FindSum(ctx context.Context, sumBuilder squirrel.Sele
 }
 
 func (m *defaultTOssModel) FindCount(ctx context.Context, countBuilder squirrel.SelectBuilder) (int64, error) {
-
 	query, values, err := countBuilder.Where("del_state = ?", DelStateNo).ToSql()
 	if err != nil {
 		return 0, err
 	}
-
 	var resp int64
 	err = m.QueryRowNoCacheCtx(ctx, &resp, query, values...)
 	switch err {

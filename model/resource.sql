@@ -17,5 +17,6 @@ create table `t_oss`
     `region`      varchar(255) null comment '地域简称',
     `remark`      varchar(255) null comment '备注',
     `status`      bigint null comment '状态',
-    primary key (`id`)
-);
+    primary key (`id`),
+    UNIQUE KEY `idx_oss_code` (`oss_code`)
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='oss表';
