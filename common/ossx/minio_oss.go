@@ -1,6 +1,7 @@
 package ossx
 
 import (
+	"errors"
 	"github.com/minio/minio-go"
 	"gtw/model"
 	"mime/multipart"
@@ -13,14 +14,23 @@ type MinioTemplate struct {
 }
 
 func (m MinioTemplate) MakeBucket(tenantId, bucketName string) error {
+	if err := validateClient(m.client); err != nil {
+		return err
+	}
 	return m.client.MakeBucket(m.ossRule.bucketName(tenantId, bucketName), "")
 }
 
 func (m MinioTemplate) RemoveBucket(tenantId, bucketName string) error {
+	if err := validateClient(m.client); err != nil {
+		return err
+	}
 	return m.client.RemoveBucket(m.ossRule.bucketName(tenantId, bucketName))
 }
 
 func (m MinioTemplate) StatFile(tenantId, bucketName, fileName string) (*OssFile, error) {
+	if err := validateClient(m.client); err != nil {
+		return nil, err
+	}
 	object, err := m.client.StatObject(m.ossRule.bucketName(tenantId, bucketName), fileName, minio.StatObjectOptions{})
 	if err != nil {
 		return nil, err
@@ -36,10 +46,16 @@ func (m MinioTemplate) StatFile(tenantId, bucketName, fileName string) (*OssFile
 }
 
 func (m MinioTemplate) BucketExists(tenantId, bucketName string) (bool, error) {
+	if err := validateClient(m.client); err != nil {
+		return false, err
+	}
 	return m.client.BucketExists(m.ossRule.bucketName(tenantId, bucketName))
 }
 
 func (m MinioTemplate) PutFile(tenantId, bucketName string, file *multipart.FileHeader) (*File, error) {
+	if err := validateClient(m.client); err != nil {
+		return nil, err
+	}
 	f, err := file.Open()
 	if err != nil {
 		return nil, err
@@ -66,10 +82,16 @@ func (m MinioTemplate) PutFile(tenantId, bucketName string, file *multipart.File
 }
 
 func (m MinioTemplate) GetObject(tenantId, bucketName, fileName string) (*minio.Object, error) {
+	if err := validateClient(m.client); err != nil {
+		return nil, err
+	}
 	return m.client.GetObject(m.ossRule.bucketName(tenantId, bucketName), fileName, minio.GetObjectOptions{})
 }
 
 func (m MinioTemplate) RemoveFile(tenantId, bucketName, fileName string) error {
+	if err := validateClient(m.client); err != nil {
+		return err
+	}
 	if len(bucketName) == 0 {
 		bucketName = m.ossProperties.BucketName
 	}
@@ -77,6 +99,9 @@ func (m MinioTemplate) RemoveFile(tenantId, bucketName, fileName string) error {
 }
 
 func (m MinioTemplate) RemoveFiles(tenantId string, bucketName string, fileNames []string) error {
+	if err := validateClient(m.client); err != nil {
+		return err
+	}
 	if len(bucketName) == 0 {
 		bucketName = m.ossProperties.BucketName
 	}
@@ -118,4 +143,11 @@ func NewMinioTemplate(Oss *model.TOss, ossRule OssRule) *MinioTemplate {
 		ossProperties: ossProperties,
 		ossRule:       ossRule,
 	}
+}
+
+func validateClient(client *minio.Client) error {
+	if client == nil {
+		return errors.New("client is nil")
+	}
+	return nil
 }
