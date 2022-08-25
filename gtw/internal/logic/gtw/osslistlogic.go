@@ -2,6 +2,8 @@ package gtw
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
+	"gtw/resource/pb"
 
 	"gtw/gtw/internal/svc"
 	"gtw/gtw/internal/types"
@@ -24,7 +26,31 @@ func NewOssListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OssListLo
 }
 
 func (l *OssListLogic) OssList(req *types.OssListReq) (resp *types.PageResult, err error) {
-	// todo: add your logic here and delete this line
+	ossListResp, err := l.svcCtx.ResourceRpc.OssList(l.ctx, &pb.OssListReq{
+		Page:     req.Page,
+		PageSize: req.PageSize,
+		OrderBy:  "create_time desc",
+		TenantId: req.TenantId,
+		Category: req.Category,
+	})
+	if err != nil {
+		return nil, err
+	}
+	var ossList []types.Oss
 
-	return
+	if len(ossListResp.Oss) > 0 {
+		for _, pbOss := range ossListResp.Oss {
+
+			var oss types.Oss
+			_ = copier.Copy(&oss, pbOss)
+			ossList = append(ossList, oss)
+		}
+	}
+
+	return &types.PageResult{
+		List:     ossList,
+		Total:    0,
+		Page:     req.Page,
+		PageSize: req.PageSize,
+	}, nil
 }

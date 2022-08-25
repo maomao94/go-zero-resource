@@ -31,3 +31,8 @@ func (s *ResourceServer) OssDetail(ctx context.Context, in *pb.OssDetailReq) (*p
 	l := logic.NewOssDetailLogic(ctx, s.svcCtx)
 	return l.OssDetail(in)
 }
+
+func (s *ResourceServer) OssList(ctx context.Context, in *pb.OssListReq) (*pb.OssListResp, error) {
+	l := logic.NewOssListLogic(ctx, s.svcCtx)
+	return l.OssList(in)
+}

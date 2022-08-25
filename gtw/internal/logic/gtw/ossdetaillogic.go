@@ -32,7 +32,7 @@ func (l *OssDetailLogic) OssDetail(req *types.BaseResult) (resp *types.Oss, err 
 	if err != nil {
 		return nil, err
 	}
-	var oss types.Oss
-	_ = copier.Copy(&oss, ossDetailResp.Oss)
-	return &oss, nil
+	var respOss types.Oss
+	_ = copier.Copy(&respOss, ossDetailResp.Oss)
+	return &respOss, nil
 }

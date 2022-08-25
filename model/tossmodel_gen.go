@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/builder"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlc"
@@ -31,6 +32,10 @@ type (
 		FindOne(ctx context.Context, id int64) (*TOss, error)
 		Update(ctx context.Context, data *TOss) error
 		Delete(ctx context.Context, id int64) error
+		RowBuilder() squirrel.SelectBuilder
+		CountBuilder(field string) squirrel.SelectBuilder
+		SumBuilder(field string) squirrel.SelectBuilder
+		FindPageListByPage(ctx context.Context, rowBuilder squirrel.SelectBuilder, page, pageSize int64, orderBy string) ([]*TOss, error)
 	}
 
 	defaultTOssModel struct {
@@ -121,4 +126,40 @@ func (m *defaultTOssModel) queryPrimary(ctx context.Context, conn sqlx.SqlConn, 
 
 func (m *defaultTOssModel) tableName() string {
 	return m.table
+}
+
+func (m *defaultTOssModel) RowBuilder() squirrel.SelectBuilder {
+	return squirrel.Select(tOssRows).From(m.table)
+}
+
+func (m *defaultTOssModel) CountBuilder(field string) squirrel.SelectBuilder {
+	return squirrel.Select("COUNT(" + field + ")").From(m.table)
+}
+
+func (m *defaultTOssModel) SumBuilder(field string) squirrel.SelectBuilder {
+	return squirrel.Select("IFNULL(SUM(" + field + "),0)").From(m.table)
+}
+
+func (m *defaultTOssModel) FindPageListByPage(ctx context.Context, rowBuilder squirrel.SelectBuilder, page, pageSize int64, orderBy string) ([]*TOss, error) {
+	if orderBy == "" {
+		rowBuilder = rowBuilder.OrderBy("id DESC")
+	} else {
+		rowBuilder = rowBuilder.OrderBy(orderBy)
+	}
+	if page < 1 {
+		page = 1
+	}
+	offset := (page - 1) * pageSize
+	query, values, err := rowBuilder.Where("del_state = ?", DelStateNo).Offset(uint64(offset)).Limit(uint64(pageSize)).ToSql()
+	if err != nil {
+		return nil, err
+	}
+	var resp []*TOss
+	err = m.QueryRowsNoCacheCtx(ctx, &resp, query, values...)
+	switch err {
+	case nil:
+		return resp, nil
+	default:
+		return nil, err
+	}
 }

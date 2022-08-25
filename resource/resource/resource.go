@@ -17,11 +17,14 @@ type (
 	Oss           = pb.Oss
 	OssDetailReq  = pb.OssDetailReq
 	OssDetailResp = pb.OssDetailResp
+	OssListReq    = pb.OssListReq
+	OssListResp   = pb.OssListResp
 	PingResp      = pb.PingResp
 
 	Resource interface {
 		Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
 		OssDetail(ctx context.Context, in *OssDetailReq, opts ...grpc.CallOption) (*OssDetailResp, error)
+		OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error)
 	}
 
 	defaultResource struct {
@@ -43,4 +46,9 @@ func (m *defaultResource) Ping(ctx context.Context, in *Empty, opts ...grpc.Call
 func (m *defaultResource) OssDetail(ctx context.Context, in *OssDetailReq, opts ...grpc.CallOption) (*OssDetailResp, error) {
 	client := pb.NewResourceClient(m.cli.Conn())
 	return client.OssDetail(ctx, in, opts...)
+}
+
+func (m *defaultResource) OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error) {
+	client := pb.NewResourceClient(m.cli.Conn())
+	return client.OssList(ctx, in, opts...)
 }

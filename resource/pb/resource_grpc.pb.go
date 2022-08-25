@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type ResourceClient interface {
 	Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
 	OssDetail(ctx context.Context, in *OssDetailReq, opts ...grpc.CallOption) (*OssDetailResp, error)
+	OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error)
 }
 
 type resourceClient struct {
@@ -52,12 +53,22 @@ func (c *resourceClient) OssDetail(ctx context.Context, in *OssDetailReq, opts .
 	return out, nil
 }
 
+func (c *resourceClient) OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error) {
+	out := new(OssListResp)
+	err := c.cc.Invoke(ctx, "/resource.Resource/ossList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ResourceServer is the server API for Resource service.
 // All implementations must embed UnimplementedResourceServer
 // for forward compatibility
 type ResourceServer interface {
 	Ping(context.Context, *Empty) (*PingResp, error)
 	OssDetail(context.Context, *OssDetailReq) (*OssDetailResp, error)
+	OssList(context.Context, *OssListReq) (*OssListResp, error)
 	mustEmbedUnimplementedResourceServer()
 }
 
@@ -70,6 +81,9 @@ func (UnimplementedResourceServer) Ping(context.Context, *Empty) (*PingResp, err
 }
 func (UnimplementedResourceServer) OssDetail(context.Context, *OssDetailReq) (*OssDetailResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OssDetail not implemented")
+}
+func (UnimplementedResourceServer) OssList(context.Context, *OssListReq) (*OssListResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OssList not implemented")
 }
 func (UnimplementedResourceServer) mustEmbedUnimplementedResourceServer() {}
 
@@ -120,6 +134,24 @@ func _Resource_OssDetail_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Resource_OssList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OssListReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceServer).OssList(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/resource.Resource/ossList",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceServer).OssList(ctx, req.(*OssListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Resource_ServiceDesc is the grpc.ServiceDesc for Resource service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -134,6 +166,10 @@ var Resource_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ossDetail",
 			Handler:    _Resource_OssDetail_Handler,
+		},
+		{
+			MethodName: "ossList",
+			Handler:    _Resource_OssList_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
