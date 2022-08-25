@@ -1,10 +1,10 @@
 Name: resource.rpc
 ListenOn: 127.0.0.1:8080
 Mode: dev
-Etcd:
-  Hosts:
-  - 127.0.0.1:2379
-  Key: resource.rpc
+#Etcd:
+#  Hosts:
+#  - 127.0.0.1:2379
+#  Key: resource.rpc
 Log:
   Encoding: plain
 #链路追踪
@@ -14,6 +14,6 @@ Telemetry:
   Sampler: 1.0
   Batcher: jaeger
 DB:
-  DataSource: root:123456@tcp(mysql:3306)/resource?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  DataSource: root:123456@tcp(127.0.0.1:3306)/resource?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 Cache:
   - Host: 127.0.0.1:6379

@@ -25,11 +25,11 @@ func NewPingLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PingLogic {
 }
 
 func (l *PingLogic) Ping() (resp *types.PingReply, err error) {
-	respPing, err := l.svcCtx.ResourceRpc.Ping(l.ctx, &resource.Empty{})
+	pingResp, err := l.svcCtx.ResourceRpc.Ping(l.ctx, &resource.Empty{})
 	if err != nil {
 		return nil, err
 	}
 	return &types.PingReply{
-		Msg: respPing.Msg,
+		Msg: pingResp.Msg,
 	}, nil
 }

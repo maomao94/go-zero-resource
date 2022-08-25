@@ -1,6 +1,6 @@
 create table `t_oss`
 (
-    `id`          bigint unsigned auto_increment,
+    `id`          bigint auto_increment,
     `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `delete_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,

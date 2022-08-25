@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/jinzhu/copier"
 
 	"gtw/resource/internal/svc"
 	"gtw/resource/pb"
@@ -24,7 +25,11 @@ func NewOssDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OssDeta
 }
 
 func (l *OssDetailLogic) OssDetail(in *pb.OssDetailReq) (*pb.OssDetailResp, error) {
-	// todo: add your logic here and delete this line
-
-	return &pb.OssDetailResp{}, nil
+	oss, err := l.svcCtx.TOssModel.FindOne(l.ctx, in.Id)
+	if err != nil {
+		return nil, err
+	}
+	var respOss pb.Oss
+	_ = copier.Copy(&respOss, oss)
+	return &pb.OssDetailResp{Oss: &respOss}, nil
 }

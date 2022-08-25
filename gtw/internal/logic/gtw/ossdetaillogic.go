@@ -26,13 +26,13 @@ func NewOssDetailLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OssDeta
 }
 
 func (l *OssDetailLogic) OssDetail(req *types.BaseResult) (resp *types.Oss, err error) {
-	respOssDetail, err := l.svcCtx.ResourceRpc.OssDetail(l.ctx, &pb.OssDetailReq{
+	ossDetailResp, err := l.svcCtx.ResourceRpc.OssDetail(l.ctx, &pb.OssDetailReq{
 		Id: req.Id,
 	})
 	if err != nil {
 		return nil, err
 	}
-	oss := new(types.Oss)
-	_ = copier.Copy(&respOssDetail, oss)
-	return oss, nil
+	var oss types.Oss
+	_ = copier.Copy(&ossDetailResp.Oss, oss)
+	return &oss, nil
 }

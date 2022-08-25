@@ -28,9 +28,9 @@ var (
 type (
 	tOssModel interface {
 		Insert(ctx context.Context, data *TOss) (sql.Result, error)
-		FindOne(ctx context.Context, id uint64) (*TOss, error)
+		FindOne(ctx context.Context, id int64) (*TOss, error)
 		Update(ctx context.Context, data *TOss) error
-		Delete(ctx context.Context, id uint64) error
+		Delete(ctx context.Context, id int64) error
 	}
 
 	defaultTOssModel struct {
@@ -39,7 +39,7 @@ type (
 	}
 
 	TOss struct {
-		Id         uint64         `db:"id"`
+		Id         int64          `db:"id"`
 		CreateTime time.Time      `db:"create_time"`
 		UpdateTime time.Time      `db:"update_time"`
 		DeleteTime time.Time      `db:"delete_time"`
@@ -66,7 +66,7 @@ func newTOssModel(conn sqlx.SqlConn, c cache.CacheConf) *defaultTOssModel {
 	}
 }
 
-func (m *defaultTOssModel) Delete(ctx context.Context, id uint64) error {
+func (m *defaultTOssModel) Delete(ctx context.Context, id int64) error {
 	tOssIdKey := fmt.Sprintf("%s%v", cacheTOssIdPrefix, id)
 	_, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
@@ -75,7 +75,7 @@ func (m *defaultTOssModel) Delete(ctx context.Context, id uint64) error {
 	return err
 }
 
-func (m *defaultTOssModel) FindOne(ctx context.Context, id uint64) (*TOss, error) {
+func (m *defaultTOssModel) FindOne(ctx context.Context, id int64) (*TOss, error) {
 	tOssIdKey := fmt.Sprintf("%s%v", cacheTOssIdPrefix, id)
 	var resp TOss
 	err := m.QueryRowCtx(ctx, &resp, tOssIdKey, func(ctx context.Context, conn sqlx.SqlConn, v interface{}) error {
