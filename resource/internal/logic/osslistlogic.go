@@ -29,12 +29,12 @@ func NewOssListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OssListLo
 func (l *OssListLogic) OssList(in *pb.OssListReq) (*pb.OssListResp, error) {
 	whereBuilder := l.svcCtx.TOssModel.RowBuilder()
 	if len(in.TenantId) > 0 {
-		whereBuilder.Where(squirrel.Eq{
+		whereBuilder = whereBuilder.Where(squirrel.Eq{
 			"tenant_id": in.TenantId,
 		})
 	}
 	if in.Category > 0 {
-		whereBuilder.Where(squirrel.Eq{
+		whereBuilder = whereBuilder.Where(squirrel.Eq{
 			"category": in.Category,
 		})
 	}
