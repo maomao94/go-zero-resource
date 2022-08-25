@@ -14,6 +14,7 @@ import (
 
 type (
 	Empty         = pb.Empty
+	MakeBucketReq = pb.MakeBucketReq
 	Oss           = pb.Oss
 	OssDetailReq  = pb.OssDetailReq
 	OssDetailResp = pb.OssDetailResp
@@ -25,6 +26,7 @@ type (
 		Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
 		OssDetail(ctx context.Context, in *OssDetailReq, opts ...grpc.CallOption) (*OssDetailResp, error)
 		OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error)
+		MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error)
 	}
 
 	defaultResource struct {
@@ -51,4 +53,9 @@ func (m *defaultResource) OssDetail(ctx context.Context, in *OssDetailReq, opts 
 func (m *defaultResource) OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error) {
 	client := pb.NewResourceClient(m.cli.Conn())
 	return client.OssList(ctx, in, opts...)
+}
+
+func (m *defaultResource) MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := pb.NewResourceClient(m.cli.Conn())
+	return client.MakeBucket(ctx, in, opts...)
 }

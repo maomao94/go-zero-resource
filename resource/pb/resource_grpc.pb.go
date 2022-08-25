@@ -25,6 +25,7 @@ type ResourceClient interface {
 	Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
 	OssDetail(ctx context.Context, in *OssDetailReq, opts ...grpc.CallOption) (*OssDetailResp, error)
 	OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error)
+	MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type resourceClient struct {
@@ -62,6 +63,15 @@ func (c *resourceClient) OssList(ctx context.Context, in *OssListReq, opts ...gr
 	return out, nil
 }
 
+func (c *resourceClient) MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/resource.Resource/makeBucket", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ResourceServer is the server API for Resource service.
 // All implementations must embed UnimplementedResourceServer
 // for forward compatibility
@@ -69,6 +79,7 @@ type ResourceServer interface {
 	Ping(context.Context, *Empty) (*PingResp, error)
 	OssDetail(context.Context, *OssDetailReq) (*OssDetailResp, error)
 	OssList(context.Context, *OssListReq) (*OssListResp, error)
+	MakeBucket(context.Context, *MakeBucketReq) (*Empty, error)
 	mustEmbedUnimplementedResourceServer()
 }
 
@@ -84,6 +95,9 @@ func (UnimplementedResourceServer) OssDetail(context.Context, *OssDetailReq) (*O
 }
 func (UnimplementedResourceServer) OssList(context.Context, *OssListReq) (*OssListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OssList not implemented")
+}
+func (UnimplementedResourceServer) MakeBucket(context.Context, *MakeBucketReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MakeBucket not implemented")
 }
 func (UnimplementedResourceServer) mustEmbedUnimplementedResourceServer() {}
 
@@ -152,6 +166,24 @@ func _Resource_OssList_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Resource_MakeBucket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MakeBucketReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceServer).MakeBucket(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/resource.Resource/makeBucket",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceServer).MakeBucket(ctx, req.(*MakeBucketReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Resource_ServiceDesc is the grpc.ServiceDesc for Resource service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +202,10 @@ var Resource_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ossList",
 			Handler:    _Resource_OssList_Handler,
+		},
+		{
+			MethodName: "makeBucket",
+			Handler:    _Resource_MakeBucket_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

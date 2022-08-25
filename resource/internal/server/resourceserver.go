@@ -36,3 +36,8 @@ func (s *ResourceServer) OssList(ctx context.Context, in *pb.OssListReq) (*pb.Os
 	l := logic.NewOssListLogic(ctx, s.svcCtx)
 	return l.OssList(in)
 }
+
+func (s *ResourceServer) MakeBucket(ctx context.Context, in *pb.MakeBucketReq) (*pb.Empty, error) {
+	l := logic.NewMakeBucketLogic(ctx, s.svcCtx)
+	return l.MakeBucket(in)
+}

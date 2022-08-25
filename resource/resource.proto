@@ -10,17 +10,17 @@ message PingResp{
 }
 
 message Oss{
-  string TenantId = 1; // 租户ID
-  int64 Category = 2; // 所属分类
-  string OssCode = 3; // 资源编号
-  string  Endpoint = 4; // 资源地址
-  string AccessKey = 5; // accessKey
-  string SecretKey = 6; // secretKey
-  string BucketName = 7; // 空间名
-  string AppId = 8; // 应用ID TencentCOS需要
-  string Region = 9; // 地域简称 TencentCOS需要
-  string Remark = 10; // 所属分类
-  int64 Status = 11; // 状态
+  string tenantId = 1; // 租户ID
+  int64 category = 2; // 所属分类
+  string ossCode = 3; // 资源编号
+  string endpoint = 4; // 资源地址
+  string accessKey = 5; // accessKey
+  string secretKey = 6; // secretKey
+  string bucketName = 7; // 空间名
+  string appId = 8; // 应用ID TencentCOS需要
+  string region = 9; // 地域简称 TencentCOS需要
+  string remark = 10; // 所属分类
+  int64 status = 11; // 状态
   int64 createTime = 51;
 }
 
@@ -33,11 +33,11 @@ message OssDetailResp{
 }
 
 message OssListReq{
-  int64 Page = 80; // 页码
-  int64 PageSize = 81; // 每页大小
-  string OrderBy = 82; // 排序
-  string TenantId = 1; // 租户ID
-  int64 Category = 2; // 所属分类
+  int64 page = 80; // 页码
+  int64 pageSize = 81; // 每页大小
+  string orderBy = 82; // 排序
+  string tenantId = 1; // 租户ID
+  int64 category = 2; // 所属分类
 }
 
 message OssListResp{
@@ -45,8 +45,15 @@ message OssListResp{
   int64 total = 2;
 }
 
+message MakeBucketReq {
+  string tenantId = 1; // 租户ID
+  string code = 2; // 资源编号
+  string bucketName = 3; // 存储桶名称
+}
+
 service Resource {
   rpc ping (Empty) returns (PingResp);
   rpc ossDetail (OssDetailReq) returns (OssDetailResp); // 查看存储详情
   rpc ossList (OssListReq) returns (OssListResp); // 查看存储列表
+  rpc makeBucket (MakeBucketReq) returns (Empty); // 创建存储桶
 }
