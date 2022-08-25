@@ -35,6 +35,8 @@ type (
 		RowBuilder() squirrel.SelectBuilder
 		CountBuilder(field string) squirrel.SelectBuilder
 		SumBuilder(field string) squirrel.SelectBuilder
+		FindSum(ctx context.Context, sumBuilder squirrel.SelectBuilder) (float64, error)
+		FindCount(ctx context.Context, countBuilder squirrel.SelectBuilder) (int64, error)
 		FindPageListByPage(ctx context.Context, rowBuilder squirrel.SelectBuilder, page, pageSize int64, orderBy string) ([]*TOss, error)
 	}
 
@@ -138,6 +140,40 @@ func (m *defaultTOssModel) CountBuilder(field string) squirrel.SelectBuilder {
 
 func (m *defaultTOssModel) SumBuilder(field string) squirrel.SelectBuilder {
 	return squirrel.Select("IFNULL(SUM(" + field + "),0)").From(m.table)
+}
+
+func (m *defaultTOssModel) FindSum(ctx context.Context, sumBuilder squirrel.SelectBuilder) (float64, error) {
+
+	query, values, err := sumBuilder.Where("del_state = ?", DelStateNo).ToSql()
+	if err != nil {
+		return 0, err
+	}
+
+	var resp float64
+	err = m.QueryRowNoCacheCtx(ctx, &resp, query, values...)
+	switch err {
+	case nil:
+		return resp, nil
+	default:
+		return 0, err
+	}
+}
+
+func (m *defaultTOssModel) FindCount(ctx context.Context, countBuilder squirrel.SelectBuilder) (int64, error) {
+
+	query, values, err := countBuilder.Where("del_state = ?", DelStateNo).ToSql()
+	if err != nil {
+		return 0, err
+	}
+
+	var resp int64
+	err = m.QueryRowNoCacheCtx(ctx, &resp, query, values...)
+	switch err {
+	case nil:
+		return resp, nil
+	default:
+		return 0, err
+	}
 }
 
 func (m *defaultTOssModel) FindPageListByPage(ctx context.Context, rowBuilder squirrel.SelectBuilder, page, pageSize int64, orderBy string) ([]*TOss, error) {

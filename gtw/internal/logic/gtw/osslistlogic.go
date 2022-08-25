@@ -49,7 +49,7 @@ func (l *OssListLogic) OssList(req *types.OssListReq) (resp *types.PageResult, e
 
 	return &types.PageResult{
 		List:     ossList,
-		Total:    0,
+		Total:    ossListResp.Total,
 		Page:     req.Page,
 		PageSize: req.PageSize,
 	}, nil

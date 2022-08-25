@@ -42,6 +42,7 @@ message OssListReq{
 
 message OssListResp{
   repeated Oss oss = 1;
+  int64 total = 2;
 }
 
 service Resource {

@@ -4,8 +4,6 @@ import (
 	"context"
 	"github.com/Masterminds/squirrel"
 	"github.com/jinzhu/copier"
-	"gtw/model"
-
 	"gtw/resource/internal/svc"
 	"gtw/resource/pb"
 
@@ -28,8 +26,12 @@ func NewOssListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *OssListLo
 
 func (l *OssListLogic) OssList(in *pb.OssListReq) (*pb.OssListResp, error) {
 	whereBuilder := l.svcCtx.TOssModel.RowBuilder()
+	countBuilder := l.svcCtx.TOssModel.CountBuilder("1")
 	if len(in.TenantId) > 0 {
 		whereBuilder = whereBuilder.Where(squirrel.Eq{
+			"tenant_id": in.TenantId,
+		})
+		countBuilder = countBuilder.Where(squirrel.Eq{
 			"tenant_id": in.TenantId,
 		})
 	}
@@ -37,9 +39,16 @@ func (l *OssListLogic) OssList(in *pb.OssListReq) (*pb.OssListResp, error) {
 		whereBuilder = whereBuilder.Where(squirrel.Eq{
 			"category": in.Category,
 		})
+		countBuilder = countBuilder.Where(squirrel.Eq{
+			"category": in.Category,
+		})
+	}
+	total, err := l.svcCtx.TOssModel.FindCount(l.ctx, countBuilder)
+	if err != nil {
+		return nil, err
 	}
 	list, err := l.svcCtx.TOssModel.FindPageListByPage(l.ctx, whereBuilder, in.Page, in.PageSize, in.OrderBy)
-	if err != nil && err != model.ErrNotFound {
+	if err != nil {
 		return nil, err
 	}
 	var respOss []*pb.Oss
@@ -51,5 +60,5 @@ func (l *OssListLogic) OssList(in *pb.OssListReq) (*pb.OssListResp, error) {
 			respOss = append(respOss, &pbOss)
 		}
 	}
-	return &pb.OssListResp{Oss: respOss}, nil
+	return &pb.OssListResp{Oss: respOss, Total: total}, nil
 }
