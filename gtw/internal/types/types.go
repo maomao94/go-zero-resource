@@ -83,6 +83,13 @@ type OssListReq struct {
 	Category int64  `json:"category,options=0|1|2|3|4"`        // 所属分类
 }
 
+type OssListReply struct {
+	List     []Oss `json:"list"`
+	Total    int64 `json:"total"`
+	Page     int64 `json:"page"`     // 页码
+	PageSize int64 `json:"pageSize"` // 每页大小
+}
+
 type OssFile struct {
 	Link        string `json:"link"`        // 文件地址
 	Name        string `json:"name"`        // 文件名
