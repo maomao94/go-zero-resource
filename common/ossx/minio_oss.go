@@ -99,7 +99,7 @@ func (m MinioTemplate) PutFileStream(tenantId, bucketName, filename, contentType
 		return nil, err
 	} else {
 		return &File{
-			Link:         m.fileLink(tenantId, bucketName, filename),
+			Link:         m.fileLink(tenantId, bucketName, objectName),
 			Domain:       m.getOssHost(tenantId, bucketName),
 			Name:         objectName,
 			OriginalName: filename,
