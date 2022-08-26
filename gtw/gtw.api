@@ -122,7 +122,7 @@ type (
 		TenantId   string `json:"tenantId,optional"`   // 租户ID
 		Code       string `json:"code,optional"`       // 资源编号
 		BucketName string `json:"bucketName,optional"` // 存储桶名称
-		FileName   string `json:"fileName"`            // 文件名
+		FileName   string `json:"filename"`            // 文件名
 	}
 
 	PutFileReq {
@@ -135,21 +135,21 @@ type (
 		TenantId   string `json:"tenantId,optional"`   // 租户ID
 		Code       string `json:"code,optional"`       // 资源编号
 		BucketName string `json:"bucketName,optional"` // 存储桶名称
-		FileName   string `json:"fileName"`            // 文件名
+		FileName   string `json:"filename"`            // 文件名
 	}
 
 	RemoveFileReq {
 		TenantId   string `json:"tenantId,optional"`   // 租户ID
 		Code       string `json:"code,optional"`       // 资源编号
 		BucketName string `json:"bucketName,optional"` // 存储桶名称
-		FileName   string `json:"fileName"`            // 文件名
+		FileName   string `json:"filename"`            // 文件名
 	}
 
 	RemoveFilesReq {
 		TenantId   string   `json:"tenantId,optional"`   // 租户ID
 		Code       string   `json:"code,optional"`       // 资源编号
 		BucketName string   `json:"bucketName,optional"` // 存储桶名称
-		FileNames  []string `json:"fileNames"`           // 文件名集合
+		FileNames  []string `json:"filenames"`           // 文件名集合
 	}
 
 	File {

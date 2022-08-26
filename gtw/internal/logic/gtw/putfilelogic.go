@@ -36,6 +36,7 @@ func (l *PutFileLogic) PutFile(req *types.PutFileReq, fileHeader *multipart.File
 	if err != nil {
 		return nil, err
 	}
+	defer file.Close()
 	stream, err := ioutil.ReadAll(file)
 	if err != nil {
 		return nil, err
@@ -45,6 +46,7 @@ func (l *PutFileLogic) PutFile(req *types.PutFileReq, fileHeader *multipart.File
 		Code:       req.Code,
 		BucketName: req.BucketName,
 		Stream:     stream,
+		Filename:   fileHeader.Filename,
 	})
 	if err != nil {
 		return nil, err

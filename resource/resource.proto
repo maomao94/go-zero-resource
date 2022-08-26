@@ -64,6 +64,7 @@ message PutFileReq {
   string Code = 2; // 资源编号
   string BucketName = 3; // 存储桶名称
   bytes stream = 4; // 文件二进制流
+  string Filename = 5; // 上传文件名
 }
 
 message PutFileResp {

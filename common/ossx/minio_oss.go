@@ -27,11 +27,11 @@ func (m MinioTemplate) RemoveBucket(tenantId, bucketName string) error {
 	return m.client.RemoveBucket(m.ossRule.bucketName(tenantId, bucketName))
 }
 
-func (m MinioTemplate) StatFile(tenantId, bucketName, fileName string) (*OssFile, error) {
+func (m MinioTemplate) StatFile(tenantId, bucketName, filename string) (*OssFile, error) {
 	if err := validateClient(m.client); err != nil {
 		return nil, err
 	}
-	object, err := m.client.StatObject(m.ossRule.bucketName(tenantId, bucketName), fileName, minio.StatObjectOptions{})
+	object, err := m.client.StatObject(m.ossRule.bucketName(tenantId, bucketName), filename, minio.StatObjectOptions{})
 	if err != nil {
 		return nil, err
 	} else {
@@ -52,53 +52,77 @@ func (m MinioTemplate) BucketExists(tenantId, bucketName string) (bool, error) {
 	return m.client.BucketExists(m.ossRule.bucketName(tenantId, bucketName))
 }
 
-func (m MinioTemplate) PutFile(tenantId, bucketName string, file *multipart.FileHeader) (*File, error) {
+func (m MinioTemplate) PutFile(tenantId, bucketName string, fileHeader *multipart.FileHeader) (*File, error) {
 	if err := validateClient(m.client); err != nil {
 		return nil, err
 	}
-	f, err := file.Open()
+	f, err := fileHeader.Open()
 	if err != nil {
 		return nil, err
 	}
 	defer f.Close()
-	fileName := m.ossRule.fileName(file.Filename)
+	filename := m.ossRule.filename(fileHeader.Filename)
 	if len(bucketName) == 0 {
 		bucketName = m.ossProperties.BucketName
 	}
 	_, err = m.client.PutObject(m.ossRule.bucketName(tenantId, bucketName),
-		fileName, f, file.Size, minio.PutObjectOptions{
+		filename, f, fileHeader.Size, minio.PutObjectOptions{
+			ContentType: fileHeader.Header.Get("content-type"),
+		})
+	if err != nil {
+		return nil, err
+	} else {
+		return &File{
+			Link:         m.fileLink(tenantId, bucketName, filename),
+			Domain:       m.getOssHost(tenantId, bucketName),
+			Name:         filename,
+			OriginalName: fileHeader.Filename,
+		}, nil
+	}
+}
+
+func (m MinioTemplate) PutFileStream(tenantId, bucketName string, stream *[]byte, filename string) (*File, error) {
+	if err := validateClient(m.client); err != nil {
+		return nil, err
+	}
+	filename := m.ossRule.filename(file.Filename)
+	if len(bucketName) == 0 {
+		bucketName = m.ossProperties.BucketName
+	}
+	_, err = m.client.PutObject(m.ossRule.bucketName(tenantId, bucketName),
+		filename, f, file.Size, minio.PutObjectOptions{
 			ContentType: file.Header.Get("content-type"),
 		})
 	if err != nil {
 		return nil, err
 	} else {
 		return &File{
-			Link:         m.fileLink(tenantId, bucketName, fileName),
+			Link:         m.fileLink(tenantId, bucketName, filename),
 			Domain:       m.getOssHost(tenantId, bucketName),
-			Name:         fileName,
+			Name:         filename,
 			OriginalName: file.Filename,
 		}, nil
 	}
 }
 
-func (m MinioTemplate) GetObject(tenantId, bucketName, fileName string) (*minio.Object, error) {
+func (m MinioTemplate) GetObject(tenantId, bucketName, filename string) (*minio.Object, error) {
 	if err := validateClient(m.client); err != nil {
 		return nil, err
 	}
-	return m.client.GetObject(m.ossRule.bucketName(tenantId, bucketName), fileName, minio.GetObjectOptions{})
+	return m.client.GetObject(m.ossRule.bucketName(tenantId, bucketName), filename, minio.GetObjectOptions{})
 }
 
-func (m MinioTemplate) RemoveFile(tenantId, bucketName, fileName string) error {
+func (m MinioTemplate) RemoveFile(tenantId, bucketName, filename string) error {
 	if err := validateClient(m.client); err != nil {
 		return err
 	}
 	if len(bucketName) == 0 {
 		bucketName = m.ossProperties.BucketName
 	}
-	return m.client.RemoveObject(m.ossRule.bucketName(tenantId, bucketName), fileName)
+	return m.client.RemoveObject(m.ossRule.bucketName(tenantId, bucketName), filename)
 }
 
-func (m MinioTemplate) RemoveFiles(tenantId string, bucketName string, fileNames []string) error {
+func (m MinioTemplate) RemoveFiles(tenantId string, bucketName string, filenames []string) error {
 	if err := validateClient(m.client); err != nil {
 		return err
 	}
@@ -108,7 +132,7 @@ func (m MinioTemplate) RemoveFiles(tenantId string, bucketName string, fileNames
 	objectsCh := make(chan string)
 	go func() {
 		defer close(objectsCh)
-		for _, f := range fileNames {
+		for _, f := range filenames {
 			objectsCh <- f
 		}
 	}()
@@ -124,8 +148,8 @@ func (m MinioTemplate) getOssHost(tenantId, bucketName string) string {
 	return m.ossProperties.Endpoint + "/" + m.ossRule.bucketName(tenantId, bucketName)
 }
 
-func (m MinioTemplate) fileLink(tenantId, bucketName, fileName string) string {
-	return m.ossProperties.Endpoint + "/" + m.ossRule.bucketName(tenantId, bucketName) + "/" + fileName
+func (m MinioTemplate) fileLink(tenantId, bucketName, filename string) string {
+	return m.ossProperties.Endpoint + "/" + m.ossRule.bucketName(tenantId, bucketName) + "/" + filename
 }
 
 func NewMinioTemplate(Oss *model.TOss, ossRule OssRule) *MinioTemplate {
