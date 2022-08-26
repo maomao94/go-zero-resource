@@ -24,6 +24,14 @@ message Oss{
   int64 createTime = 51;
 }
 
+message File {
+  string Link = 1; // 文件地址
+  string Domain = 2; // 域名地址
+  string Name = 3; // 文件名
+  string OriginalName = 4; // 初始文件名
+  string AttachId = 5; // 附件表ID
+}
+
 message OssDetailReq{
   int64 id = 50;
 }
@@ -51,9 +59,21 @@ message MakeBucketReq {
   string bucketName = 3; // 存储桶名称
 }
 
+message PutFileReq {
+  string TenantId = 1; // 租户ID
+  string Code = 2; // 资源编号
+  string BucketName = 3; // 存储桶名称
+  bytes stream = 4; // 文件二进制流
+}
+
+message PutFileResp {
+  File file = 1;
+}
+
 service Resource {
   rpc ping (Empty) returns (PingResp);
   rpc ossDetail (OssDetailReq) returns (OssDetailResp); // 查看存储详情
   rpc ossList (OssListReq) returns (OssListResp); // 查看存储列表
   rpc makeBucket (MakeBucketReq) returns (Empty); // 创建存储桶
+  rpc putFile (PutFileReq) returns (PutFileResp); // 上传文件
 }

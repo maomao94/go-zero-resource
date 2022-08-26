@@ -41,3 +41,8 @@ func (s *ResourceServer) MakeBucket(ctx context.Context, in *pb.MakeBucketReq) (
 	l := logic.NewMakeBucketLogic(ctx, s.svcCtx)
 	return l.MakeBucket(in)
 }
+
+func (s *ResourceServer) PutFile(ctx context.Context, in *pb.PutFileReq) (*pb.PutFileResp, error) {
+	l := logic.NewPutFileLogic(ctx, s.svcCtx)
+	return l.PutFile(in)
+}

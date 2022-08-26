@@ -29,6 +29,5 @@ func (l *PutFileLogic) PutFile(req *types.PutFileReq, fileHeader *multipart.File
 	if fileHeader == nil {
 		return nil, errors.New("fileHeader error")
 	}
-
 	return
 }

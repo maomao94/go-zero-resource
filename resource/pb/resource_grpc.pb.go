@@ -26,6 +26,7 @@ type ResourceClient interface {
 	OssDetail(ctx context.Context, in *OssDetailReq, opts ...grpc.CallOption) (*OssDetailResp, error)
 	OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error)
 	MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error)
+	PutFile(ctx context.Context, in *PutFileReq, opts ...grpc.CallOption) (*PutFileResp, error)
 }
 
 type resourceClient struct {
@@ -72,6 +73,15 @@ func (c *resourceClient) MakeBucket(ctx context.Context, in *MakeBucketReq, opts
 	return out, nil
 }
 
+func (c *resourceClient) PutFile(ctx context.Context, in *PutFileReq, opts ...grpc.CallOption) (*PutFileResp, error) {
+	out := new(PutFileResp)
+	err := c.cc.Invoke(ctx, "/resource.Resource/putFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ResourceServer is the server API for Resource service.
 // All implementations must embed UnimplementedResourceServer
 // for forward compatibility
@@ -80,6 +90,7 @@ type ResourceServer interface {
 	OssDetail(context.Context, *OssDetailReq) (*OssDetailResp, error)
 	OssList(context.Context, *OssListReq) (*OssListResp, error)
 	MakeBucket(context.Context, *MakeBucketReq) (*Empty, error)
+	PutFile(context.Context, *PutFileReq) (*PutFileResp, error)
 	mustEmbedUnimplementedResourceServer()
 }
 
@@ -98,6 +109,9 @@ func (UnimplementedResourceServer) OssList(context.Context, *OssListReq) (*OssLi
 }
 func (UnimplementedResourceServer) MakeBucket(context.Context, *MakeBucketReq) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MakeBucket not implemented")
+}
+func (UnimplementedResourceServer) PutFile(context.Context, *PutFileReq) (*PutFileResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method PutFile not implemented")
 }
 func (UnimplementedResourceServer) mustEmbedUnimplementedResourceServer() {}
 
@@ -184,6 +198,24 @@ func _Resource_MakeBucket_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Resource_PutFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PutFileReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceServer).PutFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/resource.Resource/putFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceServer).PutFile(ctx, req.(*PutFileReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Resource_ServiceDesc is the grpc.ServiceDesc for Resource service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -206,6 +238,10 @@ var Resource_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "makeBucket",
 			Handler:    _Resource_MakeBucket_Handler,
+		},
+		{
+			MethodName: "putFile",
+			Handler:    _Resource_PutFile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
