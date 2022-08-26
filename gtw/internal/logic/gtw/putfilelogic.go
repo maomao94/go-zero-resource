@@ -42,11 +42,12 @@ func (l *PutFileLogic) PutFile(req *types.PutFileReq, fileHeader *multipart.File
 		return nil, err
 	}
 	putFileResp, err := l.svcCtx.ResourceRpc.PutFile(l.ctx, &pb.PutFileReq{
-		TenantId:   req.TenantId,
-		Code:       req.Code,
-		BucketName: req.BucketName,
-		Stream:     stream,
-		Filename:   fileHeader.Filename,
+		TenantId:    req.TenantId,
+		Code:        req.Code,
+		BucketName:  req.BucketName,
+		Stream:      stream,
+		Filename:    fileHeader.Filename,
+		ContentType: fileHeader.Header.Get("content-type"),
 	})
 	if err != nil {
 		return nil, err

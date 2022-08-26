@@ -25,15 +25,15 @@ var (
 )
 
 type OssTemplate interface {
-	MakeBucket(tenantId, bucketName string) error                                                          // 创建存储桶
-	RemoveBucket(tenantId, bucketName string) error                                                        // 删除存储桶
-	StatFile(tenantId, bucketName, filename string) (*OssFile, error)                                      // 获取文件信息
-	BucketExists(tenantId, bucketName string) (bool, error)                                                // 存储桶是否存在
-	PutFile(tenantId, bucketName string, fileHeader *multipart.FileHeader, filename string) (*File, error) // 上传文件
-	PutFileStream(tenantId, bucketName string, stream *[]byte) (*File, error)                              // 上传文件
-	GetObject(tenantId, bucketName, filename string) (*minio.Object, error)                                // 上传文件
-	RemoveFile(tenantId, bucketName, filename string) error                                                // 删除文件
-	RemoveFiles(tenantId string, bucketName string, filenames []string) error                              // 批量删除文件
+	MakeBucket(tenantId, bucketName string) error                                                    // 创建存储桶
+	RemoveBucket(tenantId, bucketName string) error                                                  // 删除存储桶
+	StatFile(tenantId, bucketName, filename string) (*OssFile, error)                                // 获取文件信息
+	BucketExists(tenantId, bucketName string) (bool, error)                                          // 存储桶是否存在
+	PutFile(tenantId, bucketName string, fileHeader *multipart.FileHeader) (*File, error)            // 上传文件
+	PutFileStream(tenantId, bucketName, filename, contentType string, stream *[]byte) (*File, error) // 上传文件
+	GetObject(tenantId, bucketName, filename string) (*minio.Object, error)                          // 上传文件
+	RemoveFile(tenantId, bucketName, filename string) error                                          // 删除文件
+	RemoveFiles(tenantId string, bucketName string, filenames []string) error                        // 批量删除文件
 }
 
 var _ OssTemplate = (*MinioTemplate)(nil)

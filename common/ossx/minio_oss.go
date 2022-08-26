@@ -1,6 +1,7 @@
 package ossx
 
 import (
+	"bytes"
 	"errors"
 	"github.com/minio/minio-go"
 	"gtw/model"
@@ -81,17 +82,18 @@ func (m MinioTemplate) PutFile(tenantId, bucketName string, fileHeader *multipar
 	}
 }
 
-func (m MinioTemplate) PutFileStream(tenantId, bucketName string, stream *[]byte, filename string) (*File, error) {
+func (m MinioTemplate) PutFileStream(tenantId, bucketName, filename, contentType string, stream *[]byte) (*File, error) {
 	if err := validateClient(m.client); err != nil {
 		return nil, err
 	}
-	filename := m.ossRule.filename(file.Filename)
+	objectName := m.ossRule.filename(filename)
 	if len(bucketName) == 0 {
 		bucketName = m.ossProperties.BucketName
 	}
-	_, err = m.client.PutObject(m.ossRule.bucketName(tenantId, bucketName),
-		filename, f, file.Size, minio.PutObjectOptions{
-			ContentType: file.Header.Get("content-type"),
+	reader := bytes.NewReader(*stream)
+	_, err := m.client.PutObject(m.ossRule.bucketName(tenantId, bucketName),
+		objectName, reader, reader.Size(), minio.PutObjectOptions{
+			ContentType: contentType,
 		})
 	if err != nil {
 		return nil, err
@@ -99,8 +101,8 @@ func (m MinioTemplate) PutFileStream(tenantId, bucketName string, stream *[]byte
 		return &File{
 			Link:         m.fileLink(tenantId, bucketName, filename),
 			Domain:       m.getOssHost(tenantId, bucketName),
-			Name:         filename,
-			OriginalName: file.Filename,
+			Name:         objectName,
+			OriginalName: filename,
 		}, nil
 	}
 }

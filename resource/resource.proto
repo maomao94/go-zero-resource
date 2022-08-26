@@ -60,11 +60,12 @@ message MakeBucketReq {
 }
 
 message PutFileReq {
-  string TenantId = 1; // 租户ID
-  string Code = 2; // 资源编号
-  string BucketName = 3; // 存储桶名称
-  bytes stream = 4; // 文件二进制流
-  string Filename = 5; // 上传文件名
+  string tenantId = 1; // 租户ID
+  string code = 2; // 资源编号
+  string bucketName = 3; // 存储桶名称
+  string filename = 4; // 上传文件名
+  string contentType = 5;
+  bytes stream = 6; // 文件二进制流
 }
 
 message PutFileResp {
