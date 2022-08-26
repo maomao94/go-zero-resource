@@ -2,6 +2,7 @@ package gtw
 
 import (
 	"context"
+	"errors"
 	"mime/multipart"
 
 	"gtw/gtw/internal/svc"
@@ -25,6 +26,9 @@ func NewPutFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutFileLo
 }
 
 func (l *PutFileLogic) PutFile(req *types.PutFileReq, fileHeader *multipart.FileHeader) (resp *types.File, err error) {
+	if fileHeader == nil {
+		return nil, errors.New("fileHeader error")
+	}
 
 	return
 }
