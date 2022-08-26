@@ -3,6 +3,9 @@ package gtw
 import (
 	"context"
 	"errors"
+	"github.com/jinzhu/copier"
+	"gtw/resource/pb"
+	"io/ioutil"
 	"mime/multipart"
 
 	"gtw/gtw/internal/svc"
@@ -29,5 +32,24 @@ func (l *PutFileLogic) PutFile(req *types.PutFileReq, fileHeader *multipart.File
 	if fileHeader == nil {
 		return nil, errors.New("fileHeader error")
 	}
-	return
+	file, err := fileHeader.Open()
+	if err != nil {
+		return nil, err
+	}
+	stream, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+	putFileResp, err := l.svcCtx.ResourceRpc.PutFile(l.ctx, &pb.PutFileReq{
+		TenantId:   req.TenantId,
+		Code:       req.Code,
+		BucketName: req.BucketName,
+		Stream:     stream,
+	})
+	if err != nil {
+		return nil, err
+	}
+	var respFile types.File
+	_ = copier.Copy(&respFile, putFileResp.File)
+	return &respFile, nil
 }
