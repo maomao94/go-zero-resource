@@ -2,6 +2,7 @@ package gtw
 
 import (
 	"context"
+	"mime/multipart"
 
 	"gtw/gtw/internal/svc"
 	"gtw/gtw/internal/types"
@@ -23,8 +24,7 @@ func NewPutFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutFileLo
 	}
 }
 
-func (l *PutFileLogic) PutFile(req *types.PutFileReq) (resp *types.File, err error) {
-	// todo: add your logic here and delete this line
+func (l *PutFileLogic) PutFile(req *types.PutFileReq, fileHeader *multipart.FileHeader) (resp *types.File, err error) {
 
 	return
 }
