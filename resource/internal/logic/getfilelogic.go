@@ -6,6 +6,7 @@ import (
 	"gtw/model"
 	"gtw/resource/internal/svc"
 	"gtw/resource/pb"
+	"io/ioutil"
 	"net/http"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -50,9 +51,13 @@ func (l *GetFileLogic) GetFile(in *pb.GetFileReq) (*pb.GetFileResp, error) {
 	//fileType := path.Ext(fileNameWithSuffix)
 	//获取文件名称(不带后缀)
 	//fileNameOnly := strings.TrimSuffix(fileNameWithSuffix, fileType)
+	stream, err := ioutil.ReadAll(object)
+	if err != nil {
+		return nil, err
+	}
 	return &pb.GetFileResp{
 		Filename:    filename,
 		ContentType: contentType,
-		Stream:      nil,
+		Stream:      stream,
 	}, nil
 }
