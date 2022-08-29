@@ -51,6 +51,10 @@ func (l *GetFileLogic) GetFile(in *pb.GetFileReq) (*pb.GetFileResp, error) {
 	//fileType := path.Ext(fileNameWithSuffix)
 	//获取文件名称(不带后缀)
 	//fileNameOnly := strings.TrimSuffix(fileNameWithSuffix, fileType)
+	_, err = object.Seek(0, 0)
+	if err != nil {
+		return nil, err
+	}
 	stream, err := ioutil.ReadAll(object)
 	if err != nil {
 		return nil, err
