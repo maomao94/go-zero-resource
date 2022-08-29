@@ -79,11 +79,17 @@ message GetFileReq {
   string filename = 4; // 上传文件名
 }
 
+message GetFileResp {
+  string filename = 1; // 上传文件名
+  string contentType = 2;
+  bytes stream = 3; // 文件二进制流
+}
+
 service Resource {
   rpc ping (Empty) returns (PingResp);
   rpc ossDetail (OssDetailReq) returns (OssDetailResp); // 查看存储详情
   rpc ossList (OssListReq) returns (OssListResp); // 查看存储列表
   rpc makeBucket (MakeBucketReq) returns (Empty); // 创建存储桶
   rpc putFile (PutFileReq) returns (PutFileResp); // 上传文件
-  rpc getFile (GetFileReq) returns (Empty); // 上传文件
+  rpc getFile (GetFileReq) returns (GetFileResp); // 上传文件
 }
