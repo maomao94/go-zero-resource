@@ -72,10 +72,18 @@ message PutFileResp {
   File file = 1;
 }
 
+message GetFileReq {
+  string tenantId = 1; // 租户ID
+  string code = 2; // 资源编号
+  string bucketName = 3; // 存储桶名称
+  string filename = 4; // 上传文件名
+}
+
 service Resource {
   rpc ping (Empty) returns (PingResp);
   rpc ossDetail (OssDetailReq) returns (OssDetailResp); // 查看存储详情
   rpc ossList (OssListReq) returns (OssListResp); // 查看存储列表
   rpc makeBucket (MakeBucketReq) returns (Empty); // 创建存储桶
   rpc putFile (PutFileReq) returns (PutFileResp); // 上传文件
+  rpc getFile (GetFileReq) returns (Empty); // 上传文件
 }

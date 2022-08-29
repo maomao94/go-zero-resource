@@ -50,11 +50,11 @@ func (o *OssRule) bucketName(tenantId, bucketName string) string {
 	return prefix + bucketName
 }
 
-func (o *OssRule) filename(originalFileName string) string {
+func (o *OssRule) filename(originalFilename string) string {
 	u, _ := uuid.NewUUID()
 	return "upload" + "/" + time.Now().Format("20060102") + "/" +
 		strings.Replace(fmt.Sprintf("%s", u), "-", "", -1) +
-		path.Ext(originalFileName)
+		path.Ext(originalFilename)
 }
 
 type File struct {

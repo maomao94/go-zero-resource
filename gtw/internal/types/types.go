@@ -114,7 +114,7 @@ type StatFileReq struct {
 	TenantId   string `json:"tenantId,optional"`   // 租户ID
 	Code       string `json:"code,optional"`       // 资源编号
 	BucketName string `json:"bucketName,optional"` // 存储桶名称
-	FileName   string `json:"filename"`            // 文件名
+	Filename   string `json:"filename"`            // 文件名
 }
 
 type PutFileReq struct {
@@ -127,21 +127,21 @@ type GetFileReq struct {
 	TenantId   string `json:"tenantId,optional"`   // 租户ID
 	Code       string `json:"code,optional"`       // 资源编号
 	BucketName string `json:"bucketName,optional"` // 存储桶名称
-	FileName   string `json:"filename"`            // 文件名
+	Filename   string `json:"filename"`            // 文件名
 }
 
 type RemoveFileReq struct {
 	TenantId   string `json:"tenantId,optional"`   // 租户ID
 	Code       string `json:"code,optional"`       // 资源编号
 	BucketName string `json:"bucketName,optional"` // 存储桶名称
-	FileName   string `json:"filename"`            // 文件名
+	Filename   string `json:"filename"`            // 文件名
 }
 
 type RemoveFilesReq struct {
 	TenantId   string   `json:"tenantId,optional"`   // 租户ID
 	Code       string   `json:"code,optional"`       // 资源编号
 	BucketName string   `json:"bucketName,optional"` // 存储桶名称
-	FileNames  []string `json:"filenames"`           // 文件名集合
+	Filenames  []string `json:"filenames"`           // 文件名集合
 }
 
 type File struct {
