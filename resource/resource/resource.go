@@ -16,6 +16,7 @@ type (
 	Empty         = pb.Empty
 	File          = pb.File
 	GetFileReq    = pb.GetFileReq
+	GetFileResp   = pb.GetFileResp
 	MakeBucketReq = pb.MakeBucketReq
 	Oss           = pb.Oss
 	OssDetailReq  = pb.OssDetailReq
@@ -32,7 +33,7 @@ type (
 		OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error)
 		MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error)
 		PutFile(ctx context.Context, in *PutFileReq, opts ...grpc.CallOption) (*PutFileResp, error)
-		GetFile(ctx context.Context, in *GetFileReq, opts ...grpc.CallOption) (*Empty, error)
+		GetFile(ctx context.Context, in *GetFileReq, opts ...grpc.CallOption) (*GetFileResp, error)
 	}
 
 	defaultResource struct {
@@ -71,7 +72,7 @@ func (m *defaultResource) PutFile(ctx context.Context, in *PutFileReq, opts ...g
 	return client.PutFile(ctx, in, opts...)
 }
 
-func (m *defaultResource) GetFile(ctx context.Context, in *GetFileReq, opts ...grpc.CallOption) (*Empty, error) {
+func (m *defaultResource) GetFile(ctx context.Context, in *GetFileReq, opts ...grpc.CallOption) (*GetFileResp, error) {
 	client := pb.NewResourceClient(m.cli.Conn())
 	return client.GetFile(ctx, in, opts...)
 }

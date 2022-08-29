@@ -23,8 +23,8 @@ func NewGetFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetFileLo
 	}
 }
 
-func (l *GetFileLogic) GetFile(in *pb.GetFileReq) (*pb.Empty, error) {
+func (l *GetFileLogic) GetFile(in *pb.GetFileReq) (*pb.GetFileResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &pb.Empty{}, nil
+	return &pb.GetFileResp{}, nil
 }

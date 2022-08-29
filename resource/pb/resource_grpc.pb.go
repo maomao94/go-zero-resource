@@ -27,7 +27,7 @@ type ResourceClient interface {
 	OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error)
 	MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error)
 	PutFile(ctx context.Context, in *PutFileReq, opts ...grpc.CallOption) (*PutFileResp, error)
-	GetFile(ctx context.Context, in *GetFileReq, opts ...grpc.CallOption) (*Empty, error)
+	GetFile(ctx context.Context, in *GetFileReq, opts ...grpc.CallOption) (*GetFileResp, error)
 }
 
 type resourceClient struct {
@@ -83,8 +83,8 @@ func (c *resourceClient) PutFile(ctx context.Context, in *PutFileReq, opts ...gr
 	return out, nil
 }
 
-func (c *resourceClient) GetFile(ctx context.Context, in *GetFileReq, opts ...grpc.CallOption) (*Empty, error) {
-	out := new(Empty)
+func (c *resourceClient) GetFile(ctx context.Context, in *GetFileReq, opts ...grpc.CallOption) (*GetFileResp, error) {
+	out := new(GetFileResp)
 	err := c.cc.Invoke(ctx, "/resource.Resource/getFile", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -101,7 +101,7 @@ type ResourceServer interface {
 	OssList(context.Context, *OssListReq) (*OssListResp, error)
 	MakeBucket(context.Context, *MakeBucketReq) (*Empty, error)
 	PutFile(context.Context, *PutFileReq) (*PutFileResp, error)
-	GetFile(context.Context, *GetFileReq) (*Empty, error)
+	GetFile(context.Context, *GetFileReq) (*GetFileResp, error)
 	mustEmbedUnimplementedResourceServer()
 }
 
@@ -124,7 +124,7 @@ func (UnimplementedResourceServer) MakeBucket(context.Context, *MakeBucketReq) (
 func (UnimplementedResourceServer) PutFile(context.Context, *PutFileReq) (*PutFileResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PutFile not implemented")
 }
-func (UnimplementedResourceServer) GetFile(context.Context, *GetFileReq) (*Empty, error) {
+func (UnimplementedResourceServer) GetFile(context.Context, *GetFileReq) (*GetFileResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFile not implemented")
 }
 func (UnimplementedResourceServer) mustEmbedUnimplementedResourceServer() {}

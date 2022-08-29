@@ -47,7 +47,7 @@ func (s *ResourceServer) PutFile(ctx context.Context, in *pb.PutFileReq) (*pb.Pu
 	return l.PutFile(in)
 }
 
-func (s *ResourceServer) GetFile(ctx context.Context, in *pb.GetFileReq) (*pb.Empty, error) {
+func (s *ResourceServer) GetFile(ctx context.Context, in *pb.GetFileReq) (*pb.GetFileResp, error) {
 	l := logic.NewGetFileLogic(ctx, s.svcCtx)
 	return l.GetFile(in)
 }
