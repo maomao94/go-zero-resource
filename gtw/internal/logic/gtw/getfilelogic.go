@@ -27,7 +27,7 @@ func NewGetFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetFileLo
 	}
 }
 
-func (l *GetFileLogic) GetFile(req *types.GetFileReq, w *http.ResponseWriter) (resp *types.EmptyReply, err error) {
+func (l *GetFileLogic) GetFile(req *types.GetFileReq, w http.ResponseWriter) (resp *types.EmptyReply, err error) {
 	w.Header().Set("Content-Disposition", "attachment; filename=\""+path.Base(fileStat.Key)+"\"")
 	w.Header().Set("Content-Type", http.DetectContentType(fileHeader))
 	w.Header().Set("Content-Length", strconv.FormatInt(fileStat.Size, 10))
