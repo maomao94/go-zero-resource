@@ -6,7 +6,7 @@ MaxBytes: 0
 # 接口超时时间
 Timeout: 5000
 Mysql:
-  DataSource: root:123456@tcp(134.175.188.108:3306)/resource?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+  DataSource: root:123456@tcp(127.0.0.1:3306)/resource?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
   MaxIdleConns: 10
   MaxOpenConns: 100
   # 支持的日志级别 silent,error,warn,info
@@ -17,6 +17,6 @@ Oss:
   # 是否开启租户模式
   TenantMode: true
 CacheRedis:
-  - Host: 134.175.188.108:6379
+  - Host: 127.0.0.1:6379
     Pass:
     Type: node
