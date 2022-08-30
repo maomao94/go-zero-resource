@@ -2,14 +2,12 @@ package logic
 
 import (
 	"context"
+	"github.com/zeromicro/go-zero/core/logx"
 	"gtw/common/ossx"
 	"gtw/model"
 	"gtw/resource/internal/svc"
 	"gtw/resource/pb"
 	"io/ioutil"
-	"net/http"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type GetFileLogic struct {
@@ -37,21 +35,16 @@ func (l *GetFileLogic) GetFile(in *pb.GetFileReq) (*pb.GetFileResp, error) {
 	if err != nil {
 		return nil, err
 	}
-	fileHeader := make([]byte, 512)
 	fileStat, err := object.Stat()
 	if err != nil {
 		return nil, err
 	}
-	object.Read(fileHeader)
-	contentType := http.DetectContentType(fileHeader)
-	filename := fileStat.Key
 	//获取文件名称带后缀
 	//fileNameWithSuffix := path.Base(fileStat.Key)
 	//获取文件的后缀(文件类型)
 	//fileType := path.Ext(fileNameWithSuffix)
 	//获取文件名称(不带后缀)
 	//fileNameOnly := strings.TrimSuffix(fileNameWithSuffix, fileType)
-	_, err = object.Seek(0, 0)
 	if err != nil {
 		return nil, err
 	}
@@ -60,8 +53,8 @@ func (l *GetFileLogic) GetFile(in *pb.GetFileReq) (*pb.GetFileResp, error) {
 		return nil, err
 	}
 	return &pb.GetFileResp{
-		Filename:    filename,
-		ContentType: contentType,
+		Filename:    fileStat.Key,
+		ContentType: fileStat.ContentType,
 		Stream:      stream,
 	}, nil
 }
