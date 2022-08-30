@@ -2,6 +2,7 @@ package gtw
 
 import (
 	"context"
+	"gtw/resource/pb"
 
 	"gtw/gtw/internal/svc"
 	"gtw/gtw/internal/types"
@@ -24,7 +25,14 @@ func NewRemoveFilesLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Remov
 }
 
 func (l *RemoveFilesLogic) RemoveFiles(req *types.RemoveFilesReq) (resp *types.EmptyReply, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	_, err = l.svcCtx.ResourceRpc.RemoveFiles(l.ctx, &pb.RemoveFilesReq{
+		TenantId:   req.TenantId,
+		Code:       req.Code,
+		BucketName: req.BucketName,
+		Filename:   req.Filenames,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &types.EmptyReply{}, nil
 }

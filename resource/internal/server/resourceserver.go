@@ -51,3 +51,13 @@ func (s *ResourceServer) GetFile(ctx context.Context, in *pb.GetFileReq) (*pb.Ge
 	l := logic.NewGetFileLogic(ctx, s.svcCtx)
 	return l.GetFile(in)
 }
+
+func (s *ResourceServer) RemoveFile(ctx context.Context, in *pb.RemoveFileReq) (*pb.Empty, error) {
+	l := logic.NewRemoveFileLogic(ctx, s.svcCtx)
+	return l.RemoveFile(in)
+}
+
+func (s *ResourceServer) RemoveFiles(ctx context.Context, in *pb.RemoveFilesReq) (*pb.Empty, error) {
+	l := logic.NewRemoveFilesLogic(ctx, s.svcCtx)
+	return l.RemoveFiles(in)
+}

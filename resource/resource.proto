@@ -85,6 +85,20 @@ message GetFileResp {
   bytes stream = 3; // 文件二进制流
 }
 
+message RemoveFileReq {
+  string tenantId = 1; // 租户ID
+  string code = 2; // 资源编号
+  string bucketName = 3; // 存储桶名称
+  string filename = 4; // 上传文件名
+}
+
+message RemoveFilesReq {
+  string tenantId = 1; // 租户ID
+  string code = 2; // 资源编号
+  string bucketName = 3; // 存储桶名称
+  repeated string filename = 4; // 上传文件名
+}
+
 service Resource {
   rpc ping (Empty) returns (PingResp);
   rpc ossDetail (OssDetailReq) returns (OssDetailResp); // 查看存储详情
@@ -92,4 +106,6 @@ service Resource {
   rpc makeBucket (MakeBucketReq) returns (Empty); // 创建存储桶
   rpc putFile (PutFileReq) returns (PutFileResp); // 上传文件
   rpc getFile (GetFileReq) returns (GetFileResp); // 上传文件
+  rpc removeFile (RemoveFileReq) returns (Empty); // 删除文件
+  rpc removeFiles (RemoveFilesReq) returns (Empty); // 批量删除文件
 }

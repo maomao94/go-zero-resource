@@ -13,19 +13,21 @@ import (
 )
 
 type (
-	Empty         = pb.Empty
-	File          = pb.File
-	GetFileReq    = pb.GetFileReq
-	GetFileResp   = pb.GetFileResp
-	MakeBucketReq = pb.MakeBucketReq
-	Oss           = pb.Oss
-	OssDetailReq  = pb.OssDetailReq
-	OssDetailResp = pb.OssDetailResp
-	OssListReq    = pb.OssListReq
-	OssListResp   = pb.OssListResp
-	PingResp      = pb.PingResp
-	PutFileReq    = pb.PutFileReq
-	PutFileResp   = pb.PutFileResp
+	Empty          = pb.Empty
+	File           = pb.File
+	GetFileReq     = pb.GetFileReq
+	GetFileResp    = pb.GetFileResp
+	MakeBucketReq  = pb.MakeBucketReq
+	Oss            = pb.Oss
+	OssDetailReq   = pb.OssDetailReq
+	OssDetailResp  = pb.OssDetailResp
+	OssListReq     = pb.OssListReq
+	OssListResp    = pb.OssListResp
+	PingResp       = pb.PingResp
+	PutFileReq     = pb.PutFileReq
+	PutFileResp    = pb.PutFileResp
+	RemoveFileReq  = pb.RemoveFileReq
+	RemoveFilesReq = pb.RemoveFilesReq
 
 	Resource interface {
 		Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
@@ -34,6 +36,8 @@ type (
 		MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error)
 		PutFile(ctx context.Context, in *PutFileReq, opts ...grpc.CallOption) (*PutFileResp, error)
 		GetFile(ctx context.Context, in *GetFileReq, opts ...grpc.CallOption) (*GetFileResp, error)
+		RemoveFile(ctx context.Context, in *RemoveFileReq, opts ...grpc.CallOption) (*Empty, error)
+		RemoveFiles(ctx context.Context, in *RemoveFilesReq, opts ...grpc.CallOption) (*Empty, error)
 	}
 
 	defaultResource struct {
@@ -75,4 +79,14 @@ func (m *defaultResource) PutFile(ctx context.Context, in *PutFileReq, opts ...g
 func (m *defaultResource) GetFile(ctx context.Context, in *GetFileReq, opts ...grpc.CallOption) (*GetFileResp, error) {
 	client := pb.NewResourceClient(m.cli.Conn())
 	return client.GetFile(ctx, in, opts...)
+}
+
+func (m *defaultResource) RemoveFile(ctx context.Context, in *RemoveFileReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := pb.NewResourceClient(m.cli.Conn())
+	return client.RemoveFile(ctx, in, opts...)
+}
+
+func (m *defaultResource) RemoveFiles(ctx context.Context, in *RemoveFilesReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := pb.NewResourceClient(m.cli.Conn())
+	return client.RemoveFiles(ctx, in, opts...)
 }

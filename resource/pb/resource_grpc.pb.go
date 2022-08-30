@@ -28,6 +28,8 @@ type ResourceClient interface {
 	MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error)
 	PutFile(ctx context.Context, in *PutFileReq, opts ...grpc.CallOption) (*PutFileResp, error)
 	GetFile(ctx context.Context, in *GetFileReq, opts ...grpc.CallOption) (*GetFileResp, error)
+	RemoveFile(ctx context.Context, in *RemoveFileReq, opts ...grpc.CallOption) (*Empty, error)
+	RemoveFiles(ctx context.Context, in *RemoveFilesReq, opts ...grpc.CallOption) (*Empty, error)
 }
 
 type resourceClient struct {
@@ -92,6 +94,24 @@ func (c *resourceClient) GetFile(ctx context.Context, in *GetFileReq, opts ...gr
 	return out, nil
 }
 
+func (c *resourceClient) RemoveFile(ctx context.Context, in *RemoveFileReq, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/resource.Resource/removeFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *resourceClient) RemoveFiles(ctx context.Context, in *RemoveFilesReq, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/resource.Resource/removeFiles", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ResourceServer is the server API for Resource service.
 // All implementations must embed UnimplementedResourceServer
 // for forward compatibility
@@ -102,6 +122,8 @@ type ResourceServer interface {
 	MakeBucket(context.Context, *MakeBucketReq) (*Empty, error)
 	PutFile(context.Context, *PutFileReq) (*PutFileResp, error)
 	GetFile(context.Context, *GetFileReq) (*GetFileResp, error)
+	RemoveFile(context.Context, *RemoveFileReq) (*Empty, error)
+	RemoveFiles(context.Context, *RemoveFilesReq) (*Empty, error)
 	mustEmbedUnimplementedResourceServer()
 }
 
@@ -126,6 +148,12 @@ func (UnimplementedResourceServer) PutFile(context.Context, *PutFileReq) (*PutFi
 }
 func (UnimplementedResourceServer) GetFile(context.Context, *GetFileReq) (*GetFileResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetFile not implemented")
+}
+func (UnimplementedResourceServer) RemoveFile(context.Context, *RemoveFileReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveFile not implemented")
+}
+func (UnimplementedResourceServer) RemoveFiles(context.Context, *RemoveFilesReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveFiles not implemented")
 }
 func (UnimplementedResourceServer) mustEmbedUnimplementedResourceServer() {}
 
@@ -248,6 +276,42 @@ func _Resource_GetFile_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Resource_RemoveFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveFileReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceServer).RemoveFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/resource.Resource/removeFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceServer).RemoveFile(ctx, req.(*RemoveFileReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Resource_RemoveFiles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveFilesReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceServer).RemoveFiles(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/resource.Resource/removeFiles",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceServer).RemoveFiles(ctx, req.(*RemoveFilesReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Resource_ServiceDesc is the grpc.ServiceDesc for Resource service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -278,6 +342,14 @@ var Resource_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "getFile",
 			Handler:    _Resource_GetFile_Handler,
+		},
+		{
+			MethodName: "removeFile",
+			Handler:    _Resource_RemoveFile_Handler,
+		},
+		{
+			MethodName: "removeFiles",
+			Handler:    _Resource_RemoveFiles_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
