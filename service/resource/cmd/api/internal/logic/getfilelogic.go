@@ -54,9 +54,7 @@ func (l *GetFileLogic) GetFile(req types.GetFileReq, w http.ResponseWriter) erro
 			w.Header().Set("Content-Length", strconv.FormatInt(fileStat.Size, 10))
 			object.Seek(0, 0)
 			if _, err := io.Copy(w, object); err != nil {
-				if err != nil {
-					return err
-				}
+				return err
 			}
 			return nil
 		}
