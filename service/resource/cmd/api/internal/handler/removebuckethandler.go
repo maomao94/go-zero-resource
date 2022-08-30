@@ -6,7 +6,7 @@ import (
 	"go-zero-resource/common/errorx"
 	"net/http"
 
-	"github.com/tal-tech/go-zero/rest/httpx"
+	"github.com/zeromicro/go-zero/rest/httpx"
 	"go-zero-resource/service/resource/cmd/api/internal/logic"
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"

@@ -5,9 +5,9 @@ import (
 	"os"
 	"time"
 
-	"github.com/tal-tech/go-zero/core/logx"
-	"github.com/tal-tech/go-zero/core/stores/cache"
-	"github.com/tal-tech/go-zero/core/syncx"
+	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/stores/cache"
+	"github.com/zeromicro/go-zero/core/syncx"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

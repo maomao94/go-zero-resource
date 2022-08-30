@@ -7,7 +7,7 @@ import (
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
 
-	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type RemoveBucketLogic struct {

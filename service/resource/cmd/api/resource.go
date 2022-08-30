@@ -6,14 +6,14 @@ import (
 	"go-zero-resource/common/errorx"
 	"net/http"
 
-	"github.com/tal-tech/go-zero/rest/httpx"
+	"github.com/zeromicro/go-zero/rest/httpx"
 
 	"go-zero-resource/service/resource/cmd/api/internal/config"
 	"go-zero-resource/service/resource/cmd/api/internal/handler"
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 
-	"github.com/tal-tech/go-zero/core/conf"
-	"github.com/tal-tech/go-zero/rest"
+	"github.com/zeromicro/go-zero/core/conf"
+	"github.com/zeromicro/go-zero/rest"
 )
 
 var configFile = flag.String("f", "etc/resource-api.yaml", "the config file")

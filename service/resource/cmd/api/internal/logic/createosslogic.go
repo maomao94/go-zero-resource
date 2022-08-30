@@ -7,7 +7,7 @@ import (
 	"go-zero-resource/service/resource/cmd/api/service"
 	"go-zero-resource/service/resource/model/gorm_model"
 
-	"github.com/tal-tech/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type CreateOssLogic struct {

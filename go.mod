@@ -6,7 +6,6 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/minio/minio-go v6.0.14+incompatible
 	github.com/spf13/cast v1.4.1
-	github.com/tal-tech/go-zero v1.2.2
 	gorm.io/driver/mysql v1.1.2
 	gorm.io/gorm v1.21.16
 )
@@ -31,6 +30,7 @@ require (
 	github.com/prometheus/common v0.26.0 // indirect
 	github.com/prometheus/procfs v0.6.0 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
+	github.com/zeromicro/go-zero v1.3.0
 	go.opentelemetry.io/otel v1.1.0 // indirect
 	go.opentelemetry.io/otel/exporters/jaeger v1.0.1 // indirect
 	go.opentelemetry.io/otel/exporters/zipkin v1.0.1 // indirect

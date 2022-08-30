@@ -10,7 +10,7 @@ import (
 	"go-zero-resource/service/resource/cmd/api/internal/svc"
 	"go-zero-resource/service/resource/cmd/api/internal/types"
 
-	"github.com/tal-tech/go-zero/rest/httpx"
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
 func updateOssHandler(ctx *svc.ServiceContext) http.HandlerFunc {
