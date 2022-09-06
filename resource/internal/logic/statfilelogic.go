@@ -2,14 +2,13 @@ package logic
 
 import (
 	"context"
+	"github.com/golang-module/carbon/v2"
 	"github.com/jinzhu/copier"
+	"github.com/zeromicro/go-zero/core/logx"
 	"gtw/common/ossx"
 	"gtw/model"
-
 	"gtw/resource/internal/svc"
 	"gtw/resource/pb"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type StatFileLogic struct {
@@ -39,6 +38,6 @@ func (l *StatFileLogic) StatFile(in *pb.StatFileReq) (*pb.StatFileResp, error) {
 	}
 	var respOssFile pb.OssFile
 	_ = copier.Copy(&respOssFile, ossFile)
-	respOssFile.PutTime = ossFile.PutTime.Format("2006-01-02 15:04:05")
+	respOssFile.PutTime = carbon.CreateFromTimestamp(ossFile.PutTime.Unix()).Format(model.DateTimeFormatTplStandardDateTime)
 	return &pb.StatFileResp{OssFile: &respOssFile}, nil
 }
