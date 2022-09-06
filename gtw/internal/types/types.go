@@ -41,6 +41,7 @@ type Oss struct {
 	Region     string `json:"region,optional"`     // 地域简称 TencentCOS需要
 	Remark     string `json:"remark,optional"`     // 所属分类
 	Status     int64  `json:"status,optional"`     // 状态
+	CreateTime int64  `json:"createTime,optional"`
 }
 
 type OssCreate struct {

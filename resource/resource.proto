@@ -59,6 +59,17 @@ message MakeBucketReq {
   string bucketName = 3; // 存储桶名称
 }
 
+message StatFileReq {
+  string tenantId = 1; // 租户ID
+  string code = 2; // 资源编号
+  string bucketName = 3; // 存储桶名称
+  string filename = 4; // 上传文件名
+}
+
+message StatFileResp{
+  Oss oss = 1;
+}
+
 message PutFileReq {
   string tenantId = 1; // 租户ID
   string code = 2; // 资源编号
@@ -104,6 +115,7 @@ service Resource {
   rpc ossDetail (OssDetailReq) returns (OssDetailResp); // 查看存储详情
   rpc ossList (OssListReq) returns (OssListResp); // 查看存储列表
   rpc makeBucket (MakeBucketReq) returns (Empty); // 创建存储桶
+  rpc statFile (PutFileReq) returns (StatFileResp); // 获取文件信息
   rpc putFile (PutFileReq) returns (PutFileResp); // 上传文件
   rpc getFile (GetFileReq) returns (GetFileResp); // 上传文件
   rpc removeFile (RemoveFileReq) returns (Empty); // 删除文件
