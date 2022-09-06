@@ -26,6 +26,7 @@ type ResourceClient interface {
 	OssDetail(ctx context.Context, in *OssDetailReq, opts ...grpc.CallOption) (*OssDetailResp, error)
 	OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error)
 	MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error)
+	StatFile(ctx context.Context, in *StatFileReq, opts ...grpc.CallOption) (*StatFileResp, error)
 	PutFile(ctx context.Context, in *PutFileReq, opts ...grpc.CallOption) (*PutFileResp, error)
 	GetFile(ctx context.Context, in *GetFileReq, opts ...grpc.CallOption) (*GetFileResp, error)
 	RemoveFile(ctx context.Context, in *RemoveFileReq, opts ...grpc.CallOption) (*Empty, error)
@@ -76,6 +77,15 @@ func (c *resourceClient) MakeBucket(ctx context.Context, in *MakeBucketReq, opts
 	return out, nil
 }
 
+func (c *resourceClient) StatFile(ctx context.Context, in *StatFileReq, opts ...grpc.CallOption) (*StatFileResp, error) {
+	out := new(StatFileResp)
+	err := c.cc.Invoke(ctx, "/resource.Resource/statFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *resourceClient) PutFile(ctx context.Context, in *PutFileReq, opts ...grpc.CallOption) (*PutFileResp, error) {
 	out := new(PutFileResp)
 	err := c.cc.Invoke(ctx, "/resource.Resource/putFile", in, out, opts...)
@@ -120,6 +130,7 @@ type ResourceServer interface {
 	OssDetail(context.Context, *OssDetailReq) (*OssDetailResp, error)
 	OssList(context.Context, *OssListReq) (*OssListResp, error)
 	MakeBucket(context.Context, *MakeBucketReq) (*Empty, error)
+	StatFile(context.Context, *StatFileReq) (*StatFileResp, error)
 	PutFile(context.Context, *PutFileReq) (*PutFileResp, error)
 	GetFile(context.Context, *GetFileReq) (*GetFileResp, error)
 	RemoveFile(context.Context, *RemoveFileReq) (*Empty, error)
@@ -142,6 +153,9 @@ func (UnimplementedResourceServer) OssList(context.Context, *OssListReq) (*OssLi
 }
 func (UnimplementedResourceServer) MakeBucket(context.Context, *MakeBucketReq) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MakeBucket not implemented")
+}
+func (UnimplementedResourceServer) StatFile(context.Context, *StatFileReq) (*StatFileResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method StatFile not implemented")
 }
 func (UnimplementedResourceServer) PutFile(context.Context, *PutFileReq) (*PutFileResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PutFile not implemented")
@@ -240,6 +254,24 @@ func _Resource_MakeBucket_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Resource_StatFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StatFileReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceServer).StatFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/resource.Resource/statFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceServer).StatFile(ctx, req.(*StatFileReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Resource_PutFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PutFileReq)
 	if err := dec(in); err != nil {
@@ -334,6 +366,10 @@ var Resource_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "makeBucket",
 			Handler:    _Resource_MakeBucket_Handler,
+		},
+		{
+			MethodName: "statFile",
+			Handler:    _Resource_StatFile_Handler,
 		},
 		{
 			MethodName: "putFile",

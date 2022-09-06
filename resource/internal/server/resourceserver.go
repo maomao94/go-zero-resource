@@ -42,6 +42,11 @@ func (s *ResourceServer) MakeBucket(ctx context.Context, in *pb.MakeBucketReq) (
 	return l.MakeBucket(in)
 }
 
+func (s *ResourceServer) StatFile(ctx context.Context, in *pb.StatFileReq) (*pb.StatFileResp, error) {
+	l := logic.NewStatFileLogic(ctx, s.svcCtx)
+	return l.StatFile(in)
+}
+
 func (s *ResourceServer) PutFile(ctx context.Context, in *pb.PutFileReq) (*pb.PutFileResp, error) {
 	l := logic.NewPutFileLogic(ctx, s.svcCtx)
 	return l.PutFile(in)
