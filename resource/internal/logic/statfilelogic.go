@@ -39,5 +39,6 @@ func (l *StatFileLogic) StatFile(in *pb.StatFileReq) (*pb.StatFileResp, error) {
 	}
 	var respOssFile pb.OssFile
 	_ = copier.Copy(&respOssFile, ossFile)
+	respOssFile.PutTime = ossFile.PutTime.Format("2006-01-02 15:04:05")
 	return &pb.StatFileResp{OssFile: &respOssFile}, nil
 }
