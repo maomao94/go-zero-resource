@@ -13,3 +13,5 @@ zero练手项目
 ## 接口地址
 https://www.apifox.cn/apidoc/shared-6c1c58fe-fc04-45f9-abac-a4b7b71bbc62/api-7148139
 
+## 其他
+- go-stress-testing -c 1 -n 1 -p ossdetail.txt

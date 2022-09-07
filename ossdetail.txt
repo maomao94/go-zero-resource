@@ -1,0 +1,6 @@
+curl --location --request POST 'http://127.0.0.1:8888/gtw/v1/oss/detail' \
+--header 'User-Agent: apifox/1.0.0 (https://www.apifox.cn)' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "id": 1
+}'
