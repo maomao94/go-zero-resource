@@ -6,7 +6,9 @@ Mode: dev
 #  - 127.0.0.1:2379
 #  Key: resource.rpc
 Log:
-  Encoding: plain
+  Encoding: json
+  Mode: file
+  Path: logs/resource
 #链路追踪
 Telemetry:
   Name: resource

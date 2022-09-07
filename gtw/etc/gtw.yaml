@@ -3,8 +3,9 @@ Host: 0.0.0.0
 Port: 8888
 Mode: dev
 Log:
-  Encoding: plain
-#  Mode: file
+  Encoding: json
+  Mode: file
+  Path: logs/api
 #链路追踪
 Telemetry:
   Name: gtw
