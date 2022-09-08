@@ -155,7 +155,7 @@ service Resource {
   rpc ossDetail (OssDetailReq) returns (OssDetailResp); // 查看存储详情
   rpc ossList (OssListReq) returns (OssListResp); // 查看存储列表
   rpc createOss (CreateOssReq) returns (Empty); // 创建存储
-  rpc updateOss (UpdateOssReq) returns (Empty); // 创建存储
+  rpc updateOss (UpdateOssReq) returns (Empty); // 更新存储
   rpc deleteOss (DeleteOssReq) returns (Empty); // 删除存储
   rpc makeBucket (MakeBucketReq) returns (Empty); // 创建存储桶
   rpc statFile (StatFileReq) returns (StatFileResp); // 获取文件信息

@@ -51,7 +51,6 @@ type (
 		Id         int64     `db:"id"`
 		CreateTime time.Time `db:"create_time"`
 		UpdateTime time.Time `db:"update_time"`
-		DeleteTime time.Time `db:"delete_time"`
 		DelState   int64     `db:"del_state"`
 		Version    int64     `db:"version"`     // 乐观锁版本号
 		TenantId   string    `db:"tenant_id"`   // 租户ID
@@ -132,7 +131,7 @@ func (m *defaultTOssModel) Insert(ctx context.Context, data *TOss) (sql.Result, 
 	tOssTenantIdOssCodeKey := fmt.Sprintf("%s%v:%v", cacheTOssTenantIdOssCodePrefix, data.TenantId, data.OssCode)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, tOssRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DeleteTime, data.DelState, data.Version, data.TenantId, data.Category, data.OssCode, data.Endpoint, data.AccessKey, data.SecretKey, data.BucketName, data.AppId, data.Region, data.Remark, data.Status)
+		return conn.ExecCtx(ctx, query, data.DelState, data.Version, data.TenantId, data.Category, data.OssCode, data.Endpoint, data.AccessKey, data.SecretKey, data.BucketName, data.AppId, data.Region, data.Remark, data.Status)
 	}, tOssIdKey, tOssTenantIdOssCodeKey)
 	return ret, err
 }
@@ -147,7 +146,7 @@ func (m *defaultTOssModel) Update(ctx context.Context, newData *TOss) error {
 	tOssTenantIdOssCodeKey := fmt.Sprintf("%s%v:%v", cacheTOssTenantIdOssCodePrefix, data.TenantId, data.OssCode)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, tOssRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.DeleteTime, newData.DelState, newData.Version, newData.TenantId, newData.Category, newData.OssCode, newData.Endpoint, newData.AccessKey, newData.SecretKey, newData.BucketName, newData.AppId, newData.Region, newData.Remark, newData.Status, newData.Id)
+		return conn.ExecCtx(ctx, query, newData.DelState, newData.Version, newData.TenantId, newData.Category, newData.OssCode, newData.Endpoint, newData.AccessKey, newData.SecretKey, newData.BucketName, newData.AppId, newData.Region, newData.Remark, newData.Status, newData.Id)
 	}, tOssIdKey, tOssTenantIdOssCodeKey)
 	return err
 }
