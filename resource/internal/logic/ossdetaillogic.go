@@ -31,5 +31,6 @@ func (l *OssDetailLogic) OssDetail(in *pb.OssDetailReq) (*pb.OssDetailResp, erro
 	}
 	var respOss pb.Oss
 	_ = copier.Copy(&respOss, oss)
+	respOss.CreateTime = oss.CreateTime.Unix()
 	return &pb.OssDetailResp{Oss: &respOss}, nil
 }
