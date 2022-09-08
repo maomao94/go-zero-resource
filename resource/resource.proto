@@ -19,7 +19,7 @@ message Oss{
   string bucketName = 7; // 空间名
   string appId = 8; // 应用ID TencentCOS需要
   string region = 9; // 地域简称 TencentCOS需要
-  string remark = 10; // 所属分类
+  string remark = 10; // 备注
   int64 status = 11; // 状态
   int64 createTime = 51;
 }
@@ -71,7 +71,7 @@ message CreateOssReq{
   string bucketName = 7; // 空间名
   string appId = 8; // 应用ID TencentCOS需要
   string region = 9; // 地域简称 TencentCOS需要
-  string remark = 10; // 所属分类
+  string remark = 10; // 备注
 }
 
 message UpdateOssReq{
@@ -85,7 +85,7 @@ message UpdateOssReq{
   string bucketName = 7; // 空间名
   string appId = 8; // 应用ID TencentCOS需要
   string region = 9; // 地域简称 TencentCOS需要
-  string remark = 10; // 所属分类
+  string remark = 10; // 备注
   int64 status = 11; // 状态
 }
 

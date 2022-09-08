@@ -119,7 +119,7 @@ type Oss struct {
 	BucketName string `protobuf:"bytes,7,opt,name=bucketName,proto3" json:"bucketName,omitempty"` // 空间名
 	AppId      string `protobuf:"bytes,8,opt,name=appId,proto3" json:"appId,omitempty"`           // 应用ID TencentCOS需要
 	Region     string `protobuf:"bytes,9,opt,name=region,proto3" json:"region,omitempty"`         // 地域简称 TencentCOS需要
-	Remark     string `protobuf:"bytes,10,opt,name=remark,proto3" json:"remark,omitempty"`        // 所属分类
+	Remark     string `protobuf:"bytes,10,opt,name=remark,proto3" json:"remark,omitempty"`        // 备注
 	Status     int64  `protobuf:"varint,11,opt,name=status,proto3" json:"status,omitempty"`       // 状态
 	CreateTime int64  `protobuf:"varint,51,opt,name=createTime,proto3" json:"createTime,omitempty"`
 }
@@ -640,7 +640,7 @@ type CreateOssReq struct {
 	BucketName string `protobuf:"bytes,7,opt,name=bucketName,proto3" json:"bucketName,omitempty"` // 空间名
 	AppId      string `protobuf:"bytes,8,opt,name=appId,proto3" json:"appId,omitempty"`           // 应用ID TencentCOS需要
 	Region     string `protobuf:"bytes,9,opt,name=region,proto3" json:"region,omitempty"`         // 地域简称 TencentCOS需要
-	Remark     string `protobuf:"bytes,10,opt,name=remark,proto3" json:"remark,omitempty"`        // 所属分类
+	Remark     string `protobuf:"bytes,10,opt,name=remark,proto3" json:"remark,omitempty"`        // 备注
 }
 
 func (x *CreateOssReq) Reset() {
@@ -760,7 +760,7 @@ type UpdateOssReq struct {
 	BucketName string `protobuf:"bytes,7,opt,name=bucketName,proto3" json:"bucketName,omitempty"` // 空间名
 	AppId      string `protobuf:"bytes,8,opt,name=appId,proto3" json:"appId,omitempty"`           // 应用ID TencentCOS需要
 	Region     string `protobuf:"bytes,9,opt,name=region,proto3" json:"region,omitempty"`         // 地域简称 TencentCOS需要
-	Remark     string `protobuf:"bytes,10,opt,name=remark,proto3" json:"remark,omitempty"`        // 所属分类
+	Remark     string `protobuf:"bytes,10,opt,name=remark,proto3" json:"remark,omitempty"`        // 备注
 	Status     int64  `protobuf:"varint,11,opt,name=status,proto3" json:"status,omitempty"`       // 状态
 }
 
