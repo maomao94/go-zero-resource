@@ -130,7 +130,7 @@ func (m *defaultTOssModel) Insert(ctx context.Context, data *TOss) (sql.Result, 
 	tOssIdKey := fmt.Sprintf("%s%v", cacheTOssIdPrefix, data.Id)
 	tOssTenantIdOssCodeKey := fmt.Sprintf("%s%v:%v", cacheTOssTenantIdOssCodePrefix, data.TenantId, data.OssCode)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, tOssRowsExpectAutoSet)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, tOssRowsExpectAutoSet)
 		return conn.ExecCtx(ctx, query, data.DelState, data.Version, data.TenantId, data.Category, data.OssCode, data.Endpoint, data.AccessKey, data.SecretKey, data.BucketName, data.AppId, data.Region, data.Remark, data.Status)
 	}, tOssIdKey, tOssTenantIdOssCodeKey)
 	return ret, err
