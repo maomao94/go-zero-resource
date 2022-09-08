@@ -55,7 +55,6 @@ type OssCreate struct {
 	AppId      string `json:"appId,optional"`           // 应用ID TencentCOS需要
 	Region     string `json:"region,optional"`          // 地域简称 TencentCOS需要
 	Remark     string `json:"remark,optional"`          // 所属分类
-	Status     int64  `json:"status,optional"`          // 状态
 }
 
 type OssUpdate struct {
