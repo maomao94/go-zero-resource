@@ -25,6 +25,9 @@ type ResourceClient interface {
 	Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
 	OssDetail(ctx context.Context, in *OssDetailReq, opts ...grpc.CallOption) (*OssDetailResp, error)
 	OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error)
+	CreateOss(ctx context.Context, in *CreateOssReq, opts ...grpc.CallOption) (*Empty, error)
+	UpdateOss(ctx context.Context, in *UpdateOssReq, opts ...grpc.CallOption) (*Empty, error)
+	DeleteOss(ctx context.Context, in *DeleteOssReq, opts ...grpc.CallOption) (*Empty, error)
 	MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error)
 	StatFile(ctx context.Context, in *StatFileReq, opts ...grpc.CallOption) (*StatFileResp, error)
 	PutFile(ctx context.Context, in *PutFileReq, opts ...grpc.CallOption) (*PutFileResp, error)
@@ -62,6 +65,33 @@ func (c *resourceClient) OssDetail(ctx context.Context, in *OssDetailReq, opts .
 func (c *resourceClient) OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error) {
 	out := new(OssListResp)
 	err := c.cc.Invoke(ctx, "/resource.Resource/ossList", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *resourceClient) CreateOss(ctx context.Context, in *CreateOssReq, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/resource.Resource/createOss", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *resourceClient) UpdateOss(ctx context.Context, in *UpdateOssReq, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/resource.Resource/updateOss", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *resourceClient) DeleteOss(ctx context.Context, in *DeleteOssReq, opts ...grpc.CallOption) (*Empty, error) {
+	out := new(Empty)
+	err := c.cc.Invoke(ctx, "/resource.Resource/deleteOss", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -129,6 +159,9 @@ type ResourceServer interface {
 	Ping(context.Context, *Empty) (*PingResp, error)
 	OssDetail(context.Context, *OssDetailReq) (*OssDetailResp, error)
 	OssList(context.Context, *OssListReq) (*OssListResp, error)
+	CreateOss(context.Context, *CreateOssReq) (*Empty, error)
+	UpdateOss(context.Context, *UpdateOssReq) (*Empty, error)
+	DeleteOss(context.Context, *DeleteOssReq) (*Empty, error)
 	MakeBucket(context.Context, *MakeBucketReq) (*Empty, error)
 	StatFile(context.Context, *StatFileReq) (*StatFileResp, error)
 	PutFile(context.Context, *PutFileReq) (*PutFileResp, error)
@@ -150,6 +183,15 @@ func (UnimplementedResourceServer) OssDetail(context.Context, *OssDetailReq) (*O
 }
 func (UnimplementedResourceServer) OssList(context.Context, *OssListReq) (*OssListResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OssList not implemented")
+}
+func (UnimplementedResourceServer) CreateOss(context.Context, *CreateOssReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateOss not implemented")
+}
+func (UnimplementedResourceServer) UpdateOss(context.Context, *UpdateOssReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateOss not implemented")
+}
+func (UnimplementedResourceServer) DeleteOss(context.Context, *DeleteOssReq) (*Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteOss not implemented")
 }
 func (UnimplementedResourceServer) MakeBucket(context.Context, *MakeBucketReq) (*Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MakeBucket not implemented")
@@ -232,6 +274,60 @@ func _Resource_OssList_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ResourceServer).OssList(ctx, req.(*OssListReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Resource_CreateOss_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateOssReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceServer).CreateOss(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/resource.Resource/createOss",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceServer).CreateOss(ctx, req.(*CreateOssReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Resource_UpdateOss_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateOssReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceServer).UpdateOss(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/resource.Resource/updateOss",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceServer).UpdateOss(ctx, req.(*UpdateOssReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Resource_DeleteOss_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteOssReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ResourceServer).DeleteOss(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/resource.Resource/deleteOss",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ResourceServer).DeleteOss(ctx, req.(*DeleteOssReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -362,6 +458,18 @@ var Resource_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ossList",
 			Handler:    _Resource_OssList_Handler,
+		},
+		{
+			MethodName: "createOss",
+			Handler:    _Resource_CreateOss_Handler,
+		},
+		{
+			MethodName: "updateOss",
+			Handler:    _Resource_UpdateOss_Handler,
+		},
+		{
+			MethodName: "deleteOss",
+			Handler:    _Resource_DeleteOss_Handler,
 		},
 		{
 			MethodName: "makeBucket",

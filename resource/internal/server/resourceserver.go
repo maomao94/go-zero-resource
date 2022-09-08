@@ -37,6 +37,21 @@ func (s *ResourceServer) OssList(ctx context.Context, in *pb.OssListReq) (*pb.Os
 	return l.OssList(in)
 }
 
+func (s *ResourceServer) CreateOss(ctx context.Context, in *pb.CreateOssReq) (*pb.Empty, error) {
+	l := logic.NewCreateOssLogic(ctx, s.svcCtx)
+	return l.CreateOss(in)
+}
+
+func (s *ResourceServer) UpdateOss(ctx context.Context, in *pb.UpdateOssReq) (*pb.Empty, error) {
+	l := logic.NewUpdateOssLogic(ctx, s.svcCtx)
+	return l.UpdateOss(in)
+}
+
+func (s *ResourceServer) DeleteOss(ctx context.Context, in *pb.DeleteOssReq) (*pb.Empty, error) {
+	l := logic.NewDeleteOssLogic(ctx, s.svcCtx)
+	return l.DeleteOss(in)
+}
+
 func (s *ResourceServer) MakeBucket(ctx context.Context, in *pb.MakeBucketReq) (*pb.Empty, error) {
 	l := logic.NewMakeBucketLogic(ctx, s.svcCtx)
 	return l.MakeBucket(in)

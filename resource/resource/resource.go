@@ -13,6 +13,8 @@ import (
 )
 
 type (
+	CreateOssReq   = pb.CreateOssReq
+	DeleteOssReq   = pb.DeleteOssReq
 	Empty          = pb.Empty
 	File           = pb.File
 	GetFileReq     = pb.GetFileReq
@@ -31,11 +33,15 @@ type (
 	RemoveFilesReq = pb.RemoveFilesReq
 	StatFileReq    = pb.StatFileReq
 	StatFileResp   = pb.StatFileResp
+	UpdateOssReq   = pb.UpdateOssReq
 
 	Resource interface {
 		Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
 		OssDetail(ctx context.Context, in *OssDetailReq, opts ...grpc.CallOption) (*OssDetailResp, error)
 		OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error)
+		CreateOss(ctx context.Context, in *CreateOssReq, opts ...grpc.CallOption) (*Empty, error)
+		UpdateOss(ctx context.Context, in *UpdateOssReq, opts ...grpc.CallOption) (*Empty, error)
+		DeleteOss(ctx context.Context, in *DeleteOssReq, opts ...grpc.CallOption) (*Empty, error)
 		MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error)
 		StatFile(ctx context.Context, in *StatFileReq, opts ...grpc.CallOption) (*StatFileResp, error)
 		PutFile(ctx context.Context, in *PutFileReq, opts ...grpc.CallOption) (*PutFileResp, error)
@@ -68,6 +74,21 @@ func (m *defaultResource) OssDetail(ctx context.Context, in *OssDetailReq, opts 
 func (m *defaultResource) OssList(ctx context.Context, in *OssListReq, opts ...grpc.CallOption) (*OssListResp, error) {
 	client := pb.NewResourceClient(m.cli.Conn())
 	return client.OssList(ctx, in, opts...)
+}
+
+func (m *defaultResource) CreateOss(ctx context.Context, in *CreateOssReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := pb.NewResourceClient(m.cli.Conn())
+	return client.CreateOss(ctx, in, opts...)
+}
+
+func (m *defaultResource) UpdateOss(ctx context.Context, in *UpdateOssReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := pb.NewResourceClient(m.cli.Conn())
+	return client.UpdateOss(ctx, in, opts...)
+}
+
+func (m *defaultResource) DeleteOss(ctx context.Context, in *DeleteOssReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := pb.NewResourceClient(m.cli.Conn())
+	return client.DeleteOss(ctx, in, opts...)
 }
 
 func (m *defaultResource) MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error) {

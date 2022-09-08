@@ -74,6 +74,21 @@ message CreateOssReq{
   string remark = 10; // 所属分类
 }
 
+message UpdateOssReq{
+  int64 id = 50;
+  string tenantId = 1; // 租户ID
+  int64 category = 2; // 所属分类
+  string ossCode = 3; // 资源编号
+  string endpoint = 4; // 资源地址
+  string accessKey = 5; // accessKey
+  string secretKey = 6; // secretKey
+  string bucketName = 7; // 空间名
+  string appId = 8; // 应用ID TencentCOS需要
+  string region = 9; // 地域简称 TencentCOS需要
+  string remark = 10; // 所属分类
+  int64 status = 11; // 状态
+}
+
 message DeleteOssReq{
   int64 id = 50;
 }
@@ -140,6 +155,7 @@ service Resource {
   rpc ossDetail (OssDetailReq) returns (OssDetailResp); // 查看存储详情
   rpc ossList (OssListReq) returns (OssListResp); // 查看存储列表
   rpc createOss (CreateOssReq) returns (Empty); // 创建存储
+  rpc updateOss (UpdateOssReq) returns (Empty); // 创建存储
   rpc deleteOss (DeleteOssReq) returns (Empty); // 删除存储
   rpc makeBucket (MakeBucketReq) returns (Empty); // 创建存储桶
   rpc statFile (StatFileReq) returns (StatFileResp); // 获取文件信息
