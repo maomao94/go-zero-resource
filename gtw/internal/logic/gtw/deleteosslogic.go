@@ -2,6 +2,7 @@ package gtw
 
 import (
 	"context"
+	"gtw/resource/pb"
 
 	"gtw/gtw/internal/svc"
 	"gtw/gtw/internal/types"
@@ -24,7 +25,11 @@ func NewDeleteOssLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DeleteO
 }
 
 func (l *DeleteOssLogic) DeleteOss(req *types.OssDelete) (resp *types.EmptyReply, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	_, err = l.svcCtx.ResourceRpc.DeleteOss(l.ctx, &pb.DeleteOssReq{
+		Id: req.Id,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &types.EmptyReply{}, nil
 }
