@@ -13,7 +13,7 @@ Log:
 Telemetry:
   Name: resource
   Endpoint: http://127.0.0.1:14268/api/traces
-  Sampler: 1.0
+#  Sampler: 1.0
   Batcher: jaeger
 DB:
   DataSource: root:123456@tcp(127.0.0.1:3306)/resource?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
