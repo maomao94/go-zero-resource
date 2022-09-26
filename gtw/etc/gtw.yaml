@@ -2,6 +2,7 @@ Name: gtw
 Host: 0.0.0.0
 Port: 8888
 Mode: dev
+Timeout: 4000
 Log:
   Encoding: json
   Mode: file
@@ -16,3 +17,4 @@ ResourceRpcConf:
   Endpoints:
     - 127.0.0.1:8080
   NonBlock: true
+  Timeout: 3000
