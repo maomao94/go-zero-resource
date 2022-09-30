@@ -208,7 +208,7 @@ service gtw {
 	
 	@doc "下载文件"
 	@handler getFile
-	post /oss/endpoint/getFile (GetFileReq) returns (EmptyReply)
+	post /oss/endpoint/getFile (GetFileReq) returns ()
 	
 	@doc "删除文件"
 	@handler removeFile

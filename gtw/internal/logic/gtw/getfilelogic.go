@@ -3,6 +3,7 @@ package gtw
 import (
 	"context"
 	"gtw/resource/pb"
+	"io"
 	"net/http"
 	"strconv"
 
@@ -16,19 +17,19 @@ type GetFileLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
-	writer http.ResponseWriter
+	w      http.ResponseWriter
 }
 
-func NewGetFileLogic(ctx context.Context, svcCtx *svc.ServiceContext, writer http.ResponseWriter) *GetFileLogic {
+func NewGetFileLogic(ctx context.Context, svcCtx *svc.ServiceContext, w http.ResponseWriter) *GetFileLogic {
 	return &GetFileLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
-		writer: writer,
+		w:      w,
 	}
 }
 
-func (l *GetFileLogic) GetFile(req *types.GetFileReq) (resp *types.EmptyReply, err error) {
+func (l *GetFileLogic) GetFile(req *types.GetFileReq) error {
 	getFileResp, err := l.svcCtx.ResourceRpc.GetFile(l.ctx, &pb.GetFileReq{
 		TenantId:   req.TenantId,
 		Code:       req.Code,
@@ -36,16 +37,22 @@ func (l *GetFileLogic) GetFile(req *types.GetFileReq) (resp *types.EmptyReply, e
 		Filename:   req.Filename,
 	})
 	if err != nil {
-		return nil, err
+		return err
 	}
-	l.writer.Header().Set("Content-Disposition", "attachment; filename=\""+getFileResp.Filename+"\"")
-	l.writer.Header().Set("Content-Type", getFileResp.ContentType)
+	l.w.Header().Set("Content-Disposition", "attachment; filename=\""+getFileResp.Filename+"\"")
+	l.w.Header().Set("Content-Type", getFileResp.ContentType)
 	//reader := bytes.NewReader(getFileResp.Stream)
 	//l.writer.Header().Set("Content-Length", strconv.FormatInt(reader.Size(), 10))
-	l.writer.Header().Set("Content-Length", strconv.Itoa(len(getFileResp.Stream)))
-	l.writer.Write(getFileResp.Stream)
+	l.w.Header().Set("Content-Length", strconv.Itoa(len(getFileResp.Stream)))
 	//if _, err := io.Copy(l.writer, reader); err != nil {
 	//	return nil, err
 	//}
-	return
+	n, err := l.w.Write(getFileResp.Stream)
+	if err != nil {
+		return err
+	}
+	if n < len(getFileResp.Stream) {
+		return io.ErrClosedPipe
+	}
+	return nil
 }
