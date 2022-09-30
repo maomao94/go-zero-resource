@@ -34,7 +34,7 @@ func NewPutFileLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Re
 func (l *PutFileLogic) PutFile(req *types.PutFileReq) (resp *types.File, err error) {
 	l.r.ParseMultipartForm(maxFileSize)
 	file, fileHeader, err := l.r.FormFile("file")
-	if err == nil {
+	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
