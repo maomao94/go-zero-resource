@@ -17,9 +17,8 @@ func PutFileHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := gtw.NewPutFileLogic(r.Context(), svcCtx)
-		_, fileHeader, err := r.FormFile("file")
-		resp, err := l.PutFile(&req, fileHeader)
+		l := gtw.NewPutFileLogic(r.Context(), svcCtx, r)
+		resp, err := l.PutFile(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {

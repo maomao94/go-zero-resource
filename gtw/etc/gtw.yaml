@@ -3,6 +3,7 @@ Host: 0.0.0.0
 Port: 8888
 Mode: dev
 Timeout: 4000
+MaxBytes: 1073741824
 Log:
   Encoding: json
   Mode: file

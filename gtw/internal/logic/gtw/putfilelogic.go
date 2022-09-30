@@ -2,11 +2,10 @@ package gtw
 
 import (
 	"context"
-	"errors"
 	"github.com/jinzhu/copier"
 	"gtw/resource/pb"
 	"io/ioutil"
-	"mime/multipart"
+	"net/http"
 
 	"gtw/gtw/internal/svc"
 	"gtw/gtw/internal/types"
@@ -14,29 +13,33 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
+const maxFileSize = 10 << 20 // 10 MB
+
 type PutFileLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
+	r      *http.Request
 }
 
-func NewPutFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PutFileLogic {
+func NewPutFileLogic(ctx context.Context, svcCtx *svc.ServiceContext, r *http.Request) *PutFileLogic {
 	return &PutFileLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
+		r:      r,
 	}
 }
 
-func (l *PutFileLogic) PutFile(req *types.PutFileReq, fileHeader *multipart.FileHeader) (resp *types.File, err error) {
-	if fileHeader == nil {
-		return nil, errors.New("fileHeader error")
-	}
-	file, err := fileHeader.Open()
-	if err != nil {
+func (l *PutFileLogic) PutFile(req *types.PutFileReq) (resp *types.File, err error) {
+	l.r.ParseMultipartForm(maxFileSize)
+	file, fileHeader, err := l.r.FormFile("file")
+	if err == nil {
 		return nil, err
 	}
 	defer file.Close()
+	logx.Infof("upload file: %+v, file size: %d, MIME header: %+v",
+		fileHeader.Filename, fileHeader.Size, fileHeader.Header)
 	stream, err := ioutil.ReadAll(file)
 	if err != nil {
 		return nil, err

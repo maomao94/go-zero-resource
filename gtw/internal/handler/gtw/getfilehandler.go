@@ -17,12 +17,12 @@ func GetFileHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := gtw.NewGetFileLogic(r.Context(), svcCtx)
-		_, err := l.GetFile(&req, w)
+		l := gtw.NewGetFileLogic(r.Context(), svcCtx, w)
+		resp, err := l.GetFile(&req)
 		if err != nil {
 			httpx.Error(w, err)
 		} else {
-			//httpx.OkJson(w, resp)
+			httpx.OkJson(w, resp)
 		}
 	}
 }
