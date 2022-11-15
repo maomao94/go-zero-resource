@@ -8,7 +8,7 @@ Mode: dev
 Kafka:
   Name: kafkaTest
   Brokers:
-    - 0.0.0.0:9092
+    - 127.0.0.1:9092
   Group: kafka-test-group
   Topic: kafka-test-topic
   Offset: first
