@@ -151,3 +151,7 @@ type File struct {
 	OriginalName string `json:"originalName"`       // 初始文件名
 	AttachId     string `json:"attachId,omitempty"` // 附件表ID
 }
+
+type KqSendReq struct {
+	Message string `json:"message"` // 消息
+}

@@ -159,6 +159,10 @@ type (
 		OriginalName string `json:"originalName"`       // 初始文件名
 		AttachId     string `json:"attachId,omitempty"` // 附件表ID
 	}
+
+	KqSendReq {
+		Message string `json:"message"` // 消息
+	}
 )
 
 @server(
@@ -217,4 +221,8 @@ service gtw {
 	@doc "批量删除文件"
 	@handler removeFiles
 	post /oss/endpoint/removeFiles (RemoveFilesReq) returns (EmptyReply)
+	
+	@doc "发送kafka消息"
+	@handler kqSend
+	post /message/kq/send (KqSendReq) returns (EmptyReply)
 }

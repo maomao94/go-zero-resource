@@ -4,7 +4,7 @@ package handler
 import (
 	"net/http"
 
-	"github.com/hehanpeng/go-zero-resource/gtw/internal/handler/gtw"
+	gtw "github.com/hehanpeng/go-zero-resource/gtw/internal/handler/gtw"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -77,6 +77,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Method:  http.MethodPost,
 				Path:    "/oss/endpoint/removeFiles",
 				Handler: gtw.RemoveFilesHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/message/kq/send",
+				Handler: gtw.KqSendHandler(serverCtx),
 			},
 		},
 		rest.WithPrefix("/gtw/v1"),
