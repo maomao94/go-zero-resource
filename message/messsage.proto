@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package mq;
+option go_package = "./pb";
+
+message Empty {}
+
+message PingResp{
+  string msg = 1;
+}
+
+service message {
+  rpc ping (Empty) returns (PingResp);
+}
