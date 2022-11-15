@@ -39,7 +39,7 @@ func main() {
 	serviceGroup.Add(s)
 
 	// kafka
-	kq.NewQueue(c.Kafka, kafka.NewKafkaTest(ctx))
+	serviceGroup.Add(kq.MustNewQueue(c.Kafka, kafka.NewKafkaTest(ctx)))
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
-	s.Start()
+	serviceGroup.Start()
 }
