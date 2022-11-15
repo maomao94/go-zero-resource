@@ -4,9 +4,9 @@ import (
 	"flag"
 	"fmt"
 
-	"gtw/gtw/internal/config"
-	"gtw/gtw/internal/handler"
-	"gtw/gtw/internal/svc"
+	"github.com/hehanpeng/go-zero-resource/gtw/internal/config"
+	"github.com/hehanpeng/go-zero-resource/gtw/internal/handler"
+	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"

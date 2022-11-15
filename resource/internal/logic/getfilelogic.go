@@ -2,11 +2,11 @@ package logic
 
 import (
 	"context"
+	"github.com/hehanpeng/go-zero-resource/common/ossx"
+	"github.com/hehanpeng/go-zero-resource/model"
+	"github.com/hehanpeng/go-zero-resource/resource/internal/svc"
+	"github.com/hehanpeng/go-zero-resource/resource/pb"
 	"github.com/zeromicro/go-zero/core/logx"
-	"gtw/common/ossx"
-	"gtw/model"
-	"gtw/resource/internal/svc"
-	"gtw/resource/pb"
 	"io/ioutil"
 )
 

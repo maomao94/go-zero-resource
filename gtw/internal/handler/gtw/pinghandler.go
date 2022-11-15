@@ -3,9 +3,9 @@ package gtw
 import (
 	"net/http"
 
+	"github.com/hehanpeng/go-zero-resource/gtw/internal/logic/gtw"
+	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/zeromicro/go-zero/rest/httpx"
-	"gtw/gtw/internal/logic/gtw"
-	"gtw/gtw/internal/svc"
 )
 
 func PingHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {

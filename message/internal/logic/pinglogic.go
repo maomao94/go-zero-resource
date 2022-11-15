@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 
-	"gtw/message/internal/svc"
-	"gtw/message/pb"
+	"github.com/hehanpeng/go-zero-resource/message/internal/svc"
+	"github.com/hehanpeng/go-zero-resource/message/pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

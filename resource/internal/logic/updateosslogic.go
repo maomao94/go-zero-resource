@@ -2,10 +2,10 @@ package logic
 
 import (
 	"context"
-	"gtw/model"
+	"github.com/hehanpeng/go-zero-resource/model"
 
-	"gtw/resource/internal/svc"
-	"gtw/resource/pb"
+	"github.com/hehanpeng/go-zero-resource/resource/internal/svc"
+	"github.com/hehanpeng/go-zero-resource/resource/pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

@@ -2,13 +2,13 @@ package gtw
 
 import (
 	"context"
-	"gtw/resource/pb"
+	"github.com/hehanpeng/go-zero-resource/resource/pb"
 	"io"
 	"net/http"
 	"strconv"
 
-	"gtw/gtw/internal/svc"
-	"gtw/gtw/internal/types"
+	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
+	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

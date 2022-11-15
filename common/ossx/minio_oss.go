@@ -3,8 +3,8 @@ package ossx
 import (
 	"bytes"
 	"errors"
+	"github.com/hehanpeng/go-zero-resource/model"
 	"github.com/minio/minio-go"
-	"gtw/model"
 	"mime/multipart"
 )
 

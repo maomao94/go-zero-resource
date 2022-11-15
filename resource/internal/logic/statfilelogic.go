@@ -3,12 +3,12 @@ package logic
 import (
 	"context"
 	"github.com/golang-module/carbon/v2"
+	"github.com/hehanpeng/go-zero-resource/common/ossx"
+	"github.com/hehanpeng/go-zero-resource/model"
+	"github.com/hehanpeng/go-zero-resource/resource/internal/svc"
+	"github.com/hehanpeng/go-zero-resource/resource/pb"
 	"github.com/jinzhu/copier"
 	"github.com/zeromicro/go-zero/core/logx"
-	"gtw/common/ossx"
-	"gtw/model"
-	"gtw/resource/internal/svc"
-	"gtw/resource/pb"
 )
 
 type StatFileLogic struct {

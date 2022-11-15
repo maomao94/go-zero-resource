@@ -1,9 +1,9 @@
 package kafka
 
 import (
+	"github.com/hehanpeng/go-zero-resource/message/internal/svc"
 	"github.com/zeromicro/go-zero/core/logx"
 	"golang.org/x/net/context"
-	"gtw/message/internal/svc"
 )
 
 type KafkaTest struct {

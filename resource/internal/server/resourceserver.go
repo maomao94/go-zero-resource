@@ -6,9 +6,9 @@ package server
 import (
 	"context"
 
-	"gtw/resource/internal/logic"
-	"gtw/resource/internal/svc"
-	"gtw/resource/pb"
+	"github.com/hehanpeng/go-zero-resource/resource/internal/logic"
+	"github.com/hehanpeng/go-zero-resource/resource/internal/svc"
+	"github.com/hehanpeng/go-zero-resource/resource/pb"
 )
 
 type ResourceServer struct {

@@ -1,9 +1,9 @@
 package svc
 
 import (
+	"github.com/hehanpeng/go-zero-resource/model"
+	"github.com/hehanpeng/go-zero-resource/resource/internal/config"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
-	"gtw/model"
-	"gtw/resource/internal/config"
 )
 
 type ServiceContext struct {

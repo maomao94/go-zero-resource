@@ -3,9 +3,9 @@ package logic
 import (
 	"context"
 	"github.com/Masterminds/squirrel"
+	"github.com/hehanpeng/go-zero-resource/resource/internal/svc"
+	"github.com/hehanpeng/go-zero-resource/resource/pb"
 	"github.com/jinzhu/copier"
-	"gtw/resource/internal/svc"
-	"gtw/resource/pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )

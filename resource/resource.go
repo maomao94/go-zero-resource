@@ -4,10 +4,10 @@ import (
 	"flag"
 	"fmt"
 
-	"gtw/resource/internal/config"
-	"gtw/resource/internal/server"
-	"gtw/resource/internal/svc"
-	"gtw/resource/pb"
+	"github.com/hehanpeng/go-zero-resource/resource/internal/config"
+	"github.com/hehanpeng/go-zero-resource/resource/internal/server"
+	"github.com/hehanpeng/go-zero-resource/resource/internal/svc"
+	"github.com/hehanpeng/go-zero-resource/resource/pb"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
