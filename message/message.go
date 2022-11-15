@@ -3,12 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
-
-	"gtw/message/internal/config"
-	"gtw/message/internal/server"
-	"gtw/message/internal/svc"
-	"gtw/message/pb"
-
+	"github.com/hehanpeng/go-zero-resource/message/internal/config"
+	"github.com/hehanpeng/go-zero-resource/message/internal/kafka"
+	"github.com/hehanpeng/go-zero-resource/message/internal/server"
+	"github.com/hehanpeng/go-zero-resource/message/internal/svc"
+	"github.com/hehanpeng/go-zero-resource/message/pb"
+	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/service"
 	"github.com/zeromicro/go-zero/zrpc"
@@ -16,7 +16,7 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var configFile = flag.String("f", "etc/messsage.yaml", "the config file")
+var configFile = flag.String("f", "etc/message.yaml", "the config file")
 
 func main() {
 	flag.Parse()
@@ -32,8 +32,14 @@ func main() {
 			reflection.Register(grpcServer)
 		}
 	})
-	defer s.Stop()
 
+	serviceGroup := service.NewServiceGroup()
+	defer serviceGroup.Stop()
+
+	serviceGroup.Add(s)
+
+	// kafka
+	kq.NewQueue(c.Kafka, kafka.NewKafkaTest(ctx))
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
 }
