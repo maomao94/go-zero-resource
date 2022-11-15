@@ -5,6 +5,12 @@ Mode: dev
 #  Hosts:
 #  - 127.0.0.1:2379
 #  Key: message.rpc
+#链路追踪
+Telemetry:
+  Name: message
+  Endpoint: http://127.0.0.1:14268/api/traces
+  #  Sampler: 1.0
+  Batcher: jaeger
 Kafka:
   Name: kafkaTest
   Brokers:
