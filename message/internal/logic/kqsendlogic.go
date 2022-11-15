@@ -24,7 +24,9 @@ func NewKqSendLogic(ctx context.Context, svcCtx *svc.ServiceContext) *KqSendLogi
 }
 
 func (l *KqSendLogic) KqSend(in *pb.KqSendReq) (*pb.Empty, error) {
-	// todo: add your logic here and delete this line
-
+	err := l.svcCtx.KafkaTestPusher.Push(in.Msg)
+	if err != nil {
+		return nil, err
+	}
 	return &pb.Empty{}, nil
 }

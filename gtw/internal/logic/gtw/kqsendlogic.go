@@ -29,5 +29,5 @@ func (l *KqSendLogic) KqSend(req *types.KqSendReq) (resp *types.EmptyReply, err 
 	if err != nil {
 		return nil, err
 	}
-	return
+	return &types.EmptyReply{}, nil
 }

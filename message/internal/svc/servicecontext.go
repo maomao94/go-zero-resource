@@ -6,13 +6,13 @@ import (
 )
 
 type ServiceContext struct {
-	Config    config.Config
-	KafkaTest *kq.Pusher
+	Config          config.Config
+	KafkaTestPusher *kq.Pusher
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
-		Config:    c,
-		KafkaTest: kq.NewPusher(c.Kafka.Brokers, c.Kafka.Topic),
+		Config:          c,
+		KafkaTestPusher: kq.NewPusher(c.Kafka.Brokers, c.Kafka.Topic),
 	}
 }
