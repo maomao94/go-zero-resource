@@ -8,4 +8,5 @@ import (
 type Config struct {
 	rest.RestConf
 	ResourceRpcConf zrpc.RpcClientConf
+	MessageRpcConf  zrpc.RpcClientConf
 }

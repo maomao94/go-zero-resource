@@ -6,7 +6,7 @@ package resource
 import (
 	"context"
 
-	"gtw/resource/pb"
+	"github.com/hehanpeng/go-zero-resource/resource/pb"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
