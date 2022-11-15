@@ -161,7 +161,7 @@ type (
 	}
 
 	KqSendReq {
-		Message string `json:"message"` // 消息
+		Msg string `json:"msg"` // 消息
 	}
 )
 

@@ -26,3 +26,8 @@ func (s *MessageServer) Ping(ctx context.Context, in *pb.Empty) (*pb.PingResp, e
 	l := logic.NewPingLogic(ctx, s.svcCtx)
 	return l.Ping(in)
 }
+
+func (s *MessageServer) KqSend(ctx context.Context, in *pb.KqSendReq) (*pb.Empty, error) {
+	l := logic.NewKqSendLogic(ctx, s.svcCtx)
+	return l.KqSend(in)
+}

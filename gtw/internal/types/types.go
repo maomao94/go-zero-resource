@@ -153,5 +153,5 @@ type File struct {
 }
 
 type KqSendReq struct {
-	Message string `json:"message"` // 消息
+	Msg string `json:"msg"` // 消息
 }

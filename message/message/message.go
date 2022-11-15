@@ -13,11 +13,13 @@ import (
 )
 
 type (
-	Empty    = pb.Empty
-	PingResp = pb.PingResp
+	Empty     = pb.Empty
+	KqSendReq = pb.KqSendReq
+	PingResp  = pb.PingResp
 
 	Message interface {
 		Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
+		KqSend(ctx context.Context, in *KqSendReq, opts ...grpc.CallOption) (*Empty, error)
 	}
 
 	defaultMessage struct {
@@ -34,4 +36,9 @@ func NewMessage(cli zrpc.Client) Message {
 func (m *defaultMessage) Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error) {
 	client := pb.NewMessageClient(m.cli.Conn())
 	return client.Ping(ctx, in, opts...)
+}
+
+func (m *defaultMessage) KqSend(ctx context.Context, in *KqSendReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := pb.NewMessageClient(m.cli.Conn())
+	return client.KqSend(ctx, in, opts...)
 }

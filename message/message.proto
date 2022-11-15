@@ -9,6 +9,11 @@ message PingResp{
   string msg = 1;
 }
 
+message KqSendReq{
+  string msg = 1;
+}
+
 service message {
   rpc ping (Empty) returns (PingResp);
+  rpc KqSend (KqSendReq) returns (Empty);
 }
