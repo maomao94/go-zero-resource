@@ -23,7 +23,8 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type SysClient interface {
 	Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
-	Login(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
+	GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
+	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 }
 
 type sysClient struct {
@@ -43,8 +44,17 @@ func (c *sysClient) Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption
 	return out, nil
 }
 
-func (c *sysClient) Login(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error) {
-	out := new(PingResp)
+func (c *sysClient) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
+	out := new(GenerateTokenResp)
+	err := c.cc.Invoke(ctx, "/sys.sys/generateToken", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sysClient) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
+	out := new(LoginResp)
 	err := c.cc.Invoke(ctx, "/sys.sys/login", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -57,7 +67,8 @@ func (c *sysClient) Login(ctx context.Context, in *Empty, opts ...grpc.CallOptio
 // for forward compatibility
 type SysServer interface {
 	Ping(context.Context, *Empty) (*PingResp, error)
-	Login(context.Context, *Empty) (*PingResp, error)
+	GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error)
+	Login(context.Context, *LoginReq) (*LoginResp, error)
 	mustEmbedUnimplementedSysServer()
 }
 
@@ -68,7 +79,10 @@ type UnimplementedSysServer struct {
 func (UnimplementedSysServer) Ping(context.Context, *Empty) (*PingResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
-func (UnimplementedSysServer) Login(context.Context, *Empty) (*PingResp, error) {
+func (UnimplementedSysServer) GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenerateToken not implemented")
+}
+func (UnimplementedSysServer) Login(context.Context, *LoginReq) (*LoginResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
 }
 func (UnimplementedSysServer) mustEmbedUnimplementedSysServer() {}
@@ -102,8 +116,26 @@ func _Sys_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Sys_GenerateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GenerateTokenReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SysServer).GenerateToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sys.sys/generateToken",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SysServer).GenerateToken(ctx, req.(*GenerateTokenReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Sys_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Empty)
+	in := new(LoginReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -115,7 +147,7 @@ func _Sys_Login_Handler(srv interface{}, ctx context.Context, dec func(interface
 		FullMethod: "/sys.sys/login",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SysServer).Login(ctx, req.(*Empty))
+		return srv.(SysServer).Login(ctx, req.(*LoginReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -130,6 +162,10 @@ var Sys_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ping",
 			Handler:    _Sys_Ping_Handler,
+		},
+		{
+			MethodName: "generateToken",
+			Handler:    _Sys_GenerateToken_Handler,
 		},
 		{
 			MethodName: "login",

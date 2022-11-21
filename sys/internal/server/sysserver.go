@@ -27,7 +27,12 @@ func (s *SysServer) Ping(ctx context.Context, in *pb.Empty) (*pb.PingResp, error
 	return l.Ping(in)
 }
 
-func (s *SysServer) Login(ctx context.Context, in *pb.Empty) (*pb.PingResp, error) {
+func (s *SysServer) GenerateToken(ctx context.Context, in *pb.GenerateTokenReq) (*pb.GenerateTokenResp, error) {
+	l := logic.NewGenerateTokenLogic(ctx, s.svcCtx)
+	return l.GenerateToken(in)
+}
+
+func (s *SysServer) Login(ctx context.Context, in *pb.LoginReq) (*pb.LoginResp, error) {
 	l := logic.NewLoginLogic(ctx, s.svcCtx)
 	return l.Login(in)
 }

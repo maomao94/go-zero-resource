@@ -13,12 +13,17 @@ import (
 )
 
 type (
-	Empty    = pb.Empty
-	PingResp = pb.PingResp
+	Empty             = pb.Empty
+	GenerateTokenReq  = pb.GenerateTokenReq
+	GenerateTokenResp = pb.GenerateTokenResp
+	LoginReq          = pb.LoginReq
+	LoginResp         = pb.LoginResp
+	PingResp          = pb.PingResp
 
 	Sys interface {
 		Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
-		Login(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
+		GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
+		Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
 	}
 
 	defaultSys struct {
@@ -37,7 +42,12 @@ func (m *defaultSys) Ping(ctx context.Context, in *Empty, opts ...grpc.CallOptio
 	return client.Ping(ctx, in, opts...)
 }
 
-func (m *defaultSys) Login(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error) {
+func (m *defaultSys) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
+	client := pb.NewSysClient(m.cli.Conn())
+	return client.GenerateToken(ctx, in, opts...)
+}
+
+func (m *defaultSys) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	client := pb.NewSysClient(m.cli.Conn())
 	return client.Login(ctx, in, opts...)
 }

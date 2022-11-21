@@ -9,7 +9,29 @@ message PingResp{
   string msg = 1;
 }
 
+message GenerateTokenReq {
+  int64 userId = 1;
+}
+message GenerateTokenResp {
+  string accessToken = 1;
+  int64  accessExpire = 2;
+  int64  refreshAfter = 3;
+}
+
+message LoginReq{
+  string authType = 1;
+  string authKey = 2;
+  string password = 3;
+}
+
+message LoginResp{
+  string accessToken = 1;
+  int64  accessExpire = 2;
+  int64  refreshAfter = 3;
+}
+
 service sys {
   rpc ping (Empty) returns (PingResp);
-  rpc login (Empty) returns (PingResp); // 登录
+  rpc generateToken(GenerateTokenReq) returns(GenerateTokenResp); // 生成token
+  rpc login (LoginReq) returns (LoginResp); // 登录
 }
