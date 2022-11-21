@@ -194,7 +194,7 @@ type (
     prefix: gtw/v1
     group: user
 )
-service usercenter {
+service gtw {
     @doc "register"
     @handler register
     post /user/register (RegisterReq) returns (RegisterResp)
