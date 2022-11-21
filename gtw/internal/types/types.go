@@ -29,6 +29,28 @@ type PageReply struct {
 	PageSize int64       `json:"pageSize"` // 每页大小
 }
 
+type RegisterReq struct {
+	Mobile   string `json:"mobile"`
+	Password string `json:"password"`
+}
+
+type RegisterResp struct {
+	AccessToken  string `json:"accessToken"`
+	AccessExpire int64  `json:"accessExpire"`
+	RefreshAfter int64  `json:"refreshAfter"`
+}
+
+type LoginReq struct {
+	Mobile   string `json:"mobile"`
+	Password string `json:"password"`
+}
+
+type LoginResp struct {
+	AccessToken  string `json:"accessToken"`
+	AccessExpire int64  `json:"accessExpire"`
+	RefreshAfter int64  `json:"refreshAfter"`
+}
+
 type Oss struct {
 	Id         int64  `json:"id,optional"`         // 主键id
 	TenantId   string `json:"tenantId,optional"`   // 租户ID

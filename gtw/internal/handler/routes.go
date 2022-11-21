@@ -5,12 +5,29 @@ import (
 	"net/http"
 
 	gtw "github.com/hehanpeng/go-zero-resource/gtw/internal/handler/gtw"
+	user "github.com/hehanpeng/go-zero-resource/gtw/internal/handler/user"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
 )
 
 func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/register",
+				Handler: user.RegisterHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/user/login",
+				Handler: user.LoginHandler(serverCtx),
+			},
+		},
+		rest.WithPrefix("/gtw/v1"),
+	)
+
 	server.AddRoutes(
 		[]rest.Route{
 			{
