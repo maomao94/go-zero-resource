@@ -18,7 +18,6 @@ type (
 		RowBuilder() squirrel.SelectBuilder
 		CountBuilder(field string) squirrel.SelectBuilder
 		SumBuilder(field string) squirrel.SelectBuilder
-		DeleteSoft(ctx context.Context, session sqlx.Session, data *TOss) error
 		FindOneByQuery(ctx context.Context, rowBuilder squirrel.SelectBuilder) (*TOss, error)
 		FindSum(ctx context.Context, sumBuilder squirrel.SelectBuilder) (float64, error)
 		FindCount(ctx context.Context, countBuilder squirrel.SelectBuilder) (int64, error)
@@ -56,11 +55,6 @@ func (m *defaultTOssModel) CountBuilder(field string) squirrel.SelectBuilder {
 
 func (m *defaultTOssModel) SumBuilder(field string) squirrel.SelectBuilder {
 	return squirrel.Select("IFNULL(SUM(" + field + "),0)").From(m.table)
-}
-
-func (m *defaultTOssModel) DeleteSoft(ctx context.Context, session sqlx.Session, data *TOss) error {
-	data.DelState = DelStateYes
-	return m.Update(ctx, data)
 }
 
 func (m *defaultTOssModel) FindOneByQuery(ctx context.Context, rowBuilder squirrel.SelectBuilder) (*TOss, error) {

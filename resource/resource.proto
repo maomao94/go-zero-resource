@@ -10,6 +10,7 @@ message PingResp{
 }
 
 message Oss{
+  int64 id = 50;
   string tenantId = 1; // 租户ID
   int64 category = 2; // 所属分类
   string ossCode = 3; // 资源编号
