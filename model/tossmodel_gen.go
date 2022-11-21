@@ -19,8 +19,8 @@ import (
 var (
 	tOssFieldNames          = builder.RawFieldNames(&TOss{})
 	tOssRows                = strings.Join(tOssFieldNames, ",")
-	tOssRowsExpectAutoSet   = strings.Join(stringx.Remove(tOssFieldNames, "`id`", "`create_time`", "`update_time`", "`create_at`", "`update_at`"), ",")
-	tOssRowsWithPlaceHolder = strings.Join(stringx.Remove(tOssFieldNames, "`id`", "`create_time`", "`update_time`", "`create_at`", "`update_at`"), "=?,") + "=?"
+	tOssRowsExpectAutoSet   = strings.Join(stringx.Remove(tOssFieldNames, "`id`", "`create_at`", "`created_at`", "`create_time`", "`update_at`", "`updated_at`", "`update_time`"), ",")
+	tOssRowsWithPlaceHolder = strings.Join(stringx.Remove(tOssFieldNames, "`id`", "`create_at`", "`created_at`", "`create_time`", "`update_at`", "`updated_at`", "`update_time`"), "=?,") + "=?"
 
 	cacheTOssIdPrefix              = "cache:tOss:id:"
 	cacheTOssTenantIdOssCodePrefix = "cache:tOss:tenantId:ossCode:"
