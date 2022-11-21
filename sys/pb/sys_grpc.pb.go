@@ -18,86 +18,122 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// ResourceClient is the client API for Resource service.
+// SysClient is the client API for Sys service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type ResourceClient interface {
+type SysClient interface {
 	Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
+	Login(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
 }
 
-type resourceClient struct {
+type sysClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewResourceClient(cc grpc.ClientConnInterface) ResourceClient {
-	return &resourceClient{cc}
+func NewSysClient(cc grpc.ClientConnInterface) SysClient {
+	return &sysClient{cc}
 }
 
-func (c *resourceClient) Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error) {
+func (c *sysClient) Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error) {
 	out := new(PingResp)
-	err := c.cc.Invoke(ctx, "/sys.Resource/ping", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/sys.sys/ping", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// ResourceServer is the server API for Resource service.
-// All implementations must embed UnimplementedResourceServer
+func (c *sysClient) Login(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error) {
+	out := new(PingResp)
+	err := c.cc.Invoke(ctx, "/sys.sys/login", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// SysServer is the server API for Sys service.
+// All implementations must embed UnimplementedSysServer
 // for forward compatibility
-type ResourceServer interface {
+type SysServer interface {
 	Ping(context.Context, *Empty) (*PingResp, error)
-	mustEmbedUnimplementedResourceServer()
+	Login(context.Context, *Empty) (*PingResp, error)
+	mustEmbedUnimplementedSysServer()
 }
 
-// UnimplementedResourceServer must be embedded to have forward compatible implementations.
-type UnimplementedResourceServer struct {
+// UnimplementedSysServer must be embedded to have forward compatible implementations.
+type UnimplementedSysServer struct {
 }
 
-func (UnimplementedResourceServer) Ping(context.Context, *Empty) (*PingResp, error) {
+func (UnimplementedSysServer) Ping(context.Context, *Empty) (*PingResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Ping not implemented")
 }
-func (UnimplementedResourceServer) mustEmbedUnimplementedResourceServer() {}
+func (UnimplementedSysServer) Login(context.Context, *Empty) (*PingResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedSysServer) mustEmbedUnimplementedSysServer() {}
 
-// UnsafeResourceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to ResourceServer will
+// UnsafeSysServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to SysServer will
 // result in compilation errors.
-type UnsafeResourceServer interface {
-	mustEmbedUnimplementedResourceServer()
+type UnsafeSysServer interface {
+	mustEmbedUnimplementedSysServer()
 }
 
-func RegisterResourceServer(s grpc.ServiceRegistrar, srv ResourceServer) {
-	s.RegisterService(&Resource_ServiceDesc, srv)
+func RegisterSysServer(s grpc.ServiceRegistrar, srv SysServer) {
+	s.RegisterService(&Sys_ServiceDesc, srv)
 }
 
-func _Resource_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Sys_Ping_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ResourceServer).Ping(ctx, in)
+		return srv.(SysServer).Ping(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/sys.Resource/ping",
+		FullMethod: "/sys.sys/ping",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ResourceServer).Ping(ctx, req.(*Empty))
+		return srv.(SysServer).Ping(ctx, req.(*Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// Resource_ServiceDesc is the grpc.ServiceDesc for Resource service.
+func _Sys_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SysServer).Login(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sys.sys/login",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SysServer).Login(ctx, req.(*Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// Sys_ServiceDesc is the grpc.ServiceDesc for Sys service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var Resource_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "sys.Resource",
-	HandlerType: (*ResourceServer)(nil),
+var Sys_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "sys.sys",
+	HandlerType: (*SysServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "ping",
-			Handler:    _Resource_Ping_Handler,
+			Handler:    _Sys_Ping_Handler,
+		},
+		{
+			MethodName: "login",
+			Handler:    _Sys_Login_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

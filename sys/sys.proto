@@ -9,6 +9,7 @@ message PingResp{
   string msg = 1;
 }
 
-service Resource {
+service sys {
   rpc ping (Empty) returns (PingResp);
+  rpc login (Empty) returns (PingResp); // 登录
 }

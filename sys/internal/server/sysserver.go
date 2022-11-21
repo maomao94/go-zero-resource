@@ -11,18 +11,23 @@ import (
 	"github.com/hehanpeng/go-zero-resource/sys/pb"
 )
 
-type ResourceServer struct {
+type SysServer struct {
 	svcCtx *svc.ServiceContext
-	pb.UnimplementedResourceServer
+	pb.UnimplementedSysServer
 }
 
-func NewResourceServer(svcCtx *svc.ServiceContext) *ResourceServer {
-	return &ResourceServer{
+func NewSysServer(svcCtx *svc.ServiceContext) *SysServer {
+	return &SysServer{
 		svcCtx: svcCtx,
 	}
 }
 
-func (s *ResourceServer) Ping(ctx context.Context, in *pb.Empty) (*pb.PingResp, error) {
+func (s *SysServer) Ping(ctx context.Context, in *pb.Empty) (*pb.PingResp, error) {
 	l := logic.NewPingLogic(ctx, s.svcCtx)
 	return l.Ping(in)
+}
+
+func (s *SysServer) Login(ctx context.Context, in *pb.Empty) (*pb.PingResp, error) {
+	l := logic.NewLoginLogic(ctx, s.svcCtx)
+	return l.Login(in)
 }
