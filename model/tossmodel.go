@@ -2,6 +2,9 @@ package model
 
 import (
 	"context"
+	"database/sql"
+	"errors"
+	"fmt"
 	"github.com/Masterminds/squirrel"
 	"github.com/zeromicro/go-zero/core/stores/cache"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -18,7 +21,6 @@ type (
 		RowBuilder() squirrel.SelectBuilder
 		CountBuilder(field string) squirrel.SelectBuilder
 		SumBuilder(field string) squirrel.SelectBuilder
-		DeleteSoft(ctx context.Context, session sqlx.Session, data *TOss) error
 		FindOneByQuery(ctx context.Context, rowBuilder squirrel.SelectBuilder) (*TOss, error)
 		FindSum(ctx context.Context, sumBuilder squirrel.SelectBuilder) (float64, error)
 		FindCount(ctx context.Context, countBuilder squirrel.SelectBuilder) (int64, error)
@@ -26,6 +28,8 @@ type (
 		FindPageListByPage(ctx context.Context, rowBuilder squirrel.SelectBuilder, page, pageSize int64, orderBy string) ([]*TOss, error)
 		FindPageListByIdDESC(ctx context.Context, rowBuilder squirrel.SelectBuilder, preMinId, pageSize int64) ([]*TOss, error)
 		FindPageListByIdASC(ctx context.Context, rowBuilder squirrel.SelectBuilder, preMaxId, pageSize int64) ([]*TOss, error)
+		UpdateWithVersion(ctx context.Context, data *TOss) error
+		DeleteSoft(ctx context.Context, data *TOss) error
 	}
 
 	customTOssModel struct {
@@ -56,11 +60,6 @@ func (m *defaultTOssModel) CountBuilder(field string) squirrel.SelectBuilder {
 
 func (m *defaultTOssModel) SumBuilder(field string) squirrel.SelectBuilder {
 	return squirrel.Select("IFNULL(SUM(" + field + "),0)").From(m.table)
-}
-
-func (m *defaultTOssModel) DeleteSoft(ctx context.Context, session sqlx.Session, data *TOss) error {
-	data.DelState = DelStateYes
-	return m.Update(ctx, data)
 }
 
 func (m *defaultTOssModel) FindOneByQuery(ctx context.Context, rowBuilder squirrel.SelectBuilder) (*TOss, error) {
@@ -189,4 +188,35 @@ func (m *defaultTOssModel) FindPageListByIdASC(ctx context.Context, rowBuilder s
 	default:
 		return nil, err
 	}
+}
+
+func (m *defaultTOssModel) UpdateWithVersion(ctx context.Context, newData *TOss) error {
+	oldVersion := newData.Version
+	newData.Version += 1
+	data, err := m.FindOne(ctx, newData.Id)
+	if err != nil {
+		return err
+	}
+	tOssIdKey := fmt.Sprintf("%s%v", cacheTOssIdPrefix, data.Id)
+	tOssTenantIdOssCodeKey := fmt.Sprintf("%s%v:%v", cacheTOssTenantIdOssCodePrefix, data.TenantId, data.OssCode)
+	sqlResult, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
+		query := fmt.Sprintf("update %s set %s where `id` = ? and version = ? ", m.table, tOssRowsWithPlaceHolder)
+		return conn.ExecCtx(ctx, query, newData.DelState, newData.Version, data.TenantId, data.Category, data.OssCode, data.Endpoint, data.AccessKey, data.SecretKey, data.BucketName, data.AppId, data.Region, data.Remark, data.Status, newData.Id, oldVersion)
+	}, tOssIdKey, tOssTenantIdOssCodeKey)
+	if err != nil {
+		return err
+	}
+	updateCount, err := sqlResult.RowsAffected()
+	if err != nil {
+		return err
+	}
+	if updateCount == 0 {
+		return errors.New("UpdateWithVersion error.")
+	}
+	return err
+}
+
+func (m *defaultTOssModel) DeleteSoft(ctx context.Context, newData *TOss) error {
+	newData.DelState = DelStateYes
+	return m.UpdateWithVersion(ctx, newData)
 }
