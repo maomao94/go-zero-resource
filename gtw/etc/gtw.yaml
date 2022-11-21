@@ -1,13 +1,9 @@
 Name: gtw
 Host: 0.0.0.0
-Port: 1000
+Port: 1001
 Mode: dev
 Timeout: 4000
 MaxBytes: 1073741824
-Log:
-  Encoding: json
-  Mode: file
-  Path: logs/api
 #链路追踪
 Telemetry:
   Name: gtw
@@ -16,16 +12,16 @@ Telemetry:
   Batcher: jaeger
 SysRpcConf:
   Endpoints:
-    - 127.0.0.1:1001
+    - 127.0.0.1:1002
   NonBlock: true
   Timeout: 3000
 ResourceRpcConf:
   Endpoints:
-    - 127.0.0.1:1002
+    - 127.0.0.1:1003
   NonBlock: true
   Timeout: 3000
 MessageRpcConf:
   Endpoints:
-    - 127.0.0.1:1003
+    - 127.0.0.1:1004
   NonBlock: true
   Timeout: 3000

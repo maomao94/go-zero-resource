@@ -2,7 +2,6 @@ package logic
 
 import (
 	"context"
-	"github.com/hehanpeng/go-zero-resource/model"
 	"github.com/hehanpeng/go-zero-resource/resource/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/resource/pb"
 
@@ -24,7 +23,12 @@ func NewDeleteOssLogic(ctx context.Context, svcCtx *svc.ServiceContext) *DeleteO
 }
 
 func (l *DeleteOssLogic) DeleteOss(in *pb.DeleteOssReq) (*pb.Empty, error) {
-	err := l.svcCtx.TOssModel.DeleteSoft(l.ctx, &model.TOss{Id: in.Id})
+	whereBuilder := l.svcCtx.TOssModel.RowBuilder().Where("id = ?", in.Id)
+	oss, err := l.svcCtx.TOssModel.FindOneByQuery(l.ctx, whereBuilder)
+	if err != nil {
+		return nil, err
+	}
+	err = l.svcCtx.TOssModel.DeleteSoft(l.ctx, oss)
 	if err != nil {
 		return nil, err
 	}

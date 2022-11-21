@@ -1,14 +1,14 @@
 Name: resource.rpc
-ListenOn: 0.0.0.0:1002
+ListenOn: 0.0.0.0:1003
 Mode: dev
 #Etcd:
 #  Hosts:
 #  - 127.0.0.1:2379
 #  Key: resource.rpc
-Log:
-  Encoding: json
-  Mode: file
-  Path: logs/resource
+#Log:
+#  Encoding: json
+#  Mode: file
+#  Path: logs/resource
 #链路追踪
 Telemetry:
   Name: resource
