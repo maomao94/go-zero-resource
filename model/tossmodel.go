@@ -40,13 +40,34 @@ func NewTOssModel(conn sqlx.SqlConn, c cache.CacheConf) TOssModel {
 	}
 }
 
-func (m *defaultTOssModel) FindOneByQuery(ctx context.Context, rowBuilder squirrel.SelectBuilder) (*TOss, error) {
+func (m *defaultTOssModel) Trans(ctx context.Context, fn func(ctx context.Context, session sqlx.Session) error) error {
+	return m.TransactCtx(ctx, func(ctx context.Context, session sqlx.Session) error {
+		return fn(ctx, session)
+	})
+}
 
+func (m *defaultTOssModel) RowBuilder() squirrel.SelectBuilder {
+	return squirrel.Select(tOssRows).From(m.table)
+}
+
+func (m *defaultTOssModel) CountBuilder(field string) squirrel.SelectBuilder {
+	return squirrel.Select("COUNT(" + field + ")").From(m.table)
+}
+
+func (m *defaultTOssModel) SumBuilder(field string) squirrel.SelectBuilder {
+	return squirrel.Select("IFNULL(SUM(" + field + "),0)").From(m.table)
+}
+
+func (m *defaultTOssModel) DeleteSoft(ctx context.Context, session sqlx.Session, data *TOss) error {
+	data.DelState = DelStateYes
+	return m.Update(ctx, data)
+}
+
+func (m *defaultTOssModel) FindOneByQuery(ctx context.Context, rowBuilder squirrel.SelectBuilder) (*TOss, error) {
 	query, values, err := rowBuilder.Where("del_state = ?", DelStateNo).ToSql()
 	if err != nil {
 		return nil, err
 	}
-
 	var resp TOss
 	err = m.QueryRowNoCacheCtx(ctx, &resp, query, values...)
 	switch err {
@@ -183,36 +204,4 @@ func (m *defaultTOssModel) FindPageListByIdASC(ctx context.Context, rowBuilder s
 	default:
 		return nil, err
 	}
-}
-
-// export logic
-func (m *defaultTOssModel) Trans(ctx context.Context, fn func(ctx context.Context, session sqlx.Session) error) error {
-
-	return m.TransactCtx(ctx, func(ctx context.Context, session sqlx.Session) error {
-		return fn(ctx, session)
-	})
-
-}
-
-// export logic
-func (m *defaultTOssModel) RowBuilder() squirrel.SelectBuilder {
-	return squirrel.Select(tOssRows).From(m.table)
-}
-
-// export logic
-func (m *defaultTOssModel) CountBuilder(field string) squirrel.SelectBuilder {
-	return squirrel.Select("COUNT(" + field + ")").From(m.table)
-}
-
-// export logic
-func (m *defaultTOssModel) SumBuilder(field string) squirrel.SelectBuilder {
-	return squirrel.Select("IFNULL(SUM(" + field + "),0)").From(m.table)
-}
-
-func (m *defaultTOssModel) DeleteSoft(ctx context.Context, session sqlx.Session, data *TOss) error {
-	data.DelState = DelStateYes
-	if err := m.Update(ctx, data); err != nil {
-		return err
-	}
-	return nil
 }
