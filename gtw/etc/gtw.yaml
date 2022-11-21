@@ -1,6 +1,6 @@
 Name: gtw
 Host: 0.0.0.0
-Port: 8888
+Port: 1000
 Mode: dev
 Timeout: 4000
 MaxBytes: 1073741824
@@ -14,13 +14,18 @@ Telemetry:
   Endpoint: http://127.0.0.1:14268/api/traces
 #  Sampler: 1.0
   Batcher: jaeger
+SysRpcConf:
+  Endpoints:
+    - 127.0.0.1:1001
+  NonBlock: true
+  Timeout: 3000
 ResourceRpcConf:
   Endpoints:
-    - 127.0.0.1:8080
+    - 127.0.0.1:1002
   NonBlock: true
   Timeout: 3000
 MessageRpcConf:
   Endpoints:
-    - 127.0.0.1:8081
+    - 127.0.0.1:1003
   NonBlock: true
   Timeout: 3000
