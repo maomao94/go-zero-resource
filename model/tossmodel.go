@@ -79,12 +79,10 @@ func (m *defaultTOssModel) FindOneByQuery(ctx context.Context, rowBuilder squirr
 }
 
 func (m *defaultTOssModel) FindSum(ctx context.Context, sumBuilder squirrel.SelectBuilder) (float64, error) {
-
 	query, values, err := sumBuilder.Where("del_state = ?", DelStateNo).ToSql()
 	if err != nil {
 		return 0, err
 	}
-
 	var resp float64
 	err = m.QueryRowNoCacheCtx(ctx, &resp, query, values...)
 	switch err {
@@ -96,12 +94,10 @@ func (m *defaultTOssModel) FindSum(ctx context.Context, sumBuilder squirrel.Sele
 }
 
 func (m *defaultTOssModel) FindCount(ctx context.Context, countBuilder squirrel.SelectBuilder) (int64, error) {
-
 	query, values, err := countBuilder.Where("del_state = ?", DelStateNo).ToSql()
 	if err != nil {
 		return 0, err
 	}
-
 	var resp int64
 	err = m.QueryRowNoCacheCtx(ctx, &resp, query, values...)
 	switch err {
@@ -136,23 +132,19 @@ func (m *defaultTOssModel) FindAll(ctx context.Context, rowBuilder squirrel.Sele
 }
 
 func (m *defaultTOssModel) FindPageListByPage(ctx context.Context, rowBuilder squirrel.SelectBuilder, page, pageSize int64, orderBy string) ([]*TOss, error) {
-
 	if orderBy == "" {
 		rowBuilder = rowBuilder.OrderBy("id DESC")
 	} else {
 		rowBuilder = rowBuilder.OrderBy(orderBy)
 	}
-
 	if page < 1 {
 		page = 1
 	}
 	offset := (page - 1) * pageSize
-
 	query, values, err := rowBuilder.Where("del_state = ?", DelStateNo).Offset(uint64(offset)).Limit(uint64(pageSize)).ToSql()
 	if err != nil {
 		return nil, err
 	}
-
 	var resp []*TOss
 	err = m.QueryRowsNoCacheCtx(ctx, &resp, query, values...)
 	switch err {
@@ -164,16 +156,13 @@ func (m *defaultTOssModel) FindPageListByPage(ctx context.Context, rowBuilder sq
 }
 
 func (m *defaultTOssModel) FindPageListByIdDESC(ctx context.Context, rowBuilder squirrel.SelectBuilder, preMinId, pageSize int64) ([]*TOss, error) {
-
 	if preMinId > 0 {
 		rowBuilder = rowBuilder.Where(" id < ? ", preMinId)
 	}
-
 	query, values, err := rowBuilder.Where("del_state = ?", DelStateNo).OrderBy("id DESC").Limit(uint64(pageSize)).ToSql()
 	if err != nil {
 		return nil, err
 	}
-
 	var resp []*TOss
 	err = m.QueryRowsNoCacheCtx(ctx, &resp, query, values...)
 	switch err {
@@ -184,18 +173,14 @@ func (m *defaultTOssModel) FindPageListByIdDESC(ctx context.Context, rowBuilder 
 	}
 }
 
-//按照id升序分页查询数据，不支持排序
 func (m *defaultTOssModel) FindPageListByIdASC(ctx context.Context, rowBuilder squirrel.SelectBuilder, preMaxId, pageSize int64) ([]*TOss, error) {
-
 	if preMaxId > 0 {
 		rowBuilder = rowBuilder.Where(" id > ? ", preMaxId)
 	}
-
 	query, values, err := rowBuilder.Where("del_state = ?", DelStateNo).OrderBy("id ASC").Limit(uint64(pageSize)).ToSql()
 	if err != nil {
 		return nil, err
 	}
-
 	var resp []*TOss
 	err = m.QueryRowsNoCacheCtx(ctx, &resp, query, values...)
 	switch err {
