@@ -210,10 +210,9 @@ func (m *defaultTOssModel) SumBuilder(field string) squirrel.SelectBuilder {
 }
 
 func (m *defaultTOssModel) DeleteSoft(ctx context.Context, session sqlx.Session, data *TOss) error {
-	//data.DelState = DelStateYes
-	//data.DeleteTime = time.Now()
-	//if err := m.UpdateWithVersion(ctx, session, data); err != nil {
-	//	return errors.Wrapf(xerr.NewErrMsg("删除数据失败"), "HomestayOrderModel delete err : %+v", err)
-	//}
+	data.DelState = DelStateYes
+	if err := m.Update(ctx, data); err != nil {
+		return err
+	}
 	return nil
 }
