@@ -38,7 +38,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: sysuser.LoginHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/gtw/v1/sys"),
+		rest.WithPrefix("/gtw/sys/v1"),
 	)
 
 	server.AddRoutes(
@@ -49,7 +49,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: message.KqSendHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/gtw/v1/message"),
+		rest.WithPrefix("/gtw/message/v1"),
 	)
 
 	server.AddRoutes(
@@ -115,6 +115,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: resource.RemoveFilesHandler(serverCtx),
 			},
 		},
-		rest.WithPrefix("/gtw/v1/resource"),
+		rest.WithPrefix("/gtw/resource/v1"),
 	)
 }
