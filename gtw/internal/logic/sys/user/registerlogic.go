@@ -1,4 +1,4 @@
-package gtw
+package user
 
 import (
 	"context"
@@ -9,21 +9,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type RemoveBucketLogic struct {
+type RegisterLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewRemoveBucketLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RemoveBucketLogic {
-	return &RemoveBucketLogic{
+func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *RegisterLogic {
+	return &RegisterLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *RemoveBucketLogic) RemoveBucket(req *types.RemoveBucketReq) (resp *types.EmptyReply, err error) {
+func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterResp, err error) {
 	// todo: add your logic here and delete this line
 
 	return

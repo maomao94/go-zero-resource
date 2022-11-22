@@ -1,29 +1,30 @@
-package gtw
+package user
 
 import (
 	"context"
+
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type PingLogic struct {
+type LoginLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewPingLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PingLogic {
-	return &PingLogic{
+func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic {
+	return &LoginLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *PingLogic) Ping() (resp *types.PingReply, err error) {
-	return &types.PingReply{
-		Msg: "hello",
-	}, nil
+func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err error) {
+	// todo: add your logic here and delete this line
+
+	return
 }

@@ -1,8 +1,7 @@
-package gtw
+package message
 
 import (
 	"context"
-	"github.com/hehanpeng/go-zero-resource/message/pb"
 
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
@@ -25,9 +24,7 @@ func NewKqSendLogic(ctx context.Context, svcCtx *svc.ServiceContext) *KqSendLogi
 }
 
 func (l *KqSendLogic) KqSend(req *types.KqSendReq) (resp *types.EmptyReply, err error) {
-	_, err = l.svcCtx.MessageRpc.KqSend(l.ctx, &pb.KqSendReq{Msg: req.Msg})
-	if err != nil {
-		return nil, err
-	}
-	return &types.EmptyReply{}, nil
+	// todo: add your logic here and delete this line
+
+	return
 }
