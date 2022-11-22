@@ -197,7 +197,7 @@ func (m *defaultTOssModel) UpdateWithVersion(ctx context.Context, newData *TOss)
 	tOssTenantIdOssCodeKey := fmt.Sprintf("%s%v:%v", cacheTOssTenantIdOssCodePrefix, newData.TenantId, newData.OssCode)
 	sqlResult, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ? and version = ? ", m.table, tOssRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.DelState, newData.Version, newData.TenantId, newData.Category, newData.OssCode, newData.Endpoint, newData.AccessKey, newData.SecretKey, newData.BucketName, newData.AppId, newData.Region, newData.Remark, newData.Status, newData.Id, oldVersion)
+		return conn.ExecCtx(ctx, query, newData.CreateUser, newData.UpdateUser, newData.DelState, newData.Version, newData.TenantId, newData.Category, newData.OssCode, newData.Endpoint, newData.AccessKey, newData.SecretKey, newData.BucketName, newData.AppId, newData.Region, newData.Remark, newData.Status, newData.Id, oldVersion)
 	}, tOssIdKey, tOssTenantIdOssCodeKey)
 	if err != nil {
 		return err
