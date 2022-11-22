@@ -1,0 +1,27 @@
+syntax = "v1"
+
+import "base.api"
+
+info(
+    title: "消息服务"
+    desc: "消息服务"
+    author: "hehanpeng"
+    email: "hehanpengyy@163.com"
+    version: "v1"
+)
+
+type (
+    KqSendReq {
+        Msg string `json:"msg"` // 消息
+    }
+)
+
+@server(
+    prefix: gtw/v1/message
+    group: message
+)
+service gtw {
+    @doc "发送kafka消息"
+    @handler kqSend
+    post /message/kq/send (KqSendReq) returns (EmptyReply)
+}

@@ -1,0 +1,49 @@
+syntax = "v1"
+
+import "base.api"
+
+info(
+    title: "用户服务"
+    desc: "用户服务"
+    author: "hehanpeng"
+    email: "hehanpengyy@163.com"
+    version: "v1"
+)
+
+type (
+    RegisterReq {
+        Mobile string `json:"mobile"`
+        Password string `json:"password"`
+    }
+    RegisterResp {
+        AccessToken string `json:"accessToken"`
+        AccessExpire int64 `json:"accessExpire"`
+        RefreshAfter int64 `json:"refreshAfter"`
+    }
+)
+
+type (
+    LoginReq {
+        Mobile string `json:"mobile"`
+        Password string `json:"password"`
+    }
+    LoginResp {
+        AccessToken string `json:"accessToken"`
+        AccessExpire int64 `json:"accessExpire"`
+        RefreshAfter int64 `json:"refreshAfter"`
+    }
+)
+
+@server(
+    prefix: gtw/v1/sys
+    group: sys/user
+)
+service gtw {
+    @doc "register"
+    @handler register
+    post /user/register (RegisterReq) returns (RegisterResp)
+
+    @doc "login"
+    @handler login
+    post /user/login (LoginReq) returns (LoginResp)
+}
