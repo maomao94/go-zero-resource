@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package org.springblade.example.provider.api.service;
+
+option go_package = "./pb";
+
+option java_multiple_files = true;
+option java_package = "org.springblade.example.provider.api.service";
+option java_outer_classname = "HelloProto";
+
+message Empty {}
+
+message PingResp{
+    string msg = 1;
+}
+
+service Hello {
+    rpc ping (Empty) returns (PingResp) {}
+}
