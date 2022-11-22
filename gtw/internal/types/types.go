@@ -57,6 +57,9 @@ type Oss struct {
 	Remark     string `json:"remark,optional"`     // 备注
 	Status     int64  `json:"status,optional"`     // 状态
 	CreateTime int64  `json:"createTime,optional"`
+	CreateUser int64  `json:"createUser,optional"`
+	UpdateTime int64  `json:"updateTime,optional"`
+	UpdateUser int64  `json:"updateUser,optional"`
 }
 
 type OssCreate struct {
