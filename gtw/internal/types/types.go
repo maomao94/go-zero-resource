@@ -42,3 +42,127 @@ type LoginResp struct {
 type KqSendReq struct {
 	Msg string `json:"msg"` // 消息
 }
+
+type Oss struct {
+	Id         int64  `json:"id,optional"`         // 主键id
+	TenantId   string `json:"tenantId,optional"`   // 租户ID
+	Category   int64  `json:"category,optional"`   // 所属分类
+	OssCode    string `json:"ossCode,optional"`    // 资源编号
+	Endpoint   string `json:"endpoint,optional"`   // 资源地址
+	AccessKey  string `json:"accessKey ,optional"` // accessKey
+	SecretKey  string `json:"secretKey,optional"`  // secretKey
+	BucketName string `json:"bucketName,optional"` // 空间名
+	AppId      string `json:"appId,optional"`      // 应用ID TencentCOS需要
+	Region     string `json:"region,optional"`     // 地域简称 TencentCOS需要
+	Remark     string `json:"remark,optional"`     // 备注
+	Status     int64  `json:"status,optional"`     // 状态
+	CreateTime int64  `json:"createTime,optional"`
+}
+
+type OssCreate struct {
+	TenantId   string `json:"tenantId,optional"`        // 租户ID
+	Category   int64  `json:"category,options=1|2|3|4"` // 所属分类
+	OssCode    string `json:"ossCode,optional"`         // 资源编号
+	Endpoint   string `json:"endpoint,optional"`        // 资源地址
+	AccessKey  string `json:"accessKey,optional"`       // accessKey
+	SecretKey  string `json:"secretKey,optional"`       // secretKey
+	BucketName string `json:"bucketName,optional"`      // 空间名
+	AppId      string `json:"appId,optional"`           // 应用ID TencentCOS需要
+	Region     string `json:"region,optional"`          // 地域简称 TencentCOS需要
+	Remark     string `json:"remark,optional"`          // 备注
+}
+
+type OssUpdate struct {
+	Id         int64  `json:"id"`                              // 主键ID
+	TenantId   string `json:"tenantId,optional"`               // 租户ID
+	Category   int64  `json:"category,options=1|2|3|4"`        // 所属分类
+	OssCode    string `json:"ossCode,optional"`                // 资源编号
+	Endpoint   string `json:"endpoint,optional"`               // 资源地址
+	AccessKey  string `json:"accessKey,optional"`              // accessKey
+	SecretKey  string `json:"secretKey,optional"`              // secretKey
+	BucketName string `json:"bucketName,optional"`             // 空间名
+	AppId      string `json:"appId,optional"`                  // 应用ID TencentCOS需要
+	Region     string `json:"region,optional"`                 // 地域简称 TencentCOS需要
+	Remark     string `json:"remark,optional"`                 // 备注
+	Status     int64  `json:"status,options=1|2|3|4,optional"` // 状态
+}
+
+type OssDelete struct {
+	Id int64 `json:"id"` // 主键ID
+}
+
+type OssListReq struct {
+	Page     int64  `json:"page,range=[1:100],default=1"`      // 页码
+	PageSize int64  `json:"pageSize,range=[1:100],default=10"` // 每页大小
+	TenantId string `json:"tenantId,optional"`                 // 租户ID
+	Category int64  `json:"category,options=0|1|2|3|4"`        // 所属分类
+}
+
+type OssListReply struct {
+	List     []Oss `json:"list"`
+	Total    int64 `json:"total"`
+	Page     int64 `json:"page"`     // 页码
+	PageSize int64 `json:"pageSize"` // 每页大小
+}
+
+type OssFile struct {
+	Link        string `json:"link"`        // 文件地址
+	Name        string `json:"name"`        // 文件名
+	Length      int64  `json:"length"`      // 文件大小
+	PutTime     string `json:"putTime"`     // 文件上传时间
+	ContentType string `json:"contentType"` // 文件contentType
+}
+
+type MakeBucketReq struct {
+	TenantId   string `json:"tenantId,optional"` // 租户ID
+	Code       string `json:"code,optional"`     // 资源编号
+	BucketName string `json:"bucketName"`        // 存储桶名称
+}
+
+type RemoveBucketReq struct {
+	TenantId   string `json:"tenantId,optional"` // 租户ID
+	Code       string `json:"code,optional"`     // 资源编号
+	BucketName string `json:"bucketName"`        // 存储桶名称
+}
+
+type StatFileReq struct {
+	TenantId   string `json:"tenantId,optional"`   // 租户ID
+	Code       string `json:"code,optional"`       // 资源编号
+	BucketName string `json:"bucketName,optional"` // 存储桶名称
+	Filename   string `json:"filename"`            // 文件名
+}
+
+type PutFileReq struct {
+	TenantId   string `form:"tenantId,optional"`   // 租户ID
+	Code       string `form:"code,optional"`       // 资源编号
+	BucketName string `form:"bucketName,optional"` // 存储桶名称
+}
+
+type GetFileReq struct {
+	TenantId   string `json:"tenantId,optional"`   // 租户ID
+	Code       string `json:"code,optional"`       // 资源编号
+	BucketName string `json:"bucketName,optional"` // 存储桶名称
+	Filename   string `json:"filename"`            // 文件名
+}
+
+type RemoveFileReq struct {
+	TenantId   string `json:"tenantId,optional"`   // 租户ID
+	Code       string `json:"code,optional"`       // 资源编号
+	BucketName string `json:"bucketName,optional"` // 存储桶名称
+	Filename   string `json:"filename"`            // 文件名
+}
+
+type RemoveFilesReq struct {
+	TenantId   string   `json:"tenantId,optional"`   // 租户ID
+	Code       string   `json:"code,optional"`       // 资源编号
+	BucketName string   `json:"bucketName,optional"` // 存储桶名称
+	Filenames  []string `json:"filenames"`           // 文件名集合
+}
+
+type File struct {
+	Link         string `json:"link"`               // 文件地址
+	Domain       string `json:"domain"`             // 域名地址
+	Name         string `json:"name"`               // 文件名
+	OriginalName string `json:"originalName"`       // 初始文件名
+	AttachId     string `json:"attachId,omitempty"` // 附件表ID
+}
