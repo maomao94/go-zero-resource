@@ -2,6 +2,8 @@ package user
 
 import (
 	"context"
+	"github.com/hehanpeng/go-zero-resource/sys/pb"
+	"github.com/jinzhu/copier"
 
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
@@ -24,7 +26,15 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 }
 
 func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	loginResp, err := l.svcCtx.SysRpc.Login(l.ctx, &pb.LoginReq{
+		AuthType: "system",
+		AuthKey:  req.Mobile,
+		Password: req.Password,
+	})
+	if err != nil {
+		return nil, err
+	}
+	var respLogin types.LoginResp
+	_ = copier.Copy(&respLogin, loginResp)
+	return &respLogin, nil
 }
