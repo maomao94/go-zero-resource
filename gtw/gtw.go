@@ -29,9 +29,9 @@ func main() {
 	httpx.SetErrorHandler(func(err error) (int, interface{}) {
 		switch e := err.(type) {
 		case *errorx.CodeError:
-			return http.StatusOK, e.Data()
+			return http.StatusBadRequest, e.Data()
 		default:
-			return http.StatusInternalServerError, e
+			return http.StatusBadRequest, e
 		}
 	})
 

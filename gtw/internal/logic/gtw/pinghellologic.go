@@ -28,7 +28,8 @@ func NewPingHelloLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PingHel
 func (l *PingHelloLogic) PingHello() (resp *types.PingReply, err error) {
 	pingResp, err := l.svcCtx.HelloRpc.Ping(l.ctx, &pb.Empty{})
 	if err != nil {
-		return nil, errorx.NewCodeError(10001, "ping error")
+		return nil, errorx.NewCodeError(errorx.CodeFromGrpcError(err), err.Error())
+
 	}
 	return &types.PingReply{Msg: pingResp.Msg}, nil
 }
