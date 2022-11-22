@@ -3,6 +3,7 @@ package resource
 import (
 	"net/http"
 
+	"github.com/hehanpeng/go-zero-resource/gtw/internal/logic/resource"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
 	"github.com/zeromicro/go-zero/rest/httpx"

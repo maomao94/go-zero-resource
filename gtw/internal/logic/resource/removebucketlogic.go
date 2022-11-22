@@ -1,4 +1,4 @@
-package gtw
+package resource
 
 import (
 	"context"
