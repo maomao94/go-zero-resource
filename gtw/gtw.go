@@ -3,14 +3,9 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/hehanpeng/go-zero-resource/common/errorx"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/config"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/handler"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
-	"github.com/zeromicro/go-zero/rest/httpx"
-	"google.golang.org/grpc/status"
-	"net/http"
-
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
 )
@@ -28,19 +23,14 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
 
-	httpx.SetErrorHandler(func(err error) (int, interface{}) {
-		switch e := err.(type) {
-		case *errorx.CodeError:
-			return http.StatusInternalServerError, e.Data()
-		case (interface {
-			GRPCStatus() *status.Status
-		}):
-			errcode
-			return errcode, e.GRPCStatus().Message()
-		default:
-			return http.StatusInternalServerError, e
-		}
-	})
+	//httpx.SetErrorHandler(func(err error) (int, interface{}) {
+	//	switch e := err.(type) {
+	//	case *errorx.CodeError:
+	//		return http.StatusOK, e.Data()
+	//	default:
+	//		return http.StatusInternalServerError, e
+	//	}
+	//})
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
 	server.Start()
