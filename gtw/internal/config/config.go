@@ -13,4 +13,5 @@ type Config struct {
 	SysRpcConf      zrpc.RpcClientConf
 	ResourceRpcConf zrpc.RpcClientConf
 	MessageRpcConf  zrpc.RpcClientConf
+	HelloRpcConf    zrpc.RpcClientConf
 }

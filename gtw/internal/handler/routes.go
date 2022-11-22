@@ -21,6 +21,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/ping",
 				Handler: gtw.PingHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodGet,
+				Path:    "/pingHello",
+				Handler: gtw.PingHelloHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/gtw/v1"),
 	)
