@@ -44,22 +44,24 @@ type KqSendReq struct {
 }
 
 type Oss struct {
-	Id         int64  `json:"id,optional"`         // 主键id
-	TenantId   string `json:"tenantId,optional"`   // 租户ID
-	Category   int64  `json:"category,optional"`   // 所属分类
-	OssCode    string `json:"ossCode,optional"`    // 资源编号
-	Endpoint   string `json:"endpoint,optional"`   // 资源地址
-	AccessKey  string `json:"accessKey ,optional"` // accessKey
-	SecretKey  string `json:"secretKey,optional"`  // secretKey
-	BucketName string `json:"bucketName,optional"` // 空间名
-	AppId      string `json:"appId,optional"`      // 应用ID TencentCOS需要
-	Region     string `json:"region,optional"`     // 地域简称 TencentCOS需要
-	Remark     string `json:"remark,optional"`     // 备注
-	Status     int64  `json:"status,optional"`     // 状态
-	CreateTime int64  `json:"createTime,optional"`
-	CreateUser int64  `json:"createUser,optional"`
-	UpdateTime int64  `json:"updateTime,optional"`
-	UpdateUser int64  `json:"updateUser,optional"`
+	Id             int64  `json:"id,optional"`         // 主键id
+	TenantId       string `json:"tenantId,optional"`   // 租户ID
+	Category       int64  `json:"category,optional"`   // 所属分类
+	OssCode        string `json:"ossCode,optional"`    // 资源编号
+	Endpoint       string `json:"endpoint,optional"`   // 资源地址
+	AccessKey      string `json:"accessKey ,optional"` // accessKey
+	SecretKey      string `json:"secretKey,optional"`  // secretKey
+	BucketName     string `json:"bucketName,optional"` // 空间名
+	AppId          string `json:"appId,optional"`      // 应用ID TencentCOS需要
+	Region         string `json:"region,optional"`     // 地域简称 TencentCOS需要
+	Remark         string `json:"remark,optional"`     // 备注
+	Status         int64  `json:"status,optional"`     // 状态
+	CreateTime     int64  `json:"createTime,optional"`
+	CreateUser     int64  `json:"createUser,optional"`
+	CreateNickname string `json:"createNickname,optional"`
+	UpdateTime     int64  `json:"updateTime,optional"`
+	UpdateUser     int64  `json:"updateUser,optional"`
+	UpdateNickname string `json:"updateNickname,optional"`
 }
 
 type OssCreate struct {
