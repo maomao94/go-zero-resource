@@ -1,7 +1,7 @@
 package svc
 
 import (
-	interceptor "github.com/hehanpeng/go-zero-resource/common/Interceptor"
+	interceptor "github.com/hehanpeng/go-zero-resource/common/Interceptor/client"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/config"
 	"github.com/hehanpeng/go-zero-resource/hello/hello"
 	"github.com/hehanpeng/go-zero-resource/message/message"
