@@ -2,6 +2,7 @@ package gtw
 
 import (
 	"context"
+	"github.com/hehanpeng/go-zero-resource/hello/pb"
 
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
@@ -24,5 +25,6 @@ func NewPingHelloLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PingHel
 }
 
 func (l *PingHelloLogic) PingHello() (resp *types.PingReply, err error) {
-	return
+	pingResp, err := l.svcCtx.HelloRpc.Ping(l.ctx, &pb.Empty{})
+	return &types.PingReply{Msg: pingResp.Msg}, nil
 }
