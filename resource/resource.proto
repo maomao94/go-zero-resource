@@ -23,6 +23,9 @@ message Oss{
   string remark = 10; // 备注
   int64 status = 11; // 状态
   int64 createTime = 51;
+  int64 createUser = 52;
+  int64 updateTime = 53;
+  int64 updateUser = 54;
 }
 
 message File {
