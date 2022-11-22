@@ -17,7 +17,7 @@ func GetFileHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := resource.NewGetFileLogic(r.Context(), svcCtx)
+		l := resource.NewGetFileLogic(r.Context(), svcCtx, w)
 		err := l.GetFile(&req)
 		if err != nil {
 			httpx.Error(w, err)
