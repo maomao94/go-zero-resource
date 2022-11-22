@@ -13,27 +13,28 @@ import (
 )
 
 type (
-	CreateOssReq   = pb.CreateOssReq
-	DeleteOssReq   = pb.DeleteOssReq
-	Empty          = pb.Empty
-	File           = pb.File
-	GetFileReq     = pb.GetFileReq
-	GetFileResp    = pb.GetFileResp
-	MakeBucketReq  = pb.MakeBucketReq
-	Oss            = pb.Oss
-	OssDetailReq   = pb.OssDetailReq
-	OssDetailResp  = pb.OssDetailResp
-	OssFile        = pb.OssFile
-	OssListReq     = pb.OssListReq
-	OssListResp    = pb.OssListResp
-	PingResp       = pb.PingResp
-	PutFileReq     = pb.PutFileReq
-	PutFileResp    = pb.PutFileResp
-	RemoveFileReq  = pb.RemoveFileReq
-	RemoveFilesReq = pb.RemoveFilesReq
-	StatFileReq    = pb.StatFileReq
-	StatFileResp   = pb.StatFileResp
-	UpdateOssReq   = pb.UpdateOssReq
+	CreateOssReq    = pb.CreateOssReq
+	DeleteOssReq    = pb.DeleteOssReq
+	Empty           = pb.Empty
+	File            = pb.File
+	GetFileReq      = pb.GetFileReq
+	GetFileResp     = pb.GetFileResp
+	MakeBucketReq   = pb.MakeBucketReq
+	Oss             = pb.Oss
+	OssDetailReq    = pb.OssDetailReq
+	OssDetailResp   = pb.OssDetailResp
+	OssFile         = pb.OssFile
+	OssListReq      = pb.OssListReq
+	OssListResp     = pb.OssListResp
+	PingResp        = pb.PingResp
+	PutFileReq      = pb.PutFileReq
+	PutFileResp     = pb.PutFileResp
+	RemoveBucketReq = pb.RemoveBucketReq
+	RemoveFileReq   = pb.RemoveFileReq
+	RemoveFilesReq  = pb.RemoveFilesReq
+	StatFileReq     = pb.StatFileReq
+	StatFileResp    = pb.StatFileResp
+	UpdateOssReq    = pb.UpdateOssReq
 
 	Resource interface {
 		Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
@@ -43,6 +44,7 @@ type (
 		UpdateOss(ctx context.Context, in *UpdateOssReq, opts ...grpc.CallOption) (*Empty, error)
 		DeleteOss(ctx context.Context, in *DeleteOssReq, opts ...grpc.CallOption) (*Empty, error)
 		MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error)
+		RemoveBucket(ctx context.Context, in *RemoveBucketReq, opts ...grpc.CallOption) (*Empty, error)
 		StatFile(ctx context.Context, in *StatFileReq, opts ...grpc.CallOption) (*StatFileResp, error)
 		PutFile(ctx context.Context, in *PutFileReq, opts ...grpc.CallOption) (*PutFileResp, error)
 		GetFile(ctx context.Context, in *GetFileReq, opts ...grpc.CallOption) (*GetFileResp, error)
@@ -94,6 +96,11 @@ func (m *defaultResource) DeleteOss(ctx context.Context, in *DeleteOssReq, opts 
 func (m *defaultResource) MakeBucket(ctx context.Context, in *MakeBucketReq, opts ...grpc.CallOption) (*Empty, error) {
 	client := pb.NewResourceClient(m.cli.Conn())
 	return client.MakeBucket(ctx, in, opts...)
+}
+
+func (m *defaultResource) RemoveBucket(ctx context.Context, in *RemoveBucketReq, opts ...grpc.CallOption) (*Empty, error) {
+	client := pb.NewResourceClient(m.cli.Conn())
+	return client.RemoveBucket(ctx, in, opts...)
 }
 
 func (m *defaultResource) StatFile(ctx context.Context, in *StatFileReq, opts ...grpc.CallOption) (*StatFileResp, error) {

@@ -2,6 +2,7 @@ package resource
 
 import (
 	"context"
+	"github.com/hehanpeng/go-zero-resource/resource/pb"
 
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
@@ -24,7 +25,13 @@ func NewRemoveBucketLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Remo
 }
 
 func (l *RemoveBucketLogic) RemoveBucket(req *types.RemoveBucketReq) (resp *types.EmptyReply, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	_, err = l.svcCtx.ResourceRpc.RemoveBucket(l.ctx, &pb.RemoveBucketReq{
+		TenantId:   req.TenantId,
+		Code:       req.Code,
+		BucketName: req.BucketName,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &types.EmptyReply{}, nil
 }

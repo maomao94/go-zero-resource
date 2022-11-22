@@ -137,7 +137,7 @@ type (
 )
 
 @server(
-    prefix: gtw/resource/v1/
+    prefix: gtw/resource/v1
     group: resource
 )
 service gtw {

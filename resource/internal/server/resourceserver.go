@@ -57,6 +57,11 @@ func (s *ResourceServer) MakeBucket(ctx context.Context, in *pb.MakeBucketReq) (
 	return l.MakeBucket(in)
 }
 
+func (s *ResourceServer) RemoveBucket(ctx context.Context, in *pb.RemoveBucketReq) (*pb.Empty, error) {
+	l := logic.NewRemoveBucketLogic(ctx, s.svcCtx)
+	return l.RemoveBucket(in)
+}
+
 func (s *ResourceServer) StatFile(ctx context.Context, in *pb.StatFileReq) (*pb.StatFileResp, error) {
 	l := logic.NewStatFileLogic(ctx, s.svcCtx)
 	return l.StatFile(in)
