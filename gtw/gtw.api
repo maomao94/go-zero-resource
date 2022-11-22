@@ -1,19 +1,23 @@
 syntax = "v1"
 
+import "base.api"
+import "user.api"
+import "message.api"
+
 info(
-	title: "网关服务"
-	desc: "网关服务"
-	author: "hehanpeng"
-	email: "hehanpengyy@163.com"
-	version: "v1"
+    title: "网关服务"
+    desc: "网关服务"
+    author: "hehanpeng"
+    email: "hehanpengyy@163.com"
+    version: "v1"
 )
 
 @server(
-	prefix: gtw/v1
-	group: gtw
+    prefix: gtw/v1
+    group: gtw
 )
 service gtw {
-	@doc "ping"
-	@handler ping
-	get /ping returns (PingReply)
+    @doc "ping"
+    @handler ping
+    get /ping returns (PingReply)
 }
