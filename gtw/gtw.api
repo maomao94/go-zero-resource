@@ -3,6 +3,7 @@ syntax = "v1"
 import "doc/base.api"
 import "doc/sys/user.api"
 import "doc/message/message.api"
+import "doc/resource/resource.api"
 
 info(
 	title: "网关服务"
