@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"errors"
 
 	"github.com/hehanpeng/go-zero-resource/sys/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/sys/pb"
@@ -24,11 +25,24 @@ func NewGetUserInfoLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetUs
 }
 
 func (l *GetUserInfoLogic) GetUserInfo(in *pb.GetUserInfoReq) (*pb.GetUserInfoResp, error) {
-	return &pb.GetUserInfoResp{User: &pb.User{
-		Id:       1,
-		Mobile:   "15651013267",
-		Nickname: "何汉鹏",
-		Sex:      1,
-		Avatar:   "http://",
-	}}, nil
+	if in.Id == 0 {
+		return nil, errors.New("id error")
+	}
+	if in.Id != 1 {
+		return &pb.GetUserInfoResp{User: &pb.User{
+			Id:       2,
+			Mobile:   "15651013267",
+			Nickname: "何汉鹏2",
+			Sex:      2,
+			Avatar:   "https://",
+		}}, nil
+	} else {
+		return &pb.GetUserInfoResp{User: &pb.User{
+			Id:       1,
+			Mobile:   "15651013267",
+			Nickname: "何汉鹏",
+			Sex:      1,
+			Avatar:   "http://",
+		}}, nil
+	}
 }

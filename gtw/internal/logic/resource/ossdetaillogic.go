@@ -35,7 +35,7 @@ func (l *OssDetailLogic) OssDetail(req *types.BaseReq) (resp *types.Oss, err err
 	}
 	var respOss types.Oss
 	_ = copier.Copy(&respOss, ossDetailResp.Oss)
-	mr.Finish(func() error {
+	err = mr.Finish(func() error {
 		getUserInfoResp, err := l.svcCtx.SysRpc.GetUserInfo(l.ctx, &pb2.GetUserInfoReq{Id: respOss.CreateUser})
 		if err != nil {
 			return err
@@ -50,5 +50,8 @@ func (l *OssDetailLogic) OssDetail(req *types.BaseReq) (resp *types.Oss, err err
 		respOss.UpdateNickname = getUserInfoResp.User.Nickname
 		return nil
 	})
+	if err != nil {
+		return nil, err
+	}
 	return &respOss, nil
 }
