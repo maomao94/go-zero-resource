@@ -57,6 +57,7 @@ func (l *OssListLogic) OssList(in *pb.OssListReq) (*pb.OssListResp, error) {
 			var pbOss pb.Oss
 			_ = copier.Copy(&pbOss, oss)
 			pbOss.CreateTime = oss.CreateTime.Unix()
+			pbOss.UpdateTime = oss.UpdateTime.Unix()
 			respOss = append(respOss, &pbOss)
 		}
 	}
