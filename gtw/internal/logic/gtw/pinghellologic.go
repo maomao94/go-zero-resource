@@ -2,6 +2,7 @@ package gtw
 
 import (
 	"context"
+	"github.com/hehanpeng/go-zero-resource/common/errorx"
 	"github.com/hehanpeng/go-zero-resource/hello/pb"
 
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
@@ -27,7 +28,7 @@ func NewPingHelloLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PingHel
 func (l *PingHelloLogic) PingHello() (resp *types.PingReply, err error) {
 	pingResp, err := l.svcCtx.HelloRpc.Ping(l.ctx, &pb.Empty{})
 	if err != nil {
-		return nil, err
+		return nil, errorx.NewCodeError(10001, "ping error")
 	}
 	return &types.PingReply{Msg: pingResp.Msg}, nil
 }
