@@ -32,7 +32,17 @@ func (s *SysServer) GenerateToken(ctx context.Context, in *pb.GenerateTokenReq) 
 	return l.GenerateToken(in)
 }
 
+func (s *SysServer) Register(ctx context.Context, in *pb.RegisterReq) (*pb.RegisterResp, error) {
+	l := logic.NewRegisterLogic(ctx, s.svcCtx)
+	return l.Register(in)
+}
+
 func (s *SysServer) Login(ctx context.Context, in *pb.LoginReq) (*pb.LoginResp, error) {
 	l := logic.NewLoginLogic(ctx, s.svcCtx)
 	return l.Login(in)
+}
+
+func (s *SysServer) GetUserInfo(ctx context.Context, in *pb.GetUserInfoReq) (*pb.GetUserInfoResp, error) {
+	l := logic.NewGetUserInfoLogic(ctx, s.svcCtx)
+	return l.GetUserInfo(in)
 }

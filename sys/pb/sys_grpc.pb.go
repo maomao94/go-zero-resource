@@ -24,7 +24,9 @@ const _ = grpc.SupportPackageIsVersion7
 type SysClient interface {
 	Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
 	GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
+	Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 	Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+	GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
 }
 
 type sysClient struct {
@@ -53,9 +55,27 @@ func (c *sysClient) GenerateToken(ctx context.Context, in *GenerateTokenReq, opt
 	return out, nil
 }
 
+func (c *sysClient) Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error) {
+	out := new(RegisterResp)
+	err := c.cc.Invoke(ctx, "/sys.sys/register", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *sysClient) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	out := new(LoginResp)
 	err := c.cc.Invoke(ctx, "/sys.sys/login", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *sysClient) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error) {
+	out := new(GetUserInfoResp)
+	err := c.cc.Invoke(ctx, "/sys.sys/getUserInfo", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -68,7 +88,9 @@ func (c *sysClient) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOp
 type SysServer interface {
 	Ping(context.Context, *Empty) (*PingResp, error)
 	GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error)
+	Register(context.Context, *RegisterReq) (*RegisterResp, error)
 	Login(context.Context, *LoginReq) (*LoginResp, error)
+	GetUserInfo(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error)
 	mustEmbedUnimplementedSysServer()
 }
 
@@ -82,8 +104,14 @@ func (UnimplementedSysServer) Ping(context.Context, *Empty) (*PingResp, error) {
 func (UnimplementedSysServer) GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GenerateToken not implemented")
 }
+func (UnimplementedSysServer) Register(context.Context, *RegisterReq) (*RegisterResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Register not implemented")
+}
 func (UnimplementedSysServer) Login(context.Context, *LoginReq) (*LoginResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Login not implemented")
+}
+func (UnimplementedSysServer) GetUserInfo(context.Context, *GetUserInfoReq) (*GetUserInfoResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfo not implemented")
 }
 func (UnimplementedSysServer) mustEmbedUnimplementedSysServer() {}
 
@@ -134,6 +162,24 @@ func _Sys_GenerateToken_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Sys_Register_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SysServer).Register(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sys.sys/register",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SysServer).Register(ctx, req.(*RegisterReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Sys_Login_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(LoginReq)
 	if err := dec(in); err != nil {
@@ -148,6 +194,24 @@ func _Sys_Login_Handler(srv interface{}, ctx context.Context, dec func(interface
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(SysServer).Login(ctx, req.(*LoginReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Sys_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserInfoReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(SysServer).GetUserInfo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/sys.sys/getUserInfo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(SysServer).GetUserInfo(ctx, req.(*GetUserInfoReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -168,8 +232,16 @@ var Sys_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Sys_GenerateToken_Handler,
 		},
 		{
+			MethodName: "register",
+			Handler:    _Sys_Register_Handler,
+		},
+		{
 			MethodName: "login",
 			Handler:    _Sys_Login_Handler,
+		},
+		{
+			MethodName: "getUserInfo",
+			Handler:    _Sys_GetUserInfo_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

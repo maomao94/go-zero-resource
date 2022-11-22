@@ -16,14 +16,21 @@ type (
 	Empty             = pb.Empty
 	GenerateTokenReq  = pb.GenerateTokenReq
 	GenerateTokenResp = pb.GenerateTokenResp
+	GetUserInfoReq    = pb.GetUserInfoReq
+	GetUserInfoResp   = pb.GetUserInfoResp
 	LoginReq          = pb.LoginReq
 	LoginResp         = pb.LoginResp
 	PingResp          = pb.PingResp
+	RegisterReq       = pb.RegisterReq
+	RegisterResp      = pb.RegisterResp
+	User              = pb.User
 
 	Sys interface {
 		Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
 		GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
+		Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error)
 		Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error)
+		GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error)
 	}
 
 	defaultSys struct {
@@ -47,7 +54,17 @@ func (m *defaultSys) GenerateToken(ctx context.Context, in *GenerateTokenReq, op
 	return client.GenerateToken(ctx, in, opts...)
 }
 
+func (m *defaultSys) Register(ctx context.Context, in *RegisterReq, opts ...grpc.CallOption) (*RegisterResp, error) {
+	client := pb.NewSysClient(m.cli.Conn())
+	return client.Register(ctx, in, opts...)
+}
+
 func (m *defaultSys) Login(ctx context.Context, in *LoginReq, opts ...grpc.CallOption) (*LoginResp, error) {
 	client := pb.NewSysClient(m.cli.Conn())
 	return client.Login(ctx, in, opts...)
+}
+
+func (m *defaultSys) GetUserInfo(ctx context.Context, in *GetUserInfoReq, opts ...grpc.CallOption) (*GetUserInfoResp, error) {
+	client := pb.NewSysClient(m.cli.Conn())
+	return client.GetUserInfo(ctx, in, opts...)
 }

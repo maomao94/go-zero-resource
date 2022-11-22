@@ -9,10 +9,33 @@ message PingResp{
   string msg = 1;
 }
 
+message User {
+  int64 id = 50;
+  string mobile = 2;
+  string nickname = 3;
+  int32  sex = 4;
+  string avatar = 5;
+}
+
 message GenerateTokenReq {
   int64 userId = 1;
 }
+
 message GenerateTokenResp {
+  string accessToken = 1;
+  int64  accessExpire = 2;
+  int64  refreshAfter = 3;
+}
+
+message RegisterReq {
+  string mobile = 1;
+  string nickname = 2;
+  string password = 3;
+  string authKey = 4;
+  string authType = 5;
+}
+
+message RegisterResp {
   string accessToken = 1;
   int64  accessExpire = 2;
   int64  refreshAfter = 3;
@@ -30,8 +53,17 @@ message LoginResp{
   int64  refreshAfter = 3;
 }
 
+message GetUserInfoReq {
+  int64  id = 50;
+}
+message GetUserInfoResp {
+  User user = 1;
+}
+
 service sys {
   rpc ping (Empty) returns (PingResp);
   rpc generateToken(GenerateTokenReq) returns(GenerateTokenResp); // 生成token
+  rpc register(RegisterReq) returns(RegisterResp);
   rpc login (LoginReq) returns (LoginResp); // 登录
+  rpc getUserInfo(GetUserInfoReq) returns(GetUserInfoResp);
 }
