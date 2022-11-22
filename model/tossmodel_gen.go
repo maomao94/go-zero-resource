@@ -19,8 +19,8 @@ import (
 var (
 	tOssFieldNames          = builder.RawFieldNames(&TOss{})
 	tOssRows                = strings.Join(tOssFieldNames, ",")
-	tOssRowsExpectAutoSet   = strings.Join(stringx.Remove(tOssFieldNames, "`id`", "`create_at`", "`created_at`", "`create_time`", "`update_at`", "`updated_at`", "`update_time`"), ",")
-	tOssRowsWithPlaceHolder = strings.Join(stringx.Remove(tOssFieldNames, "`id`", "`create_at`", "`created_at`", "`create_time`", "`update_at`", "`updated_at`", "`update_time`"), "=?,") + "=?"
+	tOssRowsExpectAutoSet   = strings.Join(stringx.Remove(tOssFieldNames, "`id`", "`update_at`", "`updated_at`", "`update_time`", "`create_at`", "`created_at`", "`create_time`"), ",")
+	tOssRowsWithPlaceHolder = strings.Join(stringx.Remove(tOssFieldNames, "`id`", "`update_at`", "`updated_at`", "`update_time`", "`create_at`", "`created_at`", "`create_time`"), "=?,") + "=?"
 
 	cacheTOssIdPrefix              = "cache:tOss:id:"
 	cacheTOssTenantIdOssCodePrefix = "cache:tOss:tenantId:ossCode:"
@@ -43,11 +43,13 @@ type (
 	TOss struct {
 		Id         int64     `db:"id"`
 		CreateTime time.Time `db:"create_time"`
+		CreateUser int64     `db:"create_user"` // 创建人
 		UpdateTime time.Time `db:"update_time"`
+		UpdateUser int64     `db:"update_user"` // 修改人
 		DelState   int64     `db:"del_state"`
 		Version    int64     `db:"version"`     // 乐观锁版本号
 		TenantId   string    `db:"tenant_id"`   // 租户ID
-		Category   int64     `db:"category"`    // 分类
+		Category   int64     `db:"category"`    // 分类 1-minio 2-qiniu 3-ali 4-tecent
 		OssCode    string    `db:"oss_code"`    // 资源编号
 		Endpoint   string    `db:"endpoint"`    // 资源地址
 		AccessKey  string    `db:"access_key"`  // accessKey
@@ -56,7 +58,7 @@ type (
 		AppId      string    `db:"app_id"`      // 应用ID
 		Region     string    `db:"region"`      // 地域简称
 		Remark     string    `db:"remark"`      // 备注
-		Status     int64     `db:"status"`      // 状态
+		Status     int64     `db:"status"`      // 状态 1-开启 2-关闭
 	}
 )
 
@@ -123,8 +125,8 @@ func (m *defaultTOssModel) Insert(ctx context.Context, data *TOss) (sql.Result, 
 	tOssIdKey := fmt.Sprintf("%s%v", cacheTOssIdPrefix, data.Id)
 	tOssTenantIdOssCodeKey := fmt.Sprintf("%s%v:%v", cacheTOssTenantIdOssCodePrefix, data.TenantId, data.OssCode)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, tOssRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.DelState, data.Version, data.TenantId, data.Category, data.OssCode, data.Endpoint, data.AccessKey, data.SecretKey, data.BucketName, data.AppId, data.Region, data.Remark, data.Status)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, tOssRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.CreateUser, data.UpdateUser, data.DelState, data.Version, data.TenantId, data.Category, data.OssCode, data.Endpoint, data.AccessKey, data.SecretKey, data.BucketName, data.AppId, data.Region, data.Remark, data.Status)
 	}, tOssIdKey, tOssTenantIdOssCodeKey)
 	return ret, err
 }
@@ -139,7 +141,7 @@ func (m *defaultTOssModel) Update(ctx context.Context, newData *TOss) error {
 	tOssTenantIdOssCodeKey := fmt.Sprintf("%s%v:%v", cacheTOssTenantIdOssCodePrefix, data.TenantId, data.OssCode)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, tOssRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.DelState, newData.Version, newData.TenantId, newData.Category, newData.OssCode, newData.Endpoint, newData.AccessKey, newData.SecretKey, newData.BucketName, newData.AppId, newData.Region, newData.Remark, newData.Status, newData.Id)
+		return conn.ExecCtx(ctx, query, newData.CreateUser, newData.UpdateUser, newData.DelState, newData.Version, newData.TenantId, newData.Category, newData.OssCode, newData.Endpoint, newData.AccessKey, newData.SecretKey, newData.BucketName, newData.AppId, newData.Region, newData.Remark, newData.Status, newData.Id)
 	}, tOssIdKey, tOssTenantIdOssCodeKey)
 	return err
 }
