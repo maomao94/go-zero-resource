@@ -2,6 +2,7 @@ package resource
 
 import (
 	"context"
+	"github.com/hehanpeng/go-zero-resource/resource/pb"
 
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
@@ -24,7 +25,14 @@ func NewRemoveFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Remove
 }
 
 func (l *RemoveFileLogic) RemoveFile(req *types.RemoveFileReq) (resp *types.EmptyReply, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	_, err = l.svcCtx.ResourceRpc.RemoveFile(l.ctx, &pb.RemoveFileReq{
+		TenantId:   req.TenantId,
+		Code:       req.Code,
+		BucketName: req.BucketName,
+		Filename:   req.Filename,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &types.EmptyReply{}, nil
 }

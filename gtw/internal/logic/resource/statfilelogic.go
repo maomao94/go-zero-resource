@@ -2,6 +2,8 @@ package resource
 
 import (
 	"context"
+	"github.com/hehanpeng/go-zero-resource/resource/pb"
+	"github.com/jinzhu/copier"
 
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
@@ -24,7 +26,16 @@ func NewStatFileLogic(ctx context.Context, svcCtx *svc.ServiceContext) *StatFile
 }
 
 func (l *StatFileLogic) StatFile(req *types.StatFileReq) (resp *types.OssFile, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+	statFileResp, err := l.svcCtx.ResourceRpc.StatFile(l.ctx, &pb.StatFileReq{
+		TenantId:   req.TenantId,
+		Code:       req.Code,
+		BucketName: req.BucketName,
+		Filename:   req.Filename,
+	})
+	if err != nil {
+		return nil, err
+	}
+	var respOssFile types.OssFile
+	_ = copier.Copy(&respOssFile, statFileResp.OssFile)
+	return &respOssFile, nil
 }
