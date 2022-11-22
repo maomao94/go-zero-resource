@@ -35,7 +35,7 @@ type (
 )
 
 @server(
-    prefix: gtw/v1/sys
+    prefix: gtw/sys/v1
     group: sys/user
 )
 service gtw {

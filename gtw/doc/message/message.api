@@ -17,7 +17,7 @@ type (
 )
 
 @server(
-    prefix: gtw/v1/message
+    prefix: gtw/message/v1
     group: message
 )
 service gtw {
