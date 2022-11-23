@@ -6,24 +6,27 @@ import (
 	"net/http"
 )
 
-const defaultCode = 1001
+const defaultCode = 400
+
+const defaultErrorCode = -9999
 
 type CodeError struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+	Code      int    `json:"code"`
+	ErrorCode int    `json:"errorCode"`
+	Message   string `json:"message"`
 }
 
 type CodeErrorResponse struct {
-	Code    int    `json:"code"`
-	Message string `json:"message"`
+	ErrorCode int    `json:"errorCode"`
+	Message   string `json:"message"`
 }
 
-func NewCodeError(code int, msg string) error {
-	return &CodeError{Code: code, Message: msg}
+func NewCodeError(code, errorCode int, msg string) error {
+	return &CodeError{Code: code, ErrorCode: errorCode, Message: msg}
 }
 
 func NewDefaultError(msg string) error {
-	return NewCodeError(defaultCode, msg)
+	return NewCodeError(defaultCode, defaultErrorCode, msg)
 }
 
 func (e *CodeError) Error() string {
@@ -32,13 +35,11 @@ func (e *CodeError) Error() string {
 
 func (e *CodeError) Data() *CodeErrorResponse {
 	return &CodeErrorResponse{
-		Code:    e.Code,
-		Message: e.Message,
+		ErrorCode: e.ErrorCode,
+		Message:   e.Message,
 	}
 }
 
-// CodeFromGrpcError converts the gRPC error to an HTTP status code.
-// See: https://github.com/googleapis/googleapis/blob/master/google/rpc/code.proto
 func CodeFromGrpcError(err error) int {
 	code := status.Code(err)
 	switch code {
@@ -71,7 +72,6 @@ func CodeFromGrpcError(err error) int {
 	return http.StatusInternalServerError
 }
 
-// IsGrpcError checks if the error is a gRPC error.
 func IsGrpcError(err error) bool {
 	if err == nil {
 		return false

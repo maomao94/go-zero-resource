@@ -10,6 +10,7 @@ import (
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/rest/httpx"
+	"google.golang.org/grpc/status"
 	"net/http"
 )
 
@@ -30,6 +31,18 @@ func main() {
 		switch e := err.(type) {
 		case *errorx.CodeError:
 			return http.StatusBadRequest, e.Data()
+		case (interface {
+			GRPCStatus() *status.Status
+		}):
+			code := errorx.CodeFromGrpcError(err)
+			details := e.GRPCStatus().Details()
+			if len(details) == 1 {
+				return code, details[0]
+			}
+			return code, errorx.CodeErrorResponse{
+				ErrorCode: code,
+				Message:   e.GRPCStatus().Message(),
+			}
 		default:
 			return http.StatusBadRequest, e
 		}

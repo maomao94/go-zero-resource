@@ -13,8 +13,9 @@ import (
 )
 
 type (
-	Empty    = pb.Empty
-	PingResp = pb.PingResp
+	Empty       = pb.Empty
+	ErrorDetail = pb.ErrorDetail
+	PingResp    = pb.PingResp
 
 	Hello interface {
 		Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error)
