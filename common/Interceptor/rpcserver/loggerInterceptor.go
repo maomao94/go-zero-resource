@@ -32,7 +32,7 @@ func LoggerInterceptor(ctx context.Context, req interface{}, info *grpc.UnarySer
 			}
 			var details []proto.Message
 			details = append(details, errInfo)
-			st, _ := status.New(codes.Code(e.Code), fmt.Sprintf("%s^%s", e.ErrorCode, e.Message)).WithDetails(details...)
+			st, _ := status.New(codes.Code(e.Code), fmt.Sprintf("%d^%s", e.ErrorCode, e.Message)).WithDetails(details...)
 			err = st.Err()
 		} else {
 			logx.WithContext(ctx).Errorf("【RPC-SRV-ERR】 %+v", err)
