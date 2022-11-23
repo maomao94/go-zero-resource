@@ -35,16 +35,9 @@ func main() {
 			GRPCStatus() *status.Status
 		}):
 			code := errorx.CodeFromGrpcError(err)
-			details := e.GRPCStatus().Details()
-			if len(details) == 1 {
-				return code, details[0]
-			}
-			return code, errorx.CodeErrorResponse{
-				ErrorCode: code,
-				Message:   e.GRPCStatus().Message(),
-			}
+			return code, errorx.FromError(err)
 		default:
-			return http.StatusBadRequest, e
+			return http.StatusBadRequest, errorx.FromError(err)
 		}
 	})
 
