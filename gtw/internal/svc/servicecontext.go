@@ -1,7 +1,7 @@
 package svc
 
 import (
-	interceptor "github.com/hehanpeng/go-zero-resource/common/Interceptor/client"
+	"github.com/hehanpeng/go-zero-resource/common/Interceptor/rpcclient"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/config"
 	"github.com/hehanpeng/go-zero-resource/hello/hello"
 	"github.com/hehanpeng/go-zero-resource/message/message"
@@ -22,12 +22,12 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config: c,
 		SysRpc: sys.NewSys(zrpc.MustNewClient(
-			c.SysRpcConf, zrpc.WithUnaryClientInterceptor(interceptor.UnaryMetadataInterceptor))),
+			c.SysRpcConf, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor))),
 		ResourceRpc: resource.NewResource(zrpc.MustNewClient(
-			c.ResourceRpcConf, zrpc.WithUnaryClientInterceptor(interceptor.UnaryMetadataInterceptor))),
+			c.ResourceRpcConf, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor))),
 		MessageRpc: message.NewMessage(zrpc.MustNewClient(
-			c.MessageRpcConf, zrpc.WithUnaryClientInterceptor(interceptor.UnaryMetadataInterceptor))),
+			c.MessageRpcConf, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor))),
 		HelloRpc: hello.NewHello(zrpc.MustNewClient(
-			c.HelloRpcConf, zrpc.WithUnaryClientInterceptor(interceptor.UnaryMetadataInterceptor))),
+			c.HelloRpcConf, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor))),
 	}
 }
