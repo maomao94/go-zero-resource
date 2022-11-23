@@ -1,9 +1,10 @@
-package rpcserver
+package interceptor
 
 import (
 	"context"
+	"github.com/golang/protobuf/proto"
 	"github.com/hehanpeng/go-zero-resource/common/errorx"
-	"github.com/hehanpeng/go-zero-resource/common/pb"
+	"github.com/hehanpeng/go-zero-resource/hello/pb"
 	"github.com/pkg/errors"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -18,10 +19,13 @@ func LoggerInterceptor(ctx context.Context, req interface{}, info *grpc.UnarySer
 		causeErr := errors.Cause(err)
 		if e, ok := causeErr.(*errorx.CodeError); ok {
 			logx.WithContext(ctx).Errorf("【RPC-SRV-ERR】 %+v", err)
-			st, _ := status.New(codes.Code(e.Code), e.Error()).WithDetails(&pb.ErrorDetail{
+			var details []proto.Message
+			detail := &pb.ErrorDetail{
 				ErrorCode: int32(e.ErrorCode),
 				Message:   e.Message,
-			})
+			}
+			details = append(details, detail)
+			st, _ := status.New(codes.Code(e.Code), e.Error()).WithDetails(details...)
 			err = st.Err()
 		} else {
 			logx.WithContext(ctx).Errorf("【RPC-SRV-ERR】 %+v", err)

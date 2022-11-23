@@ -14,6 +14,7 @@ import (
 
 type (
 	Empty             = pb.Empty
+	ErrorDetail       = pb.ErrorDetail
 	GenerateTokenReq  = pb.GenerateTokenReq
 	GenerateTokenResp = pb.GenerateTokenResp
 	GetUserInfoReq    = pb.GetUserInfoReq
