@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	interceptor "github.com/hehanpeng/go-zero-resource/sys/Interceptor"
+	interceptor "github.com/hehanpeng/go-zero-resource/common/Interceptor/rpcserver"
 	"github.com/hehanpeng/go-zero-resource/sys/internal/config"
 	"github.com/hehanpeng/go-zero-resource/sys/internal/server"
 	"github.com/hehanpeng/go-zero-resource/sys/internal/svc"

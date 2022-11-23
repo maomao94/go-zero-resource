@@ -3,21 +3,12 @@ syntax = "proto3";
 package sys;
 option go_package = "./pb";
 
-import "google/protobuf/descriptor.proto";
-
-extend google.protobuf.EnumValueOptions {
-  uint32 code = 5000;
-  string name = 5001;
-  bool bool = 5002;
-  string desc = 5003;
-}
+import "pb/enum.proto";
 
 enum ErrCode {
-  OK = 0;
-  Err = -999 [(code) = 500, (name) = "未知错误", (desc) = "未知错误"];
-  ErrParam = -101 [(code) = 400, (name) = "参数错误", (desc) = "参数错误", (bool) = true];
-  ErrDB = -102 [(code) = 500, (name) = "数据库错误", (desc) = "数据库错误"];
-  ErrCache = -103 [(code) = 500, (name) = "缓存数据错误", (desc) = "缓存数据错误", (bool) = true];
-
-  ErrLogin = -1002001 [(code) = 500, (name) = "登录失败", (bool) = true];
+  E_0 = 0;
+  E_999 = 999 [(name) = "未知错误"];
+  E_101 = 101 [(name) = "参数错误"];
+  E_102 = 102 [(name) = "数据库错误"];
+  E_103 = 103 [(name) = "缓存数据错误"];
 }

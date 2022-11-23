@@ -1,9 +1,13 @@
 package errorx
 
 import (
+	"github.com/golang/protobuf/proto"
+	"github.com/hehanpeng/go-zero-resource/sys/pb"
+	"github.com/zeromicro/go-zero/core/mapping"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/reflect/protoreflect"
 	"net/http"
 	"strconv"
 )
@@ -11,6 +15,7 @@ import (
 const defaultErrorCode = 999
 
 type CodeError struct {
+	Code      uint32 `json:"errorCode"`
 	ErrorCode int    `json:"errorCode"`
 	Message   string `json:"message"`
 }
@@ -34,16 +39,16 @@ func Default() *CodeErrorResponse {
 	}
 }
 
-func NewCodeError(errorCode int, msg string) error {
-	return &CodeError{ErrorCode: errorCode, Message: msg}
+func NewCodeError(code uint32, errorCode int, msg string) error {
+	return &CodeError{Code: code, ErrorCode: errorCode, Message: msg}
 }
 
-//func NewEnumError(enum protoreflect.Enum) error {
-//	eCode, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), pb.E_Code)
-//	code, _ := strconv.ParseUint(mapping.Repr(eCode), 10, 32)
-//	eName, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), pb.E_Name)
-//	return &CodeError{Code: uint32(code), ErrorCode: int(enum.Number()), Message: mapping.Repr(eName)}
-//}
+func NewEnumError(enum protoreflect.Enum) error {
+	//eCode, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), pb.E_Code)
+	//code, _ := strconv.ParseUint(mapping.Repr(eCode), 10, 32)
+	eName, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), pb.E_Name)
+	return &CodeError{Code: uint32(code), ErrorCode: int(enum.Number()), Message: mapping.Repr(eName)}
+}
 
 //func NewEnumErrorf(enum protoreflect.Enum, wrap string) error {
 //	eBool, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), pb.E_Bool)
@@ -58,9 +63,13 @@ func NewCodeError(errorCode int, msg string) error {
 //	return err
 //}
 
-//func NewDefaultError(msg string) error {
-//	return NewCodeError(defaultCode, defaultErrorCode, msg)
-//}
+//	func NewDefaultError(msg string) error {
+//		return NewCodeError(defaultCode, defaultErrorCode, msg)
+//	}
+
+func (e *CodeError) GetErrorCode() int {
+	return e.ErrorCode
+}
 
 func (e *CodeError) Error() string {
 	return e.Message
