@@ -11,7 +11,7 @@ const defaultCode = 400
 const defaultErrorCode = -9999
 
 type CodeError struct {
-	Code      int    `json:"code"`
+	Code      uint32 `json:"code"`
 	ErrorCode int    `json:"errorCode"`
 	Message   string `json:"message"`
 }
@@ -21,7 +21,7 @@ type CodeErrorResponse struct {
 	Message   string `json:"message"`
 }
 
-func NewCodeError(code, errorCode int, msg string) error {
+func NewCodeError(code uint32, errorCode int, msg string) error {
 	return &CodeError{Code: code, ErrorCode: errorCode, Message: msg}
 }
 
