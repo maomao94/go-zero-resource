@@ -1,6 +1,7 @@
 package errorx
 
 import (
+	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/hehanpeng/go-zero-resource/sys/pb"
 	"github.com/zeromicro/go-zero/core/mapping"
@@ -35,6 +36,19 @@ func NewEnumError(enum protoreflect.Enum) error {
 	code, _ := strconv.ParseUint(mapping.Repr(eCode), 10, 32)
 	eName, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), pb.E_Name)
 	return &CodeError{Code: uint32(code), ErrorCode: int(enum.Number()), Message: mapping.Repr(eName)}
+}
+
+func NewEnumErrorf(enum protoreflect.Enum, wrap string) error {
+	eBool, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), pb.E_Bool)
+	bool, _ := strconv.ParseBool(mapping.Repr(eBool))
+	err := NewEnumError(enum)
+	if bool {
+		append := fmt.Sprintf("%s^", err.Error())
+		if e, ok := err.(*CodeError); ok {
+			e.Message = fmt.Sprintf("%s%s", append, wrap)
+		}
+	}
+	return err
 }
 
 func NewDefaultError(msg string) error {

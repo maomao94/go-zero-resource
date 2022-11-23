@@ -22,7 +22,7 @@ func LoggerInterceptor(ctx context.Context, req interface{}, info *grpc.UnarySer
 			var details []proto.Message
 			detail := &pb.ErrorDetail{
 				ErrorCode: int32(e.ErrorCode),
-				Message:   e.Message,
+				Message:   e.Error(),
 			}
 			details = append(details, detail)
 			st, _ := status.New(codes.Code(e.Code), e.Error()).WithDetails(details...)
