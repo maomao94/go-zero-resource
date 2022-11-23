@@ -2,7 +2,6 @@ package errorx
 
 import (
 	"github.com/golang/protobuf/proto"
-	"github.com/hehanpeng/go-zero-resource/sys/pb"
 	"github.com/zeromicro/go-zero/core/mapping"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
@@ -46,8 +45,8 @@ func NewCodeError(code uint32, errorCode int, msg string) error {
 func NewEnumError(enum protoreflect.Enum) error {
 	//eCode, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), pb.E_Code)
 	//code, _ := strconv.ParseUint(mapping.Repr(eCode), 10, 32)
-	eName, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), pb.E_Name)
-	return &CodeError{Code: uint32(code), ErrorCode: int(enum.Number()), Message: mapping.Repr(eName)}
+	eName, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), E_Name)
+	return &CodeError{Code: uint32(codes.Internal), ErrorCode: int(enum.Number()), Message: mapping.Repr(eName)}
 }
 
 //func NewEnumErrorf(enum protoreflect.Enum, wrap string) error {
