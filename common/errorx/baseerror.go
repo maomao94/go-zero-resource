@@ -15,7 +15,7 @@ import (
 const defaultErrorCode = 999
 
 type CodeError struct {
-	Code      uint32 `json:"errorCode"`
+	Code      uint32 `json:"code"`
 	ErrorCode int    `json:"errorCode"`
 	Message   string `json:"message"`
 }
