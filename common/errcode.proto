@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package sys;
+package errorx;
 option go_package = "./errorx";
 
 import "google/protobuf/descriptor.proto";
