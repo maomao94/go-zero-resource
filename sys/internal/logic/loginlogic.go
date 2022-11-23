@@ -2,11 +2,11 @@ package logic
 
 import (
 	"context"
+	"github.com/hehanpeng/go-zero-resource/common/errorx"
 	"github.com/hehanpeng/go-zero-resource/common/tool"
 	"github.com/hehanpeng/go-zero-resource/sys/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/sys/pb"
 	"github.com/pkg/errors"
-
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
@@ -60,11 +60,7 @@ func (l *LoginLogic) loginByMobile(mobile, password string) (int64, error) {
 	//	return 0, errors.Wrapf(ErrUserNoExistsError, "mobile:%s", mobile)
 	//}
 	if !(tool.Md5ByString(password) == "e10adc3949ba59abbe56e057f20f883e") {
-		n := pb.ErrCode_ErrLogin.Number()
-		l.Logger.Infof("errorCode %d", int32(n))
-		d := pb.ErrCode_ErrLogin.Descriptor()
-		l.Logger.Infof("%s", d)
-		return 0, errors.New("login error.")
+		return 0, errorx.NewEnumError(pb.ErrCode_ErrLogin)
 	}
 	return 1, nil
 }

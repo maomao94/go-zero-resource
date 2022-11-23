@@ -1,4 +1,4 @@
-package server
+package rpcserver
 
 import (
 	"context"
@@ -17,7 +17,7 @@ func LoggerInterceptor(ctx context.Context, req interface{}, info *grpc.UnarySer
 		causeErr := errors.Cause(err)
 		if e, ok := causeErr.(*errorx.CodeError); ok {
 			logx.WithContext(ctx).Errorf("【RPC-SRV-ERR】 %+v", err)
-			err = status.Error(codes.Code(e.Code), e.Error())
+			err = status.New(codes.Code(e.Code), e.Error()).WithDetails(err)
 		} else {
 			logx.WithContext(ctx).Errorf("【RPC-SRV-ERR】 %+v", err)
 		}
