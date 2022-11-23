@@ -2,6 +2,7 @@ package rpcserver
 
 import (
 	"context"
+	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/hehanpeng/go-zero-resource/common/errorx"
 	"github.com/pkg/errors"
@@ -20,10 +21,10 @@ func LoggerInterceptor(ctx context.Context, req interface{}, info *grpc.UnarySer
 		if e, ok := causeErr.(*errorx.CodeError); ok {
 			logx.WithContext(ctx).Errorf("【RPC-SRV-ERR】 %+v", err)
 			err = status.Error(codes.Code(e.Code), e.Message)
-			var metadata map[string]string
+			metadata := make(map[string]string)
 			metadata["code"] = mapping.Repr(e.Code)
-			metadata["ErrorCode"] = mapping.Repr(e.ErrorCode)
-			metadata["message"] = mapping.Repr(e.Message)
+			metadata["errorCode"] = mapping.Repr(e.ErrorCode)
+			metadata["message"] = e.Message
 			errInfo := &errdetails.ErrorInfo{
 				Reason:   e.Message,
 				Domain:   "http://zero",
@@ -31,7 +32,7 @@ func LoggerInterceptor(ctx context.Context, req interface{}, info *grpc.UnarySer
 			}
 			var details []proto.Message
 			details = append(details, errInfo)
-			st, _ := status.New(codes.Code(e.Code), e.Error()).WithDetails(details...)
+			st, _ := status.New(codes.Code(e.Code), fmt.Sprintf("%s^%s", e.ErrorCode, e.Message)).WithDetails(details...)
 			err = st.Err()
 		} else {
 			logx.WithContext(ctx).Errorf("【RPC-SRV-ERR】 %+v", err)
