@@ -1,6 +1,7 @@
 package errorx
 
 import (
+	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/zeromicro/go-zero/core/mapping"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
@@ -49,18 +50,18 @@ func NewEnumError(enum protoreflect.Enum) error {
 	return &CodeError{Code: uint32(codes.Internal), ErrorCode: int(enum.Number()), Message: mapping.Repr(eName)}
 }
 
-//func NewEnumErrorf(enum protoreflect.Enum, wrap string) error {
-//	eBool, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), pb.E_Bool)
-//	bool, _ := strconv.ParseBool(mapping.Repr(eBool))
-//	err := NewEnumError(enum)
-//	if bool {
-//		append := fmt.Sprintf("%s^", err.Error())
-//		if e, ok := err.(*CodeError); ok {
-//			e.Message = fmt.Sprintf("%s%s", append, wrap)
-//		}
-//	}
-//	return err
-//}
+func NewEnumErrorf(enum protoreflect.Enum, wrap string) error {
+	//eBool, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), pb.E_Bool)
+	//bool, _ := strconv.ParseBool(mapping.Repr(eBool))
+	err := NewEnumError(enum)
+	if true {
+		msg := fmt.Sprintf("%s^", err.Error())
+		if e, ok := err.(*CodeError); ok {
+			e.Message = fmt.Sprintf("%s%s", msg, wrap)
+		}
+	}
+	return err
+}
 
 //	func NewDefaultError(msg string) error {
 //		return NewCodeError(defaultCode, defaultErrorCode, msg)
