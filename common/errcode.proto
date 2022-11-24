@@ -9,12 +9,12 @@ extend google.protobuf.EnumValueOptions {
   string name = 5001;
 }
 
-enum ErrCode {
-  E_0 = 0;
-  E_999 = 999 [(name) = "未知错误"]; // 未知错误
-  E_101 = 101 [(name) = "参数错误"]; // 参数错误
-  E_102 = 102 [(name) = "数据库错误"]; // 数据库错误
-  E_103 = 103 [(name) = "缓存数据错误"]; // 缓存数据错误
+enum Code {
+  Ok = 0;
+  Err = 999 [(name) = "未知错误"]; // 未知错误
+  ErrParam = 101 [(name) = "参数错误"]; // 参数错误
+  ErrDb = 102 [(name) = "数据库错误"]; // 数据库错误
+  ErrCache = 103 [(name) = "缓存数据错误"]; // 缓存数据错误
 
-  Y_1002001 = 1002001 [(name) = "登录失败"]; // 登录失败
+  ErrLogin = 1002001 [(name) = "登录失败"]; // 登录失败
 }

@@ -60,7 +60,7 @@ func (l *LoginLogic) loginByMobile(mobile, password string) (int64, error) {
 	//	return 0, errors.Wrapf(ErrUserNoExistsError, "mobile:%s", mobile)
 	//}
 	if !(tool.Md5ByString(password) == "e10adc3949ba59abbe56e057f20f883e") {
-		return 0, errorx.NewEnumErrorf(errorx.ErrCode_Y_1002001, mobile)
+		return 0, errorx.NewEnumErrorf(errorx.Code_ErrLogin, mobile)
 	}
 	return 1, nil
 }
