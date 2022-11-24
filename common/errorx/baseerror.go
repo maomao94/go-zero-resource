@@ -44,10 +44,11 @@ func NewCodeError(code uint32, errorCode int, msg string) error {
 }
 
 func NewEnumError(enum protoreflect.Enum) error {
-	//eCode, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), pb.E_Code)
-	//code, _ := strconv.ParseUint(mapping.Repr(eCode), 10, 32)
+	eCode, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), E_Code)
+	code, _ := strconv.ParseUint(mapping.Repr(eCode), 10, 32)
 	eName, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), E_Name)
-	return &CodeError{Code: uint32(codes.Internal), ErrorCode: int(enum.Number()), Message: mapping.Repr(eName)}
+	name := fmt.Sprintf("%s", mapping.Repr(eName))
+	return &CodeError{Code: uint32(code), ErrorCode: int(enum.Number()), Message: name}
 }
 
 func NewEnumErrorf(enum protoreflect.Enum, wrap string) error {
@@ -55,9 +56,8 @@ func NewEnumErrorf(enum protoreflect.Enum, wrap string) error {
 	//bool, _ := strconv.ParseBool(mapping.Repr(eBool))
 	err := NewEnumError(enum)
 	if true {
-		msg := fmt.Sprintf("%s^", err.Error())
 		if e, ok := err.(*CodeError); ok {
-			e.Message = fmt.Sprintf("%s%s", msg, wrap)
+			e.Message = fmt.Sprintf("%s, %s", err.Error(), wrap)
 		}
 	}
 	return err
