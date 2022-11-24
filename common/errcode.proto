@@ -6,16 +6,15 @@ option go_package = "./errorx";
 import "google/protobuf/descriptor.proto";
 
 extend google.protobuf.EnumValueOptions {
-  int32 code = 5000;
   string name = 5001;
 }
 
 enum Code {
   Ok = 0;
-  Err = 999 [(code) = 500, (name) = "未知错误"]; // 未知错误
-  ErrParam = 101 [(code) = 400, (name) = "参数错误"]; // 参数错误
-  ErrDb = 102 [(code) = 500, (name) = "数据库错误"]; // 数据库错误
-  ErrCache = 103 [(code) = 500, (name) = "缓存数据错误"]; // 缓存数据错误
+  Err = 999 [(name) = "未知错误"]; // 未知错误
+  ErrParam = 101 [(name) = "参数错误"]; // 参数错误
+  ErrDb = 102 [(name) = "数据库错误"]; // 数据库错误
+  ErrCache = 103 [(name) = "缓存数据错误"]; // 缓存数据错误
 
-  ErrLogin = 1002001 [(code) = 500, (name) = "登录失败"]; // 登录失败
+  ErrLogin = 1002001 [(name) = "登录失败"]; // 登录失败
 }

@@ -49,8 +49,6 @@ func NewEnumError(enum protoreflect.Enum) error {
 }
 
 func NewEnumErrorf(enum protoreflect.Enum, wrap string) error {
-	//eBool, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), pb.E_Bool)
-	//bool, _ := strconv.ParseBool(mapping.Repr(eBool))
 	err := NewEnumError(enum)
 	if true {
 		if e, ok := err.(*CodeError); ok {
@@ -59,10 +57,6 @@ func NewEnumErrorf(enum protoreflect.Enum, wrap string) error {
 	}
 	return err
 }
-
-//	func NewDefaultError(msg string) error {
-//		return NewCodeError(defaultCode, defaultErrorCode, msg)
-//	}
 
 func (e *CodeError) GetErrorCode() int {
 	return e.ErrorCode
