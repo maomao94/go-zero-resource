@@ -38,7 +38,7 @@ func Default() *CodeErrorResponse {
 	}
 }
 
-func NewCodeError(code int32, errorCode int, msg string) error {
+func NewCodeError(errorCode int, msg string) error {
 	return &CodeError{ErrorCode: errorCode, Message: msg}
 }
 
@@ -56,10 +56,6 @@ func NewEnumErrorf(enum protoreflect.Enum, wrap string) error {
 		}
 	}
 	return err
-}
-
-func (e *CodeError) GetErrorCode() int {
-	return e.ErrorCode
 }
 
 func (e *CodeError) Error() string {
