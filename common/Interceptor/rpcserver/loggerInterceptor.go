@@ -20,9 +20,7 @@ func LoggerInterceptor(ctx context.Context, req interface{}, info *grpc.UnarySer
 		causeErr := errors.Cause(err)
 		if e, ok := causeErr.(*errorx.CodeError); ok {
 			logx.WithContext(ctx).Errorf("【RPC-SRV-ERR】 %+v", err)
-			err = status.Error(codes.Code(e.Code), e.Message)
 			metadata := make(map[string]string)
-			metadata["code"] = mapping.Repr(e.Code)
 			metadata["errorCode"] = mapping.Repr(e.ErrorCode)
 			metadata["message"] = e.Message
 			errInfo := &errdetails.ErrorInfo{
@@ -32,7 +30,7 @@ func LoggerInterceptor(ctx context.Context, req interface{}, info *grpc.UnarySer
 			}
 			var details []proto.Message
 			details = append(details, errInfo)
-			st, _ := status.New(codes.Code(e.Code), fmt.Sprintf("%d, %s", e.ErrorCode, e.Message)).WithDetails(details...)
+			st, _ := status.New(codes.Internal, fmt.Sprintf("%d, %s", e.ErrorCode, e.Message)).WithDetails(details...)
 			err = st.Err()
 		} else {
 			logx.WithContext(ctx).Errorf("【RPC-SRV-ERR】 %+v", err)

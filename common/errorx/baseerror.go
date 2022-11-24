@@ -15,7 +15,6 @@ import (
 const defaultErrorCode = 999
 
 type CodeError struct {
-	Code      uint32 `json:"code"`
 	ErrorCode int    `json:"errorCode"`
 	Message   string `json:"message"`
 }
@@ -39,16 +38,14 @@ func Default() *CodeErrorResponse {
 	}
 }
 
-func NewCodeError(code uint32, errorCode int, msg string) error {
-	return &CodeError{Code: code, ErrorCode: errorCode, Message: msg}
+func NewCodeError(code int32, errorCode int, msg string) error {
+	return &CodeError{ErrorCode: errorCode, Message: msg}
 }
 
 func NewEnumError(enum protoreflect.Enum) error {
-	eCode, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), E_Code)
-	code, _ := strconv.ParseUint(mapping.Repr(eCode), 10, 32)
 	eName, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), E_Name)
 	name := fmt.Sprintf("%s", mapping.Repr(eName))
-	return &CodeError{Code: uint32(code), ErrorCode: int(enum.Number()), Message: name}
+	return &CodeError{ErrorCode: int(enum.Number()), Message: name}
 }
 
 func NewEnumErrorf(enum protoreflect.Enum, wrap string) error {
