@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/hehanpeng/go-zero-resource/common/ctxdata"
+	trace2 "github.com/zeromicro/go-zero/core/trace"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/propagation"
 	"go.opentelemetry.io/otel/trace"
@@ -29,7 +30,7 @@ func NewKqSendLogic(ctx context.Context, svcCtx *svc.ServiceContext) *KqSendLogi
 }
 
 func (l *KqSendLogic) KqSend(in *pb.KqSendReq) (*pb.Empty, error) {
-	tracer := otel.GetTracerProvider().Tracer("kafka")
+	tracer := otel.GetTracerProvider().Tracer(trace2.TraceName)
 	spanCtx, span := tracer.Start(l.ctx, "send_msg_mq", trace.WithSpanKind(trace.SpanKindProducer))
 	defer span.End()
 	carrier := &propagation.HeaderCarrier{}
