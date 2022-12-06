@@ -23,5 +23,5 @@ type (
 service gtw {
     @doc "发送kafka消息"
     @handler kqSend
-    post /message/kq/send (KqSendReq) returns (EmptyReply)
+    post /kq/send (KqSendReq) returns (EmptyReply)
 }
