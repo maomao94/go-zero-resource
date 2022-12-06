@@ -31,7 +31,7 @@ func (l KafkaTest) Consume(key, value string) error {
 		tracer := otel.GetTracerProvider().Tracer(trace2.TraceName)
 		_, span := tracer.Start(wireContext, "mq_consumer_msg", trace.WithSpanKind(trace.SpanKindProducer))
 		defer span.End()
-		logx.Infof("consumerOne Consumer, key: %+v msg:%+v", key, msg)
+		logx.WithContext(ctx).Infof("consumerOne Consumer, key: %+v msg:%+v", key, msg)
 	}
 	return nil
 }
