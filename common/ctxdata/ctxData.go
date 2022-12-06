@@ -4,11 +4,17 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/zeromicro/go-zero/core/logx"
+	"go.opentelemetry.io/otel/propagation"
 	"google.golang.org/grpc/metadata"
 	"strconv"
 )
 
 var CtxKeyUserId = "userId"
+
+type MsgBody struct {
+	Carrier *propagation.HeaderCarrier
+	Msg     string
+}
 
 func GetUserIdFromCtx(ctx context.Context, bool bool) int64 {
 	var uid int64
