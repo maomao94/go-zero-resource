@@ -139,6 +139,21 @@ type (
         OriginalName string `json:"originalName"`       // 初始文件名
         AttachId string `json:"attachId,omitempty"`     // 附件表ID
     }
+
+    UploadFileReq {
+        MfsType int64 `json:"status,options=1|2,optional"` // 文件类型 1-临时文件 2-业务文件
+    }
+
+    DownloadFileReq {
+        Path string `json:"path"`               // 文件路径
+    }
+
+    FileInfo {
+        Name string `json:"name"`               // 文件名
+        Path string `json:"path"`               // 文件路径
+        Size int64 `json:"size"`                // 文件大小
+        ContextType string `json:"contextType"` // 文件类型
+    }
 )
 
 @server(
@@ -194,4 +209,12 @@ service gtw {
     @doc "批量删除文件"
     @handler removeFiles
     post /oss/endpoint/removeFiles (RemoveFilesReq) returns (EmptyReply)
+
+    @doc "上传文件"
+    @handler uploadFile
+    post /mfs/uploadFile (UploadFileReq) returns (FileInfo)
+
+    @doc "下载文件"
+    @handler downloadFile
+    post /mfs/downloadFile (DownloadFileReq) returns ()
 }
