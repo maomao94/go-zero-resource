@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
-	"go.etcd.io/etcd/client/pkg/v3/fileutil"
 	"io"
 	"net/http"
+	"os"
 	"strconv"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -29,26 +29,22 @@ func NewDownloadFileLogic(ctx context.Context, svcCtx *svc.ServiceContext, w htt
 }
 
 func (l *DownloadFileLogic) DownloadFile(req *types.DownloadFileReq) error {
-	f, err := fileutil.OpenDir(req.Path)
+	stat, err := os.Stat(req.Path)
 	if err != nil {
 		return err
 	}
-	defer f.Close()
-	bytes, err := io.ReadAll(f)
+	bytes, err := os.ReadFile(req.Path)
 	if err != nil {
 		return err
 	}
-	l.w.Header().Set("Content-Disposition", "attachment; filename=\""+f.Name()+"\"")
+	l.w.Header().Set("Content-Disposition", "attachment; filename=\""+stat.Name()+"\"")
 	l.w.Header().Set("Content-Type", "application/octet-stream")
-	l.w.Header().Set("Content-Length", strconv.Itoa(len(bytes)))
-	//if _, err := io.Copy(l.writer, reader); err != nil {
-	//	return nil, err
-	//}
+	l.w.Header().Set("Content-Length", strconv.FormatInt(stat.Size(), 10))
 	n, err := l.w.Write(bytes)
 	if err != nil {
 		return err
 	}
-	if n < len(strconv.Itoa(len(bytes))) {
+	if n < int(stat.Size()) {
 		return io.ErrClosedPipe
 	}
 	return nil

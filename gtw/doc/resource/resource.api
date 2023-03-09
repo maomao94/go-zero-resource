@@ -145,7 +145,7 @@ type (
     }
 
     DownloadFileReq {
-        Path string `json:"path"`               // 文件路径
+        Path string `form:"path"`               // 文件路径
     }
 
     FileInfo {

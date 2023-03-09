@@ -177,7 +177,7 @@ type UploadFileReq struct {
 }
 
 type DownloadFileReq struct {
-	Path string `json:"path"` // 文件路径
+	Path string `form:"path"` // 文件路径
 }
 
 type FileInfo struct {
