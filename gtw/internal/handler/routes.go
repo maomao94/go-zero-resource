@@ -119,6 +119,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/oss/endpoint/removeFiles",
 				Handler: resource.RemoveFilesHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/mfs/uploadFile",
+				Handler: resource.UploadFileHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/mfs/downloadFile",
+				Handler: resource.DownloadFileHandler(serverCtx),
+			},
 		},
 		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
 		rest.WithPrefix("/gtw/resource/v1"),

@@ -171,3 +171,18 @@ type File struct {
 	OriginalName string `json:"originalName"`       // 初始文件名
 	AttachId     string `json:"attachId,omitempty"` // 附件表ID
 }
+
+type UploadFileReq struct {
+	MfsType int64 `json:"status,options=1|2,optional"` // 文件类型 1-临时文件 2-业务文件
+}
+
+type DownloadFileReq struct {
+	Path string `json:"path"` // 文件路径
+}
+
+type FileInfo struct {
+	Name        string `json:"name"`        // 文件名
+	Path        string `json:"path"`        // 文件路径
+	Size        int64  `json:"size"`        // 文件大小
+	ContextType string `json:"contextType"` // 文件类型
+}
