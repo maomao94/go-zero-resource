@@ -217,5 +217,5 @@ service gtw {
 
     @doc "下载文件"
     @handler downloadFile
-    get /mfs/downloadFile (DownloadFileReq) returns ()
+    post /mfs/downloadFile (DownloadFileReq) returns ()
 }
