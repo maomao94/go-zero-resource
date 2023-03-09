@@ -38,7 +38,7 @@ func (l *DownloadFileLogic) DownloadFile(req *types.DownloadFileReq) error {
 		return err
 	}
 	l.w.Header().Set("Content-Disposition", "attachment; filename=\""+stat.Name()+"\"")
-	l.w.Header().Set("Content-Type", "application/octet-stream")
+	l.w.Header().Set("Content-Type", http.DetectContentType(bytes))
 	l.w.Header().Set("Content-Length", strconv.FormatInt(stat.Size(), 10))
 	n, err := l.w.Write(bytes)
 	if err != nil {
