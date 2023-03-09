@@ -7,7 +7,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
-	"github.com/zeromicro/go-zero/core/stringx"
 	"net/http"
 	"os"
 	"path"
