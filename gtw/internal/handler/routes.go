@@ -125,7 +125,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: resource.DownloadFileHandler(serverCtx),
 			},
 		},
-		//rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
+		rest.WithJwt(serverCtx.Config.JwtAuth.AccessSecret),
 		rest.WithPrefix("/gtw/resource/v1"),
 	)
 }
