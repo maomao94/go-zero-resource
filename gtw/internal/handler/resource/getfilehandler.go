@@ -13,14 +13,14 @@ func GetFileHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.GetFileReq
 		if err := httpx.Parse(r, &req); err != nil {
-			httpx.Error(w, err)
+			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
 		l := resource.NewGetFileLogic(r.Context(), svcCtx, w)
 		err := l.GetFile(&req)
 		if err != nil {
-			httpx.Error(w, err)
+			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
 			httpx.Ok(w)
 		}

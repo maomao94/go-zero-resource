@@ -13,9 +13,9 @@ func PingHelloHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		l := gtw.NewPingHelloLogic(r.Context(), svcCtx)
 		resp, err := l.PingHello()
 		if err != nil {
-			httpx.Error(w, err)
+			httpx.ErrorCtx(r.Context(), w, err)
 		} else {
-			httpx.OkJson(w, resp)
+			httpx.OkJsonCtx(r.Context(), w, resp)
 		}
 	}
 }
