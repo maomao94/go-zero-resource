@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
+	"io"
 	"net/http"
 	"os"
 	"path"
@@ -40,6 +41,10 @@ func (l *UploadFileLogic) UploadFile(req *types.UploadFileReq) (resp *types.File
 	defer file.Close()
 	logx.Infof("upload file: %+v, file size: %d, MIME header: %+v",
 		fileHeader.Filename, fileHeader.Size, fileHeader.Header)
+	bytes, _ := io.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
 	typeFile := "tempFile"
 	if req.MfsType == 2 {
 		typeFile = "bizFile"
@@ -52,7 +57,12 @@ func (l *UploadFileLogic) UploadFile(req *types.UploadFileReq) (resp *types.File
 	}
 	u, _ := uuid.NewUUID()
 	path := dirPath + "/" + strings.Replace(fmt.Sprintf("%s", u), "-", "", -1) + path.Ext(fileHeader.Filename)
-	err = os.WriteFile(path, []byte{}, 0o600)
+	f, err := os.Create(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	_, err = f.Write(bytes)
 	if err != nil {
 		return nil, err
 	}
