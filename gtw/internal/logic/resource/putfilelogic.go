@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/hehanpeng/go-zero-resource/resource/pb"
 	"github.com/jinzhu/copier"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
@@ -40,7 +40,7 @@ func (l *PutFileLogic) PutFile(req *types.PutFileReq) (resp *types.File, err err
 	defer file.Close()
 	logx.Infof("upload file: %+v, file size: %d, MIME header: %+v",
 		fileHeader.Filename, fileHeader.Size, fileHeader.Header)
-	stream, err := ioutil.ReadAll(file)
+	stream, err := io.ReadAll(file)
 	if err != nil {
 		return nil, err
 	}
