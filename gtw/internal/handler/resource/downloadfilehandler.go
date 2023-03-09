@@ -17,7 +17,7 @@ func DownloadFileHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			return
 		}
 
-		l := resource.NewDownloadFileLogic(r.Context(), svcCtx, w)
+		l := resource.NewDownloadFileLogic(r.Context(), svcCtx, r, w)
 		err := l.DownloadFile(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
