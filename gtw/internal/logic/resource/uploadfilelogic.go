@@ -47,9 +47,7 @@ func (l *UploadFileLogic) UploadFile(req *types.UploadFileReq) (resp *types.File
 	}
 	u, _ := uuid.NewUUID()
 	dayStr := carbon.Now().Format("20060102")
-	s1, _ := stringx.Substr(dayStr, 0, 6)
-	s2, _ := stringx.Substr(dayStr, 6, 2)
-	midPath := s1 + "/" + s2 + "/" + strings.Replace(fmt.Sprintf("%s", u), "-", "", -1) + path.Ext(fileHeader.Filename)
+	midPath := dayStr + "/" + strings.Replace(fmt.Sprintf("%s", u), "-", "", -1) + path.Ext(fileHeader.Filename)
 	path := "/" + typeFile + midPath
 	err = os.WriteFile(path, []byte{}, 0o600)
 	if err != nil {
