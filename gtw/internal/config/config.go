@@ -13,4 +13,6 @@ type Config struct {
 	SysRpcConf      zrpc.RpcClientConf
 	ResourceRpcConf zrpc.RpcClientConf
 	MessageRpcConf  zrpc.RpcClientConf
+	NfsRootPath     string
+	DownloadUrl     string
 }

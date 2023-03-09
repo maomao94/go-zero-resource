@@ -185,4 +185,5 @@ type FileInfo struct {
 	Path        string `json:"path"`        // 文件路径
 	Size        int64  `json:"size"`        // 文件大小
 	ContextType string `json:"contextType"` // 文件类型
+	Url         string `json:"url"`         // 文件下载
 }

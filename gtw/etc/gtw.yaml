@@ -8,7 +8,7 @@ MaxBytes: 1073741824
 Telemetry:
   Name: gtw
   Endpoint: http://127.0.0.1:14268/api/traces
-#  Sampler: 1.0
+  #  Sampler: 1.0
   Batcher: jaeger
 JwtAuth:
   AccessSecret: ae0536f9-6450-4606-8e13-5a19ed505da0
@@ -27,3 +27,5 @@ MessageRpcConf:
     - 127.0.0.1:1004
   NonBlock: true
   Timeout: 3000
+NfsRootPath: /opt/nfs/data
+DownloadUrl: http://127.0.0.1:1001/gtw/resource/v1/mfs/downloadFile?path=

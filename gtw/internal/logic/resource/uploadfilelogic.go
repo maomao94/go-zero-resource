@@ -44,10 +44,14 @@ func (l *UploadFileLogic) UploadFile(req *types.UploadFileReq) (resp *types.File
 	if req.MfsType == 2 {
 		typeFile = "bizFile"
 	}
-	u, _ := uuid.NewUUID()
 	dayStr := carbon.Now().Format("20060102")
-	midPath := dayStr + "/" + strings.Replace(fmt.Sprintf("%s", u), "-", "", -1) + path.Ext(fileHeader.Filename)
-	path := "/" + typeFile + "/" + midPath
+	dirPath := l.svcCtx.Config.NfsRootPath + "/" + typeFile + "/" + dayStr
+	err = os.MkdirAll(dirPath, os.ModePerm)
+	if err != nil {
+		return nil, err
+	}
+	u, _ := uuid.NewUUID()
+	path := dirPath + "/" + strings.Replace(fmt.Sprintf("%s", u), "-", "", -1) + path.Ext(fileHeader.Filename)
 	err = os.WriteFile(path, []byte{}, 0o600)
 	if err != nil {
 		return nil, err
@@ -57,5 +61,6 @@ func (l *UploadFileLogic) UploadFile(req *types.UploadFileReq) (resp *types.File
 		Path:        path,
 		Size:        fileHeader.Size,
 		ContextType: fileHeader.Header.Get("Content-Type"),
+		Url:         l.svcCtx.Config.DownloadUrl + path,
 	}, nil
 }
