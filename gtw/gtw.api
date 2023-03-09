@@ -21,8 +21,4 @@ service gtw {
 	@doc "ping"
 	@handler ping
 	get /ping returns (PingReply)
-	
-	@doc "pingHello"
-	@handler pingHello
-	get /pingHello returns (PingReply)
 }

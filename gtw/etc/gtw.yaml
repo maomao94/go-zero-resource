@@ -27,8 +27,3 @@ MessageRpcConf:
     - 127.0.0.1:1004
   NonBlock: true
   Timeout: 3000
-HelloRpcConf:
-  Endpoints:
-    - 127.0.0.1:1005
-  NonBlock: true
-  Timeout: 3000
