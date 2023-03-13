@@ -11,6 +11,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 	"io"
 	"os"
+	"path"
 )
 
 type GetFileLogic struct {
@@ -43,7 +44,7 @@ func (l *GetFileLogic) GetFile(in *pb.GetFileReq) (*pb.GetFileResp, error) {
 		return nil, err
 	}
 	//获取文件名称带后缀
-	//fileNameWithSuffix := path.Base(fileStat.Key)
+	fileNameWithSuffix := path.Base(fileStat.Key)
 	//获取文件的后缀(文件类型)
 	//fileType := path.Ext(fileNameWithSuffix)
 	//获取文件名称(不带后缀)
@@ -59,7 +60,7 @@ func (l *GetFileLogic) GetFile(in *pb.GetFileReq) (*pb.GetFileResp, error) {
 	if err != nil {
 		return nil, err
 	}
-	path := dirPath + "/" + fileStat.Key
+	path := dirPath + "/" + fileNameWithSuffix
 	f, err := os.Create(path)
 	if err != nil {
 		return nil, err
