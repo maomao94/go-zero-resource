@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/hehanpeng/go-zero-resource/model"
 	"github.com/minio/minio-go"
+	"io"
 	"mime/multipart"
 )
 
@@ -82,7 +83,7 @@ func (m MinioTemplate) PutFile(tenantId, bucketName string, fileHeader *multipar
 	}
 }
 
-func (m MinioTemplate) PutFileStream(tenantId, bucketName, filename, contentType string, stream *[]byte) (*File, error) {
+func (m MinioTemplate) PutStream(tenantId, bucketName, filename, contentType string, stream *[]byte) (*File, error) {
 	if err := validateClient(m.client); err != nil {
 		return nil, err
 	}
@@ -93,6 +94,30 @@ func (m MinioTemplate) PutFileStream(tenantId, bucketName, filename, contentType
 	reader := bytes.NewReader(*stream)
 	_, err := m.client.PutObject(m.ossRule.bucketName(tenantId, bucketName),
 		objectName, reader, reader.Size(), minio.PutObjectOptions{
+			ContentType: contentType,
+		})
+	if err != nil {
+		return nil, err
+	} else {
+		return &File{
+			Link:         m.fileLink(tenantId, bucketName, objectName),
+			Domain:       m.getOssHost(tenantId, bucketName),
+			Name:         objectName,
+			OriginalName: filename,
+		}, nil
+	}
+}
+
+func (m MinioTemplate) PutObject(tenantId, bucketName, filename, contentType string, reader io.Reader, objectSize int64) (*File, error) {
+	if err := validateClient(m.client); err != nil {
+		return nil, err
+	}
+	objectName := m.ossRule.filename(filename)
+	if len(bucketName) == 0 {
+		bucketName = m.ossProperties.BucketName
+	}
+	_, err := m.client.PutObject(m.ossRule.bucketName(tenantId, bucketName),
+		objectName, reader, objectSize, minio.PutObjectOptions{
 			ContentType: contentType,
 		})
 	if err != nil {

@@ -33,7 +33,7 @@ func (l *PutFileLogic) PutFile(in *pb.PutFileReq) (*pb.PutFileResp, error) {
 	if err != nil {
 		return nil, err
 	}
-	file, err := ossTemplate.PutFileStream(in.TenantId, in.BucketName, in.Filename, in.ContentType, &in.Stream)
+	file, err := ossTemplate.PutStream(in.TenantId, in.BucketName, in.Filename, in.ContentType, &in.Stream)
 	if err != nil {
 		return nil, err
 	}
