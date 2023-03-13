@@ -1,11 +1,18 @@
 package resource
 
 import (
+	"bufio"
 	"context"
+	"fmt"
+	"github.com/golang-module/carbon/v2"
+	"github.com/google/uuid"
 	"github.com/hehanpeng/go-zero-resource/resource/pb"
 	"github.com/jinzhu/copier"
 	"io"
 	"net/http"
+	"os"
+	"path"
+	"strings"
 
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
@@ -40,7 +47,22 @@ func (l *PutFileLogic) PutFile(req *types.PutFileReq) (resp *types.File, err err
 	defer file.Close()
 	logx.Infof("upload file: %+v, file size: %d, MIME header: %+v",
 		fileHeader.Filename, fileHeader.Size, fileHeader.Header)
-	stream, err := io.ReadAll(file)
+	typeFile := "tempFile"
+	dayStr := carbon.Now().Format("20060102")
+	dirPath := l.svcCtx.Config.NfsRootPath + "/" + typeFile + "/" + dayStr
+	err = os.MkdirAll(dirPath, os.ModePerm)
+	if err != nil {
+		return nil, err
+	}
+	u, _ := uuid.NewUUID()
+	path := dirPath + "/" + strings.Replace(fmt.Sprintf("%s", u), "-", "", -1) + path.Ext(fileHeader.Filename)
+	f, err := os.Create(path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	buffer := bufio.NewReader(file)
+	_, err = io.Copy(f, buffer)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +70,7 @@ func (l *PutFileLogic) PutFile(req *types.PutFileReq) (resp *types.File, err err
 		TenantId:    req.TenantId,
 		Code:        req.Code,
 		BucketName:  req.BucketName,
-		Stream:      stream,
+		Path:        path,
 		Filename:    fileHeader.Filename,
 		ContentType: fileHeader.Header.Get("content-type"),
 	})
