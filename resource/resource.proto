@@ -126,7 +126,7 @@ message PutFileReq {
   string bucketName = 3; // 存储桶名称
   string filename = 4; // 上传文件名
   string contentType = 5;
-  bytes stream = 6; // 文件二进制流
+  string path = 6; // 文件路径
 }
 
 message PutFileResp {
@@ -143,7 +143,7 @@ message GetFileReq {
 message GetFileResp {
   string filename = 1; // 上传文件名
   string contentType = 2;
-  bytes stream = 3; // 文件二进制流
+  string path = 3; // 文件路径
 }
 
 message RemoveFileReq {
