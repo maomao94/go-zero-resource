@@ -5,6 +5,7 @@ import (
 	"github.com/hehanpeng/go-zero-resource/common/ossx"
 	"github.com/hehanpeng/go-zero-resource/model"
 	"github.com/jinzhu/copier"
+	"os"
 
 	"github.com/hehanpeng/go-zero-resource/resource/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/resource/pb"
@@ -33,7 +34,16 @@ func (l *PutFileLogic) PutFile(in *pb.PutFileReq) (*pb.PutFileResp, error) {
 	if err != nil {
 		return nil, err
 	}
-	file, err := ossTemplate.PutStream(in.TenantId, in.BucketName, in.Filename, in.ContentType, &in.Stream)
+	f, err := os.Open(in.Path)
+	if err != nil {
+		return nil, err
+	}
+	defer f.Close()
+	fInfo, err := f.Stat()
+	if err != nil {
+		return nil, err
+	}
+	file, err := ossTemplate.PutObject(in.TenantId, in.BucketName, in.Filename, in.ContentType, f, fInfo.Size())
 	if err != nil {
 		return nil, err
 	}

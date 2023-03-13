@@ -22,3 +22,4 @@ Cache:
 Oss:
   # 是否开启租户模式
   TenantMode: true
+NfsRootPath: /opt/nfs/data

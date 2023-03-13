@@ -11,6 +11,7 @@ type Config struct {
 	DB struct {
 		DataSource string
 	}
-	Cache cache.CacheConf
-	Oss   osssconfig.OssConf
+	Cache       cache.CacheConf
+	Oss         osssconfig.OssConf
+	NfsRootPath string
 }
