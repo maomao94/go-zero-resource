@@ -1,6 +1,7 @@
 package ossx
 
 import (
+	"bufio"
 	"bytes"
 	"errors"
 	"github.com/hehanpeng/go-zero-resource/model"
@@ -92,8 +93,9 @@ func (m MinioTemplate) PutStream(tenantId, bucketName, filename, contentType str
 		bucketName = m.ossProperties.BucketName
 	}
 	reader := bytes.NewReader(*stream)
+	buffer := bufio.NewReader(reader)
 	_, err := m.client.PutObject(m.ossRule.bucketName(tenantId, bucketName),
-		objectName, reader, reader.Size(), minio.PutObjectOptions{
+		objectName, buffer, reader.Size(), minio.PutObjectOptions{
 			ContentType: contentType,
 		})
 	if err != nil {
