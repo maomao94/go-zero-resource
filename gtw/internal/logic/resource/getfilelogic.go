@@ -38,7 +38,7 @@ func (l *GetFileLogic) GetFile(req *types.GetFileReq) error {
 	if err != nil {
 		return err
 	}
-	//l.w.Header().Set("Content-Disposition", "attachment; filename=\""+getFileResp.Filename+"\"")
+	l.w.Header().Set("Content-Disposition", "attachment; filename=\""+getFileResp.Filename+"\"")
 	//l.w.Header().Set("Content-Type", getFileResp.ContentType)
 	//reader := bytes.NewReader(getFileResp.Stream)
 	//l.writer.Header().Set("Content-Length", strconv.FormatInt(reader.Size(), 10))

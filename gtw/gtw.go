@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"github.com/hehanpeng/go-zero-resource/common/errorx"
@@ -27,7 +28,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
 
-	httpx.SetErrorHandler(func(err error) (int, interface{}) {
+	httpx.SetErrorHandlerCtx(func(ctx context.Context, err error) (int, interface{}) {
 		switch e := err.(type) {
 		case *errorx.CodeError:
 			return http.StatusBadRequest, e.Data()
