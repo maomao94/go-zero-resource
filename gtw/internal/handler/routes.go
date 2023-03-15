@@ -120,7 +120,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: resource.UploadFileHandler(serverCtx),
 			},
 			{
-				Method:  http.MethodPost,
+				Method:  http.MethodGet,
 				Path:    "/mfs/downloadFile",
 				Handler: resource.DownloadFileHandler(serverCtx),
 			},
