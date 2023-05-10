@@ -1,9 +1,11 @@
 package errorx
 
 import (
+	"context"
 	"fmt"
 	"github.com/golang/protobuf/proto"
 	"github.com/zeromicro/go-zero/core/mapping"
+	"github.com/zeromicro/go-zero/core/trace"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -22,9 +24,10 @@ type CodeError struct {
 type CodeErrorResponse struct {
 	ErrorCode int    `json:"errorCode"`
 	Message   string `json:"message"`
+	traceId   string `json:"traceId"`
 }
 
-func New(errCode int, message string) *CodeErrorResponse {
+func New(errCode int, message string, traceId string) *CodeErrorResponse {
 	return &CodeErrorResponse{
 		ErrorCode: errCode,
 		Message:   message,
@@ -113,11 +116,13 @@ func IsGrpcError(err error) bool {
 	return ok
 }
 
-func FromError(err error) *CodeErrorResponse {
+func FromError(ctx context.Context, err error) *CodeErrorResponse {
+	traceID := trace.TraceIDFromContext(ctx)
 	if err == nil {
 		return &CodeErrorResponse{
 			ErrorCode: defaultErrorCode,
 			Message:   "err is nil",
+			traceId:   traceID,
 		}
 	}
 	gs, ok := status.FromError(err)
@@ -132,12 +137,13 @@ func FromError(err error) *CodeErrorResponse {
 					return Default()
 				}
 				message, _ := metadata["message"]
-				return New(int(errorCode), message)
+				return New(int(errorCode), message, traceID)
 			}
 		}
 	}
 	return &CodeErrorResponse{
 		ErrorCode: defaultErrorCode,
 		Message:   err.Error(),
+		traceId:   traceID,
 	}
 }
