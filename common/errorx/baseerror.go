@@ -24,13 +24,21 @@ type CodeError struct {
 type CodeErrorResponse struct {
 	ErrorCode int    `json:"errorCode"`
 	Message   string `json:"message"`
-	traceId   string `json:"traceId"`
+	TraceId   string `json:"traceId"`
 }
 
 func New(errCode int, message string, traceId string) *CodeErrorResponse {
 	return &CodeErrorResponse{
 		ErrorCode: errCode,
 		Message:   message,
+	}
+}
+
+func DefaultT(traceId string) *CodeErrorResponse {
+	return &CodeErrorResponse{
+		ErrorCode: defaultErrorCode,
+		Message:   "未知错误",
+		TraceId:   traceId,
 	}
 }
 
@@ -122,7 +130,7 @@ func FromError(ctx context.Context, err error) *CodeErrorResponse {
 		return &CodeErrorResponse{
 			ErrorCode: defaultErrorCode,
 			Message:   "err is nil",
-			traceId:   traceID,
+			TraceId:   traceID,
 		}
 	}
 	gs, ok := status.FromError(err)
@@ -134,7 +142,7 @@ func FromError(ctx context.Context, err error) *CodeErrorResponse {
 				ec, _ := metadata["errorCode"]
 				errorCode, e := strconv.ParseInt(ec, 10, 32)
 				if e != nil {
-					return Default()
+					return DefaultT(traceID)
 				}
 				message, _ := metadata["message"]
 				return New(int(errorCode), message, traceID)
@@ -144,6 +152,6 @@ func FromError(ctx context.Context, err error) *CodeErrorResponse {
 	return &CodeErrorResponse{
 		ErrorCode: defaultErrorCode,
 		Message:   err.Error(),
-		traceId:   traceID,
+		TraceId:   traceID,
 	}
 }
