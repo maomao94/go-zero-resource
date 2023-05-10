@@ -31,6 +31,7 @@ func New(code int, message string, traceId string) *CodeErrorResponse {
 	return &CodeErrorResponse{
 		Code:    code,
 		Message: message,
+		TraceId: traceId,
 	}
 }
 
