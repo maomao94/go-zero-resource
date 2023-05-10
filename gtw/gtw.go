@@ -36,9 +36,9 @@ func main() {
 			GRPCStatus() *status.Status
 		}):
 			code := errorx.CodeFromGrpcError(err)
-			return code, errorx.FromError(err)
+			return code, errorx.FromError(ctx, err)
 		default:
-			return http.StatusBadRequest, errorx.FromError(err)
+			return http.StatusBadRequest, errorx.FromError(ctx, err)
 		}
 	})
 
