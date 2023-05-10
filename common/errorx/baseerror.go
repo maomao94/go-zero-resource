@@ -14,49 +14,49 @@ import (
 	"strconv"
 )
 
-const defaultErrorCode = 999
+const defaultCode = 999
 
 type CodeError struct {
-	ErrorCode int    `json:"errorCode"`
-	Message   string `json:"message"`
+	Code    int    `json:"Code"`
+	Message string `json:"message"`
 }
 
 type CodeErrorResponse struct {
-	ErrorCode int    `json:"errorCode"`
-	Message   string `json:"message"`
-	TraceId   string `json:"traceId"`
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	TraceId string `json:"traceId"`
 }
 
-func New(errCode int, message string, traceId string) *CodeErrorResponse {
+func New(code int, message string, traceId string) *CodeErrorResponse {
 	return &CodeErrorResponse{
-		ErrorCode: errCode,
-		Message:   message,
+		Code:    code,
+		Message: message,
 	}
 }
 
 func DefaultT(traceId string) *CodeErrorResponse {
 	return &CodeErrorResponse{
-		ErrorCode: defaultErrorCode,
-		Message:   "未知错误",
-		TraceId:   traceId,
+		Code:    defaultCode,
+		Message: "未知错误",
+		TraceId: traceId,
 	}
 }
 
 func Default() *CodeErrorResponse {
 	return &CodeErrorResponse{
-		ErrorCode: defaultErrorCode,
-		Message:   "未知错误",
+		Code:    defaultCode,
+		Message: "未知错误",
 	}
 }
 
-func NewCodeError(errorCode int, msg string) error {
-	return &CodeError{ErrorCode: errorCode, Message: msg}
+func NewCodeError(code int, msg string) error {
+	return &CodeError{Code: code, Message: msg}
 }
 
 func NewEnumError(enum protoreflect.Enum) error {
 	eName, _ := proto.GetExtension(proto.MessageV1(enum.Descriptor().Values().ByNumber(enum.Number()).Options()), E_Name)
 	name := fmt.Sprintf("%s", mapping.Repr(eName))
-	return &CodeError{ErrorCode: int(enum.Number()), Message: name}
+	return &CodeError{Code: int(enum.Number()), Message: name}
 }
 
 func NewEnumErrorf(enum protoreflect.Enum, wrap string) error {
@@ -75,8 +75,8 @@ func (e *CodeError) Error() string {
 
 func (e *CodeError) Data() *CodeErrorResponse {
 	return &CodeErrorResponse{
-		ErrorCode: e.ErrorCode,
-		Message:   e.Message,
+		Code:    e.Code,
+		Message: e.Message,
 	}
 }
 
@@ -128,9 +128,9 @@ func FromError(ctx context.Context, err error) *CodeErrorResponse {
 	traceID := trace.TraceIDFromContext(ctx)
 	if err == nil {
 		return &CodeErrorResponse{
-			ErrorCode: defaultErrorCode,
-			Message:   "err is nil",
-			TraceId:   traceID,
+			Code:    defaultCode,
+			Message: "err is nil",
+			TraceId: traceID,
 		}
 	}
 	gs, ok := status.FromError(err)
@@ -150,8 +150,8 @@ func FromError(ctx context.Context, err error) *CodeErrorResponse {
 		}
 	}
 	return &CodeErrorResponse{
-		ErrorCode: defaultErrorCode,
-		Message:   err.Error(),
-		TraceId:   traceID,
+		Code:    defaultCode,
+		Message: err.Error(),
+		TraceId: traceID,
 	}
 }
