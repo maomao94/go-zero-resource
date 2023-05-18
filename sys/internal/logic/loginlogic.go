@@ -3,12 +3,14 @@ package logic
 import (
 	"context"
 	"fmt"
+	"github.com/hehanpeng/go-zero-resource/common/ctxdata"
 	"github.com/hehanpeng/go-zero-resource/common/errorx"
 	"github.com/hehanpeng/go-zero-resource/common/tool"
 	"github.com/hehanpeng/go-zero-resource/sys/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/sys/pb"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/mapping"
 	"net/http"
 )
 
@@ -33,7 +35,13 @@ func (l *LoginLogic) Login(in *pb.LoginReq) (*pb.LoginResp, error) {
 	case "system":
 		userId, err = l.loginByMobile(in.AuthKey, in.Password)
 	case "sso":
-		userId, err = l.loginBySso(in.AuthKey, in.Password)
+		data, err := l.loginBySso(in.AuthKey, in.Password)
+		if err != nil {
+			return nil, err
+		}
+		return &pb.LoginResp{
+			AccessToken: data.TokenInfo.TokenValue,
+		}, nil
 	default:
 		return nil, errors.New("AuthType error.")
 	}
@@ -69,14 +77,26 @@ func (l *LoginLogic) loginByMobile(mobile, password string) (int64, error) {
 	return 1, nil
 }
 
-func (l *LoginLogic) loginBySso(mobile, password string) (int64, error) {
-	val := struct {
-		Name string `json:"name"`
-		Pwd  string `json:"pwd"`
-	}{
+func (l *LoginLogic) loginBySso(mobile, password string) (*ctxdata.SsoLoginResp, error) {
+	type Data struct {
+		Name string `form:"name"`
+		Pwd  string `form:"pwd"`
+	}
+	var data = Data{
 		Name: mobile,
 		Pwd:  password,
 	}
-	l.svcCtx.SsoSvc.Do(l.ctx, http.MethodPost, l.svcCtx.Config.SsoUrl.Login, val)
-	return 1, nil
+	resp, err := l.svcCtx.SsoSvc.Do(l.ctx, http.MethodPost, l.svcCtx.Config.SsoUrl.Login, data)
+	if err != nil {
+		return nil, err
+	}
+	var val ctxdata.SsoLoginResp
+	err = mapping.UnmarshalJsonReader(resp.Body, &val)
+	if err != nil {
+		return nil, err
+	}
+	if val.Code != 200 {
+		return nil, errorx.NewEnumErrorf(errorx.Code_ErrLogin, fmt.Sprintf("sso:%s", val.Msg))
+	}
+	return &val, nil
 }
