@@ -27,7 +27,7 @@ func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic 
 
 func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err error) {
 	loginResp, err := l.svcCtx.SysRpc.Login(l.ctx, &pb.LoginReq{
-		AuthType: "system",
+		AuthType: "sso",
 		AuthKey:  req.Mobile,
 		Password: req.Password,
 	})

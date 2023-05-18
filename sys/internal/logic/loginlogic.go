@@ -9,6 +9,7 @@ import (
 	"github.com/hehanpeng/go-zero-resource/sys/pb"
 	"github.com/pkg/errors"
 	"github.com/zeromicro/go-zero/core/logx"
+	"net/http"
 )
 
 type LoginLogic struct {
@@ -31,6 +32,8 @@ func (l *LoginLogic) Login(in *pb.LoginReq) (*pb.LoginResp, error) {
 	switch in.AuthType {
 	case "system":
 		userId, err = l.loginByMobile(in.AuthKey, in.Password)
+	case "sso":
+		userId, err = l.loginBySso(in.AuthKey, in.Password)
 	default:
 		return nil, errors.New("AuthType error.")
 	}
@@ -63,5 +66,17 @@ func (l *LoginLogic) loginByMobile(mobile, password string) (int64, error) {
 	if !(tool.Md5ByString(password) == "e10adc3949ba59abbe56e057f20f883e") {
 		return 0, errorx.NewEnumErrorf(errorx.Code_ErrParam, fmt.Sprintf("mobile:%s", mobile))
 	}
+	return 1, nil
+}
+
+func (l *LoginLogic) loginBySso(mobile, password string) (int64, error) {
+	val := struct {
+		Name string `json:"name"`
+		Pwd  string `json:"pwd"`
+	}{
+		Name: mobile,
+		Pwd:  password,
+	}
+	l.svcCtx.SsoSvc.Do(l.ctx, http.MethodPost, l.svcCtx.Config.SsoUrl.Login, val)
 	return 1, nil
 }
