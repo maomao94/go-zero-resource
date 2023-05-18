@@ -35,13 +35,7 @@ func (l *LoginLogic) Login(in *pb.LoginReq) (*pb.LoginResp, error) {
 	case "system":
 		userId, err = l.loginByMobile(in.AuthKey, in.Password)
 	case "sso":
-		data, err := l.loginBySso(in.AuthKey, in.Password)
-		if err != nil {
-			return nil, err
-		}
-		return &pb.LoginResp{
-			AccessToken: data.TokenInfo.TokenValue,
-		}, nil
+		userId, err = l.loginBySso(in.AuthKey, in.Password)
 	default:
 		return nil, errors.New("AuthType error.")
 	}
@@ -77,7 +71,7 @@ func (l *LoginLogic) loginByMobile(mobile, password string) (int64, error) {
 	return 1, nil
 }
 
-func (l *LoginLogic) loginBySso(mobile, password string) (*ctxdata.SsoLoginResp, error) {
+func (l *LoginLogic) loginBySso(mobile, password string) (int64, error) {
 	type Data struct {
 		Name string `form:"name"`
 		Pwd  string `form:"pwd"`
@@ -88,15 +82,15 @@ func (l *LoginLogic) loginBySso(mobile, password string) (*ctxdata.SsoLoginResp,
 	}
 	resp, err := l.svcCtx.SsoSvc.Do(l.ctx, http.MethodPost, l.svcCtx.Config.SsoUrl.Login, data)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 	var val ctxdata.SsoLoginResp
 	err = mapping.UnmarshalJsonReader(resp.Body, &val)
 	if err != nil {
-		return nil, err
+		return 0, err
 	}
 	if val.Code != 200 {
-		return nil, errorx.NewEnumErrorf(errorx.Code_ErrLogin, fmt.Sprintf("sso:%s", val.Msg))
+		return 0, errorx.NewEnumErrorf(errorx.Code_ErrLogin, fmt.Sprintf("sso:%s", val.Msg))
 	}
-	return &val, nil
+	return int64(val.UserId), nil
 }
