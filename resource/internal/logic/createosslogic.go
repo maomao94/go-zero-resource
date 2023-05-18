@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/hehanpeng/go-zero-resource/common/ctxdata"
 	"github.com/hehanpeng/go-zero-resource/model"
 	"github.com/hehanpeng/go-zero-resource/resource/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/resource/pb"
@@ -24,7 +25,9 @@ func NewCreateOssLogic(ctx context.Context, svcCtx *svc.ServiceContext) *CreateO
 }
 
 func (l *CreateOssLogic) CreateOss(in *pb.CreateOssReq) (*pb.Empty, error) {
+	userId := ctxdata.GetUserIdFromMetadata(l.ctx)
 	_, err := l.svcCtx.TOssModel.Insert(l.ctx, &model.TOss{
+		CreateUser: userId,
 		TenantId:   in.TenantId,
 		Category:   in.Category,
 		OssCode:    in.OssCode,

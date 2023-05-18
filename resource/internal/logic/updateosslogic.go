@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"github.com/hehanpeng/go-zero-resource/common/ctxdata"
 	"github.com/hehanpeng/go-zero-resource/model"
 
 	"github.com/hehanpeng/go-zero-resource/resource/internal/svc"
@@ -25,7 +26,9 @@ func NewUpdateOssLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UpdateO
 }
 
 func (l *UpdateOssLogic) UpdateOss(in *pb.UpdateOssReq) (*pb.Empty, error) {
+	userId := ctxdata.GetUserIdFromMetadata(l.ctx)
 	err := l.svcCtx.TOssModel.Update(l.ctx, &model.TOss{
+		UpdateUser: userId,
 		Id:         in.Id,
 		TenantId:   in.TenantId,
 		Category:   in.Category,
