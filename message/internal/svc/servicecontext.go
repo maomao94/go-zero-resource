@@ -95,12 +95,9 @@ func (p *PubContainer) getConn4UniqueCfg(c zrpc.RpcClientConf) error {
 	for _, val := range c.Endpoints {
 		endpoints := make([]string, 1)
 		endpoints[0] = val
-		RpcClientConf := zrpc.RpcClientConf{
-			Endpoints: endpoints,
-			Timeout:   3000,
-		}
+		c.Endpoints = endpoints
 		mGtwRpc := mgtw.NewMgtw(zrpc.MustNewClient(
-			RpcClientConf, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor)))
+			c, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor)))
 		allPub = append(allPub, mGtwRpc)
 	}
 	p.MGtwRpcList = allPub
