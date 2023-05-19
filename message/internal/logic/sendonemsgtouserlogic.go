@@ -28,7 +28,7 @@ func NewSendOneMsgToUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 
 func (l *SendOneMsgToUserLogic) SendOneMsgToUser(in *pb.SendOneMsgToUserReq) (*pb.SendOneMsgToUserResp, error) {
 	seq := time.Now().UnixNano()
-	pub := l.svcCtx.PubContainer.MGtwRpcList
+	pub := l.svcCtx.PubContainer.PubMap
 	if len(pub) > 0 {
 		l.Logger.Infof("len(pub)=%d", len(pub))
 		for _, v := range pub {

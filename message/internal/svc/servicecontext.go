@@ -13,17 +13,6 @@ import (
 )
 
 const (
-	// DirectScheme stands for direct scheme.
-	DirectScheme = "direct"
-	// DiscovScheme stands for discov scheme.
-	DiscovScheme = "discov"
-	// EtcdScheme stands for etcd scheme.
-	EtcdScheme = "etcd"
-	// KubernetesScheme stands for k8s scheme.
-	KubernetesScheme = "k8s"
-	// EndpointSepChar is the separator cha in endpoints.
-	EndpointSepChar = ','
-
 	subsetSize = 32
 )
 
@@ -50,57 +39,82 @@ func NewServiceContext(c config.Config) *ServiceContext {
 }
 
 type PubContainer struct {
-	MGtwRpcList []mgtw.Mgtw
+	PubMap map[string]mgtw.Mgtw
+	lock   sync.Mutex
 }
 
 func NewEtcdPubContainer(c zrpc.RpcClientConf) *PubContainer {
 	p := &PubContainer{}
 	if len(c.Endpoints) != 0 {
-		err := p.getConn4UniqueCfg(c)
+		err := p.getConn4Direct(c)
 		if err != nil {
 			log.Fatal(err.Error())
 		}
 	}
-	err := p.getConn4UniqueEtcd(c)
+	err := p.getConn4Etcd(c)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 	return p
 }
 
-func (p *PubContainer) getConn4UniqueEtcd(c zrpc.RpcClientConf) error {
+func (p *PubContainer) getConn4Etcd(c zrpc.RpcClientConf) error {
 	sub, err := discov.NewSubscriber(c.Etcd.Hosts, c.Etcd.Key)
 	if err != nil {
 		return err
 	}
+	p.lock.Lock()
 	update := func() {
-		updatePub := make([]mgtw.Mgtw, 0)
+		var add []string
+		var remove []string
+		p.lock.Lock()
+		m := make(map[string]any)
 		for _, val := range subset(sub.Values(), subsetSize) {
+			m[val] = true
+		}
+		for k, _ := range p.PubMap {
+			if _, ok := m[k]; !ok {
+				remove = append(remove, k)
+			}
+		}
+		for k, _ := range m {
+			if _, ok := p.PubMap[k]; !ok {
+				add = append(add, k)
+			}
+		}
+		for _, val := range add {
 			endpoints := make([]string, 1)
 			endpoints[0] = val
 			c.Endpoints = endpoints
 			mGtwRpc := mgtw.NewMgtw(zrpc.MustNewClient(
 				c, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor)))
-			updatePub = append(updatePub, mGtwRpc)
+			p.PubMap[val] = mGtwRpc
 		}
-		p.MGtwRpcList = updatePub
+		for _, val := range remove {
+			delete(p.PubMap, val)
+		}
+		p.lock.Unlock()
 	}
 	sub.AddListener(update)
 	update()
+	p.lock.Unlock()
 	return nil
 }
 
-func (p *PubContainer) getConn4UniqueCfg(c zrpc.RpcClientConf) error {
-	pub := make([]mgtw.Mgtw, 0)
+func (p *PubContainer) getConn4Direct(c zrpc.RpcClientConf) error {
+	p.lock.Lock()
 	for _, val := range c.Endpoints {
+		if _, ok := p.PubMap[val]; ok {
+			continue
+		}
 		endpoints := make([]string, 1)
 		endpoints[0] = val
 		c.Endpoints = endpoints
 		mGtwRpc := mgtw.NewMgtw(zrpc.MustNewClient(
 			c, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor)))
-		pub = append(pub, mGtwRpc)
+		p.PubMap[val] = mGtwRpc
 	}
-	p.MGtwRpcList = pub
+	p.lock.Unlock()
 	return nil
 }
 

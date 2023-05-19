@@ -25,7 +25,7 @@ ResourceRpcConf:
 MessageRpcConf:
 #  Endpoints:
 #    - 127.0.0.1:1004
-#  NonBlock: true
+  NonBlock: true
   Timeout: 3000
   Etcd:
     Hosts:
