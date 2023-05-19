@@ -14,6 +14,11 @@ type (
     KqSendReq {
         Msg string `json:"msg"` // 消息
     }
+
+    PushOneMsgToUserReq {
+        UserId string `json:"userId"` // 用户id
+        Msg string `json:"msg"` // 消息
+    }
 )
 
 @server(
@@ -24,4 +29,8 @@ service gtw {
     @doc "发送kafka消息"
     @handler kqSend
     post /kq/send (KqSendReq) returns (EmptyReply)
+
+    @doc "发送单条用户消息"
+    @handler pushOneMsgToUser
+    post /pushOneMsgToUser (PushOneMsgToUserReq) returns (EmptyReply)
 }
