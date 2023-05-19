@@ -72,7 +72,7 @@ func (manager *ClientManager) start() {
 // 用户建立连接事件
 func (manager *ClientManager) EventRegister(client *Client) {
 	manager.AddClients(client)
-	logx.Info("EventRegister 用户建立连接", client.Addr)
+	logx.WithContext(client.Ctx).Info("EventRegister 用户建立连接", client.Addr)
 }
 
 // 添加客户端
