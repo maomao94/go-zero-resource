@@ -1,5 +1,5 @@
 Name: mgtw.rpc
-ListenOn: 0.0.0.0:1005
+ListenOn: 0.0.0.0:1007
 Etcd:
   Hosts:
   - 127.0.0.1:2379
@@ -10,3 +10,16 @@ Telemetry:
   Endpoint: http://127.0.0.1:14268/api/traces
   #  Sampler: 1.0
   Batcher: jaeger
+RestConfig:
+  Name: mgtw
+  Host: 0.0.0.0
+  Port: 21007
+  Timeout: 4000
+  MaxBytes: 1073741824
+  #链路追踪
+  Telemetry:
+    Name: mgtw
+    Endpoint: http://127.0.0.1:14268/api/traces
+    #  Sampler: 1.0
+    Batcher: jaeger
+
