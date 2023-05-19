@@ -44,7 +44,9 @@ type PubContainer struct {
 }
 
 func NewEtcdPubContainer(c zrpc.RpcClientConf) *PubContainer {
-	p := &PubContainer{}
+	p := &PubContainer{
+		PubMap: make(map[string]mgtw.Mgtw),
+	}
 	if len(c.Endpoints) != 0 {
 		err := p.getConn4Direct(c)
 		if err != nil {
@@ -63,7 +65,6 @@ func (p *PubContainer) getConn4Etcd(c zrpc.RpcClientConf) error {
 	if err != nil {
 		return err
 	}
-	p.lock.Lock()
 	update := func() {
 		var add []string
 		var remove []string
@@ -86,9 +87,9 @@ func (p *PubContainer) getConn4Etcd(c zrpc.RpcClientConf) error {
 			endpoints := make([]string, 1)
 			endpoints[0] = val
 			c.Endpoints = endpoints
-			mGtwRpc := mgtw.NewMgtw(zrpc.MustNewClient(
+			pub := mgtw.NewMgtw(zrpc.MustNewClient(
 				c, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor)))
-			p.PubMap[val] = mGtwRpc
+			p.PubMap[val] = pub
 		}
 		for _, val := range remove {
 			delete(p.PubMap, val)
@@ -97,7 +98,6 @@ func (p *PubContainer) getConn4Etcd(c zrpc.RpcClientConf) error {
 	}
 	sub.AddListener(update)
 	update()
-	p.lock.Unlock()
 	return nil
 }
 
@@ -110,9 +110,9 @@ func (p *PubContainer) getConn4Direct(c zrpc.RpcClientConf) error {
 		endpoints := make([]string, 1)
 		endpoints[0] = val
 		c.Endpoints = endpoints
-		mGtwRpc := mgtw.NewMgtw(zrpc.MustNewClient(
+		pub := mgtw.NewMgtw(zrpc.MustNewClient(
 			c, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor)))
-		p.PubMap[val] = mGtwRpc
+		p.PubMap[val] = pub
 	}
 	p.lock.Unlock()
 	return nil
