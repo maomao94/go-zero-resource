@@ -30,7 +30,7 @@ func (l *SendOneMsgToUserLogic) SendOneMsgToUser(in *pb.SendOneMsgToUserReq) (*p
 	seq := time.Now().UnixNano()
 	pub := l.svcCtx.PubContainer.MGtwRpcList
 	if len(pub) > 0 {
-		logx.Infof("len(pub)=%d", len(pub))
+		l.Logger.Infof("len(pub)=%d", len(pub))
 		for _, v := range pub {
 			_, err := v.PushOneWsMsgToUser(l.ctx, &pb2.PushOneMsgToUserReq{
 				Seq: seq,
