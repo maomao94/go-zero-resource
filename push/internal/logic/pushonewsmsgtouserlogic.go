@@ -24,7 +24,6 @@ func NewPushOneWsMsgToUserLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 }
 
 func (l *PushOneWsMsgToUserLogic) PushOneWsMsgToUser(in *pb.PushOneMsgToUserReq) (*pb.PushOneMsgToUserRes, error) {
-	// todo: add your logic here and delete this line
-
+	l.Logger.Infof("收到消息：fromUserId:%d^toUserId:%d^seq:%d^msg:%s", in.FromUserId, in.ToUserId, in.Seq, in.Msg)
 	return &pb.PushOneMsgToUserRes{}, nil
 }
