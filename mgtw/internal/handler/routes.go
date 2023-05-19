@@ -12,8 +12,8 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodGet,
-				Path:    "/wss",
-				Handler: wss.WssHandler(serverCtx),
+				Path:    "/webSocket",
+				Handler: wss.WsHandler(serverCtx),
 			},
 		},
 	)

@@ -9,7 +9,7 @@ import (
 	"net/http"
 )
 
-func WssHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+func WsHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		// 升级协议
 		conn, err := (&websocket.Upgrader{CheckOrigin: func(r *http.Request) bool {
