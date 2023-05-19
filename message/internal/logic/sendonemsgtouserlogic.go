@@ -23,8 +23,8 @@ func NewSendOneMsgToUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *SendOneMsgToUserLogic) SendOneMsgToUser(in *pb.SendOneMsgToUserReq) (*pb.SendOneMsgToUserRes, error) {
+func (l *SendOneMsgToUserLogic) SendOneMsgToUser(in *pb.SendOneMsgToUserReq) (*pb.SendOneMsgToUserResp, error) {
 	// todo: add your logic here and delete this line
 
-	return &pb.SendOneMsgToUserRes{}, nil
+	return &pb.SendOneMsgToUserResp{}, nil
 }
