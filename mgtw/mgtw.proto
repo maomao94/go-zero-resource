@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package push;
+package mgtw;
 option go_package = "./pb";
 
 message Empty {}
@@ -19,7 +19,7 @@ message PushOneMsgToUserReq{
 message PushOneMsgToUserRes{
 }
 
-service push {
+service mgtw {
   rpc ping (Empty) returns (PingResp);
   rpc pushOneWsMsgToUser (PushOneMsgToUserReq) returns (PushOneMsgToUserRes);
 }

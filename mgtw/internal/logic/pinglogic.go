@@ -3,8 +3,8 @@ package logic
 import (
 	"context"
 
-	"github.com/hehanpeng/go-zero-resource/push/internal/svc"
-	"github.com/hehanpeng/go-zero-resource/push/pb"
+	"github.com/hehanpeng/go-zero-resource/mgtw/internal/svc"
+	"github.com/hehanpeng/go-zero-resource/mgtw/pb"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -24,5 +24,7 @@ func NewPingLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PingLogic {
 }
 
 func (l *PingLogic) Ping(in *pb.Empty) (*pb.PingResp, error) {
-	return &pb.PingResp{Msg: "hello"}, nil
+	// todo: add your logic here and delete this line
+
+	return &pb.PingResp{}, nil
 }

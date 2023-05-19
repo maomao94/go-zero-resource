@@ -1,6 +1,6 @@
 package svc
 
-import "github.com/hehanpeng/go-zero-resource/push/internal/config"
+import "github.com/hehanpeng/go-zero-resource/mgtw/internal/config"
 
 type ServiceContext struct {
 	Config config.Config
