@@ -108,6 +108,6 @@ func (manager *ClientManager) ClientsRange(f func(client *Client, value bool) (r
 	return
 }
 
-func (manager *ClientManager) EventUnregister(conn *Client) {
+func (manager *ClientManager) EventUnregister(client *Client) {
 
 }
