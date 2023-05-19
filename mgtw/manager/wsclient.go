@@ -92,7 +92,7 @@ func (c *Client) Write(ctx context.Context, svcCtx *svc.ServiceContext) {
 		}
 	}()
 	defer func() {
-		svc.ClientManager.Unregister <- c
+		svcCtx.ClientManager.Unregister <- c
 		c.Socket.Close()
 		logx.WithContext(ctx).Info("Client发送数据 defer", c)
 	}()
