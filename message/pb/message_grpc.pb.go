@@ -37,7 +37,7 @@ func NewMessageClient(cc grpc.ClientConnInterface) MessageClient {
 
 func (c *messageClient) Ping(ctx context.Context, in *Empty, opts ...grpc.CallOption) (*PingResp, error) {
 	out := new(PingResp)
-	err := c.cc.Invoke(ctx, "/mq.message/ping", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/message.message/ping", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *messageClient) Ping(ctx context.Context, in *Empty, opts ...grpc.CallOp
 
 func (c *messageClient) KqSend(ctx context.Context, in *KqSendReq, opts ...grpc.CallOption) (*Empty, error) {
 	out := new(Empty)
-	err := c.cc.Invoke(ctx, "/mq.message/kqSend", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/message.message/kqSend", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +55,7 @@ func (c *messageClient) KqSend(ctx context.Context, in *KqSendReq, opts ...grpc.
 
 func (c *messageClient) SendOneMsgToUser(ctx context.Context, in *SendOneMsgToUserReq, opts ...grpc.CallOption) (*SendOneMsgToUserResp, error) {
 	out := new(SendOneMsgToUserResp)
-	err := c.cc.Invoke(ctx, "/mq.message/SendOneMsgToUser", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/message.message/SendOneMsgToUser", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -108,7 +108,7 @@ func _Message_Ping_Handler(srv interface{}, ctx context.Context, dec func(interf
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/mq.message/ping",
+		FullMethod: "/message.message/ping",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MessageServer).Ping(ctx, req.(*Empty))
@@ -126,7 +126,7 @@ func _Message_KqSend_Handler(srv interface{}, ctx context.Context, dec func(inte
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/mq.message/kqSend",
+		FullMethod: "/message.message/kqSend",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MessageServer).KqSend(ctx, req.(*KqSendReq))
@@ -144,7 +144,7 @@ func _Message_SendOneMsgToUser_Handler(srv interface{}, ctx context.Context, dec
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/mq.message/SendOneMsgToUser",
+		FullMethod: "/message.message/SendOneMsgToUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MessageServer).SendOneMsgToUser(ctx, req.(*SendOneMsgToUserReq))
@@ -156,7 +156,7 @@ func _Message_SendOneMsgToUser_Handler(srv interface{}, ctx context.Context, dec
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Message_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "mq.message",
+	ServiceName: "message.message",
 	HandlerType: (*MessageServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
