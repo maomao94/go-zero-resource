@@ -105,7 +105,6 @@ func (c *Client) Write(ctx context.Context, svcCtx *ServiceContext) {
 		c.Socket.Close()
 		logx.WithContext(ctx).Info("Client发送数据 defer", c)
 	}()
-
 	for {
 		select {
 		case message, ok := <-c.Send:

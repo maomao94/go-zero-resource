@@ -72,7 +72,7 @@ func (manager *ClientManager) start() {
 // 用户建立连接事件
 func (manager *ClientManager) EventRegister(client *Client) {
 	manager.AddClients(client)
-	logx.WithContext(client.Ctx).Info("EventRegister 用户建立连接", client.Addr)
+	logx.WithContext(client.Ctx).Infof("EventRegister addr:%s", client.Addr)
 }
 
 // 添加客户端
@@ -89,7 +89,7 @@ func (manager *ClientManager) EventLogin(l *login) {
 		userKey := l.GetKey()
 		manager.AddUsers(userKey, l.Client)
 	}
-	logx.WithContext(client.Ctx).Info("EventLogin 用户登录", client.Addr, l.AppId, l.UserId)
+	logx.WithContext(client.Ctx).Infof("EventLogin addr:%s^appId:%d^userId:%s", client.Addr, l.AppId, l.UserId)
 }
 
 func (manager *ClientManager) EventUnregister(client *Client) {
