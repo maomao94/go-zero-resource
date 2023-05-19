@@ -3,7 +3,6 @@ package wss
 import (
 	"github.com/gorilla/websocket"
 	"github.com/hehanpeng/go-zero-resource/mgtw/internal/svc"
-	mannager "github.com/hehanpeng/go-zero-resource/mgtw/manager"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest/httpx"
 	"net/http"
@@ -22,7 +21,7 @@ func WsHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		}
 		logx.WithContext(r.Context()).Info("webSocket 建立连接:", conn.RemoteAddr().String())
 		currentTime := uint64(time.Now().Unix())
-		client := mannager.NewClientCtx(r.Context(), conn.RemoteAddr().String(), conn, currentTime)
+		client := svc.NewClientCtx(r.Context(), conn.RemoteAddr().String(), conn, currentTime)
 		go client.Read(r.Context(), svcCtx)
 		go client.Write(r.Context(), svcCtx)
 		svcCtx.ClientManager.Register <- client

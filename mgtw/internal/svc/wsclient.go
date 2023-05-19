@@ -1,8 +1,7 @@
-package manager
+package svc
 
 import (
 	"fmt"
-	"github.com/hehanpeng/go-zero-resource/mgtw/internal/svc"
 	"github.com/zeromicro/go-zero/core/logx"
 	"golang.org/x/net/context"
 	"runtime/debug"
@@ -61,7 +60,7 @@ func (c *Client) GetKey() (key string) {
 }
 
 // 读取客户端数据
-func (c *Client) Read(ctx context.Context, svcCtx *svc.ServiceContext) {
+func (c *Client) Read(ctx context.Context, svcCtx *ServiceContext) {
 	defer func() {
 		if r := recover(); r != nil {
 			fmt.Println("write stop", string(debug.Stack()), r)
@@ -85,7 +84,7 @@ func (c *Client) Read(ctx context.Context, svcCtx *svc.ServiceContext) {
 }
 
 // 向客户端写数据
-func (c *Client) Write(ctx context.Context, svcCtx *svc.ServiceContext) {
+func (c *Client) Write(ctx context.Context, svcCtx *ServiceContext) {
 	defer func() {
 		if r := recover(); r != nil {
 			logx.WithContext(ctx).Info("write stop", string(debug.Stack()), r)
