@@ -73,17 +73,17 @@ func (p *PubContainer) getConn4UniqueEtcd(c zrpc.RpcClientConf) error {
 	if err != nil {
 		return err
 	}
-	allPub := make([]mgtw.Mgtw, 0)
 	update := func() {
+		updatePub := make([]mgtw.Mgtw, 0)
 		for _, val := range subset(sub.Values(), subsetSize) {
 			endpoints := make([]string, 1)
 			endpoints[0] = val
 			c.Endpoints = endpoints
 			mGtwRpc := mgtw.NewMgtw(zrpc.MustNewClient(
 				c, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor)))
-			allPub = append(allPub, mGtwRpc)
+			updatePub = append(updatePub, mGtwRpc)
 		}
-		p.MGtwRpcList = allPub
+		p.MGtwRpcList = updatePub
 	}
 	sub.AddListener(update)
 	update()
@@ -91,16 +91,16 @@ func (p *PubContainer) getConn4UniqueEtcd(c zrpc.RpcClientConf) error {
 }
 
 func (p *PubContainer) getConn4UniqueCfg(c zrpc.RpcClientConf) error {
-	allPub := make([]mgtw.Mgtw, 0)
+	pub := make([]mgtw.Mgtw, 0)
 	for _, val := range c.Endpoints {
 		endpoints := make([]string, 1)
 		endpoints[0] = val
 		c.Endpoints = endpoints
 		mGtwRpc := mgtw.NewMgtw(zrpc.MustNewClient(
 			c, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor)))
-		allPub = append(allPub, mGtwRpc)
+		pub = append(pub, mGtwRpc)
 	}
-	p.MGtwRpcList = allPub
+	p.MGtwRpcList = pub
 	return nil
 }
 
