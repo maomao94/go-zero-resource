@@ -49,22 +49,22 @@ func (manager *ClientManager) start() {
 		case conn := <-manager.Register:
 			// 建立连接事件
 			manager.EventRegister(conn)
-			//case login := <-manager.Login:
-			//	// 用户登录
-			//	//manager.EventLogin(login)
-			//case conn := <-manager.Unregister:
-			//	// 断开连接事件
-			//	//manager.EventUnregister(conn)
-			//case message := <-manager.Broadcast:
-			//	// 广播事件
-			//	clients := manager.GetClients()
-			//	for conn := range clients {
-			//		select {
-			//		case conn.Send <- message:
-			//		default:
-			//			close(conn.Send)
-			//		}
-			//	}
+		case login := <-manager.Login:
+			// 用户登录
+			manager.EventLogin(login)
+		case conn := <-manager.Unregister:
+			// 断开连接事件
+			manager.EventUnregister(conn)
+		case message := <-manager.Broadcast:
+			// 广播事件
+			clients := manager.GetClients()
+			for conn := range clients {
+				select {
+				case conn.Send <- message:
+				default:
+					close(conn.Send)
+				}
+			}
 		}
 	}
 }
@@ -80,4 +80,34 @@ func (manager *ClientManager) AddClients(client *Client) {
 	manager.ClientsLock.Lock()
 	defer manager.ClientsLock.Unlock()
 	manager.Clients[client] = true
+}
+
+func (manager *ClientManager) EventLogin(l *login) {
+
+}
+
+func (manager *ClientManager) GetClients() (clients map[*Client]bool) {
+	clients = make(map[*Client]bool)
+	manager.ClientsRange(func(client *Client, value bool) (result bool) {
+		clients[client] = value
+		return true
+	})
+	return
+}
+
+// 遍历
+func (manager *ClientManager) ClientsRange(f func(client *Client, value bool) (result bool)) {
+	manager.ClientsLock.RLock()
+	defer manager.ClientsLock.RUnlock()
+	for key, value := range manager.Clients {
+		result := f(key, value)
+		if result == false {
+			return
+		}
+	}
+	return
+}
+
+func (manager *ClientManager) EventUnregister(conn *Client) {
+
 }
