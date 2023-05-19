@@ -41,5 +41,5 @@ func main() {
 	serviceGroup.Add(s)
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	fmt.Printf("Starting server at %s:%d...\n", c.RestConfig.Host, c.RestConfig.Port)
-	s.Start()
+	serviceGroup.Start()
 }
