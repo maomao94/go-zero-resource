@@ -6,7 +6,6 @@ import (
 	"github.com/hehanpeng/go-zero-resource/mgtw/mgtw"
 	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/discov"
-	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/zrpc"
 	"log"
 	"math/rand"
@@ -62,14 +61,16 @@ func NewEtcdPubContainer(c zrpc.RpcClientConf) *PubContainer {
 			log.Fatal(err.Error())
 		}
 	}
-	p.getConn4UniqueEtcd(c.Etcd.Hosts, c.Etcd.Key)
+	err := p.getConn4UniqueEtcd(c.Etcd.Hosts, c.Etcd.Key)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
 	return p
 }
 
 func (p *PubContainer) getConn4UniqueEtcd(endpoints []string, key string) error {
 	sub, err := discov.NewSubscriber(endpoints, key)
 	if err != nil {
-		logx.Errorf("getConn4UniqueEtcd %s", err.Error())
 		return err
 	}
 	allPub := make([]mgtw.Mgtw, 0)

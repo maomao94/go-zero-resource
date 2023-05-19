@@ -1,10 +1,10 @@
 Name: message.rpc
 ListenOn: 0.0.0.0:1004
 Mode: dev
-#Etcd:
-#  Hosts:
-#  - 127.0.0.1:2379
-#  Key: message.rpc
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: message.rpc
 #链路追踪
 Telemetry:
   Name: message
@@ -12,10 +12,14 @@ Telemetry:
   #  Sampler: 1.0
   Batcher: jaeger
 MGtwRpcConf:
-  Endpoints:
-    - 127.0.0.1:1005
-  NonBlock: true
-  Timeout: 3000
+#  Endpoints:
+#    - 127.0.0.1:1005
+#  NonBlock: true
+#  Timeout: 3000
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: mgtw.rpc
 Kafka:
   Name: kafkaTest
   Brokers:
