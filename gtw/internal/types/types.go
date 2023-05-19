@@ -44,8 +44,8 @@ type KqSendReq struct {
 }
 
 type SendOneMsgToUserReq struct {
-	FromUserId int64  `json:"fromUserId"` // 发送者id
-	ToUserId   int64  `json:"toUserId"`   // 接收者id
+	FromUserId string `json:"fromUserId"` // 发送者id
+	ToUserId   string `json:"toUserId"`   // 接收者id
 	Msg        string `json:"msg"`        // 消息
 }
 

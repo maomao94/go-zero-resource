@@ -3,6 +3,7 @@ package message
 import (
 	"context"
 	"github.com/hehanpeng/go-zero-resource/message/pb"
+	"strconv"
 
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
@@ -25,9 +26,17 @@ func NewSendOneMsgToUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 }
 
 func (l *SendOneMsgToUserLogic) SendOneMsgToUser(req *types.SendOneMsgToUserReq) (resp *types.SendOneMsgToUserRes, err error) {
+	fromUserId, err := strconv.ParseInt(req.FromUserId, 10, 64)
+	if err != nil {
+		return nil, err
+	}
+	toUserId, err := strconv.ParseInt(req.ToUserId, 10, 64)
+	if err != nil {
+		return nil, err
+	}
 	sendOneMsgToUserResp, err := l.svcCtx.MessageRpc.SendOneMsgToUser(l.ctx, &pb.SendOneMsgToUserReq{
-		FromUserId: req.FromUserId,
-		ToUerId:    req.ToUserId,
+		FromUserId: fromUserId,
+		ToUerId:    toUserId,
 		Msg:        req.Msg,
 	})
 	if err != nil {
