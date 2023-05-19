@@ -56,20 +56,20 @@ type PubContainer struct {
 func NewEtcdPubContainer(c zrpc.RpcClientConf) *PubContainer {
 	p := &PubContainer{}
 	if len(c.Endpoints) != 0 {
-		err := p.getConn4UniqueCfg(c.Endpoints)
+		err := p.getConn4UniqueCfg(c)
 		if err != nil {
 			log.Fatal(err.Error())
 		}
 	}
-	err := p.getConn4UniqueEtcd(c.Etcd.Hosts, c.Etcd.Key)
+	err := p.getConn4UniqueEtcd(c)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
 	return p
 }
 
-func (p *PubContainer) getConn4UniqueEtcd(endpoints []string, key string) error {
-	sub, err := discov.NewSubscriber(endpoints, key)
+func (p *PubContainer) getConn4UniqueEtcd(c zrpc.RpcClientConf) error {
+	sub, err := discov.NewSubscriber(c.Etcd.Hosts, c.Etcd.Key)
 	if err != nil {
 		return err
 	}
@@ -78,12 +78,9 @@ func (p *PubContainer) getConn4UniqueEtcd(endpoints []string, key string) error 
 		for _, val := range subset(sub.Values(), subsetSize) {
 			endpoints := make([]string, 1)
 			endpoints[0] = val
-			RpcClientConf := zrpc.RpcClientConf{
-				Endpoints: endpoints,
-				Timeout:   3000,
-			}
+			c.Endpoints = endpoints
 			mGtwRpc := mgtw.NewMgtw(zrpc.MustNewClient(
-				RpcClientConf, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor)))
+				c, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor)))
 			allPub = append(allPub, mGtwRpc)
 		}
 		p.MGtwRpcList = allPub
@@ -93,9 +90,9 @@ func (p *PubContainer) getConn4UniqueEtcd(endpoints []string, key string) error 
 	return nil
 }
 
-func (p *PubContainer) getConn4UniqueCfg(endpoints []string) error {
+func (p *PubContainer) getConn4UniqueCfg(c zrpc.RpcClientConf) error {
 	allPub := make([]mgtw.Mgtw, 0)
-	for _, val := range endpoints {
+	for _, val := range c.Endpoints {
 		endpoints := make([]string, 1)
 		endpoints[0] = val
 		RpcClientConf := zrpc.RpcClientConf{
