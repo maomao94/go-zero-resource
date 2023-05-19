@@ -9,21 +9,21 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type PushOneMsgToUserLogic struct {
+type PushOneWsMsgToUserLogic struct {
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 	logx.Logger
 }
 
-func NewPushOneMsgToUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PushOneMsgToUserLogic {
-	return &PushOneMsgToUserLogic{
+func NewPushOneWsMsgToUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *PushOneWsMsgToUserLogic {
+	return &PushOneWsMsgToUserLogic{
 		ctx:    ctx,
 		svcCtx: svcCtx,
 		Logger: logx.WithContext(ctx),
 	}
 }
 
-func (l *PushOneMsgToUserLogic) PushOneMsgToUser(in *pb.PushOneMsgToUserReq) (*pb.PushOneMsgToUserRes, error) {
+func (l *PushOneWsMsgToUserLogic) PushOneWsMsgToUser(in *pb.PushOneMsgToUserReq) (*pb.PushOneMsgToUserRes, error) {
 	// todo: add your logic here and delete this line
 
 	return &pb.PushOneMsgToUserRes{}, nil
