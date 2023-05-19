@@ -15,7 +15,7 @@ MGtwRpcConf:
 #  Endpoints:
 #    - 127.0.0.1:1005
 #  NonBlock: true
-#  Timeout: 3000
+  Timeout: 3000
   Etcd:
     Hosts:
       - 127.0.0.1:2379

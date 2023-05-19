@@ -23,9 +23,13 @@ ResourceRpcConf:
   NonBlock: true
   Timeout: 3000
 MessageRpcConf:
-  Endpoints:
-    - 127.0.0.1:1004
-  NonBlock: true
+#  Endpoints:
+#    - 127.0.0.1:1004
+#  NonBlock: true
   Timeout: 3000
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: message.rpc
 NfsRootPath: /opt/nfs/data
 DownloadUrl: http://127.0.0.1:1001/gtw/resource/v1/mfs/downloadFile?path=
