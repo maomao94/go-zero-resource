@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"time"
 
 	"github.com/hehanpeng/go-zero-resource/message/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/message/pb"
@@ -24,7 +25,6 @@ func NewSendOneMsgToUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 }
 
 func (l *SendOneMsgToUserLogic) SendOneMsgToUser(in *pb.SendOneMsgToUserReq) (*pb.SendOneMsgToUserResp, error) {
-	// todo: add your logic here and delete this line
-
-	return &pb.SendOneMsgToUserResp{}, nil
+	seq := time.Now().UnixNano()
+	return &pb.SendOneMsgToUserResp{Seq: seq}, nil
 }

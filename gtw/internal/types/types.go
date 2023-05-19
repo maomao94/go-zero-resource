@@ -50,7 +50,7 @@ type SendOneMsgToUserReq struct {
 }
 
 type SendOneMsgToUserRes struct {
-	Seq int64 `json:"seq"` // 消息id
+	Seq string `json:"seq"` // 消息id
 }
 
 type Oss struct {

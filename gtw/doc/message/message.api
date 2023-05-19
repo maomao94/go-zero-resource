@@ -22,7 +22,7 @@ type (
     }
 
     SendOneMsgToUserRes {
-        Seq int64 `json:"seq"` // 消息id
+        Seq string `json:"seq"` // 消息id
     }
 )
 

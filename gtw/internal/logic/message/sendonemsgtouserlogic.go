@@ -2,11 +2,10 @@ package message
 
 import (
 	"context"
-	"github.com/hehanpeng/go-zero-resource/message/pb"
-	"strconv"
-
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
+	"github.com/hehanpeng/go-zero-resource/message/pb"
+	"strconv"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -42,5 +41,5 @@ func (l *SendOneMsgToUserLogic) SendOneMsgToUser(req *types.SendOneMsgToUserReq)
 	if err != nil {
 		return nil, err
 	}
-	return &types.SendOneMsgToUserRes{Seq: sendOneMsgToUserResp.Seq}, nil
+	return &types.SendOneMsgToUserRes{Seq: strconv.FormatInt(sendOneMsgToUserResp.Seq, 10)}, nil
 }
