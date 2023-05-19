@@ -43,6 +43,11 @@ type KqSendReq struct {
 	Msg string `json:"msg"` // 消息
 }
 
+type SendOneMsgToUserReq struct {
+	UserId string `json:"userId"` // 用户id
+	Msg    string `json:"msg"`    // 消息
+}
+
 type Oss struct {
 	Id             int64  `json:"id,optional"`         // 主键id
 	TenantId       string `json:"tenantId,optional"`   // 租户ID

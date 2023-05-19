@@ -15,7 +15,7 @@ type (
         Msg string `json:"msg"` // 消息
     }
 
-    PushOneMsgToUserReq {
+    SendOneMsgToUserReq {
         UserId string `json:"userId"` // 用户id
         Msg string `json:"msg"` // 消息
     }
@@ -31,6 +31,6 @@ service gtw {
     post /kq/send (KqSendReq) returns (EmptyReply)
 
     @doc "发送单条用户消息"
-    @handler pushOneMsgToUser
-    post /pushOneMsgToUser (PushOneMsgToUserReq) returns (EmptyReply)
+    @handler sendOneMsgToUser
+    post /sendOneMsgToUser (SendOneMsgToUserReq) returns (EmptyReply)
 }

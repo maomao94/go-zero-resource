@@ -48,6 +48,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/kq/send",
 				Handler: message.KqSendHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/sendOneMsgToUser",
+				Handler: message.SendOneMsgToUserHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/gtw/message/v1"),
 	)

@@ -20,5 +20,5 @@ message PushOneMsgToUserRes{
 
 service push {
   rpc ping (Empty) returns (PingResp);
-  rpc pushOneMsgToUser (PushOneMsgToUserReq) returns (PushOneMsgToUserRes);
+  rpc pushOneWsMsgToUser (PushOneMsgToUserReq) returns (PushOneMsgToUserRes);
 }
