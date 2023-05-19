@@ -23,7 +23,13 @@ type login struct {
 
 // GetKey 获取 key
 func (l *login) GetKey() (key string) {
-	//key = GetUserKey(l.AppId, l.UserId)
+	key = GetUserKey(l.AppId, l.UserId)
+	return
+}
+
+// 获取用户key
+func GetUserKey(appId uint32, userId string) (key string) {
+	key = fmt.Sprintf("%d_%s", appId, userId)
 	return
 }
 
@@ -63,23 +69,27 @@ func (c *Client) GetKey() (key string) {
 func (c *Client) Read(ctx context.Context, svcCtx *ServiceContext) {
 	defer func() {
 		if r := recover(); r != nil {
-			fmt.Println("write stop", string(debug.Stack()), r)
+			logx.WithContext(ctx).Info("write stop", string(debug.Stack()), r)
 		}
 	}()
 	defer func() {
-		fmt.Println("读取客户端数据 关闭send", c)
+		logx.WithContext(ctx).Info("读取客户端数据 关闭send", c)
 		close(c.Send)
 	}()
 	for {
 		_, message, err := c.Socket.ReadMessage()
 		if err != nil {
-			fmt.Println("读取客户端数据 错误", c.Addr, err)
-
+			logx.WithContext(ctx).Error("读取客户端数据 错误", c.Addr, err)
 			return
 		}
 		// 处理程序
-		fmt.Println("读取客户端数据 处理:", string(message))
+		logx.WithContext(ctx).Info("读取客户端数据 处理:", string(message))
 		//ProcessData(c, message)
+		svcCtx.ClientManager.Login <- &login{
+			AppId:  111,
+			UserId: "2222",
+			Client: c,
+		}
 	}
 }
 

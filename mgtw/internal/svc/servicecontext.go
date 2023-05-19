@@ -83,7 +83,31 @@ func (manager *ClientManager) AddClients(client *Client) {
 }
 
 func (manager *ClientManager) EventLogin(l *login) {
+	client := l.Client
+	// 连接存在，在添加
+	if manager.InClient(client) {
+		userKey := l.GetKey()
+		manager.AddUsers(userKey, l.Client)
+	}
+	logx.WithContext(client.Ctx).Info("EventLogin 用户登录", client.Addr, l.AppId, l.UserId)
+}
 
+func (manager *ClientManager) EventUnregister(client *Client) {
+
+}
+
+func (manager *ClientManager) InClient(client *Client) (ok bool) {
+	manager.ClientsLock.RLock()
+	defer manager.ClientsLock.RUnlock()
+	// 连接存在，在添加
+	_, ok = manager.Clients[client]
+	return
+}
+
+func (manager *ClientManager) AddUsers(key string, client *Client) {
+	manager.UserLock.Lock()
+	defer manager.UserLock.Unlock()
+	manager.Users[key] = client
 }
 
 func (manager *ClientManager) GetClients() (clients map[*Client]bool) {
@@ -95,7 +119,6 @@ func (manager *ClientManager) GetClients() (clients map[*Client]bool) {
 	return
 }
 
-// 遍历
 func (manager *ClientManager) ClientsRange(f func(client *Client, value bool) (result bool)) {
 	manager.ClientsLock.RLock()
 	defer manager.ClientsLock.RUnlock()
@@ -106,8 +129,4 @@ func (manager *ClientManager) ClientsRange(f func(client *Client, value bool) (r
 		}
 	}
 	return
-}
-
-func (manager *ClientManager) EventUnregister(client *Client) {
-
 }
