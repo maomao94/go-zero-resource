@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/hehanpeng/go-zero-resource/mgtw/internal/config"
+	"github.com/hehanpeng/go-zero-resource/mgtw/internal/handler"
 	"github.com/hehanpeng/go-zero-resource/mgtw/internal/server"
 	"github.com/hehanpeng/go-zero-resource/mgtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/mgtw/pb"
@@ -25,6 +26,7 @@ func main() {
 
 	restServer := rest.MustNewServer(c.RestConfig)
 	ctx := svc.NewServiceContext(c)
+	handler.RegisterHandlers(restServer, ctx)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		pb.RegisterMgtwServer(grpcServer, server.NewMgtwServer(ctx))

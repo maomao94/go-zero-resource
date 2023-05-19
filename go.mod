@@ -8,6 +8,7 @@ require (
 	github.com/golang-module/carbon/v2 v2.2.3
 	github.com/golang/protobuf v1.5.3
 	github.com/google/uuid v1.3.0
+	github.com/gorilla/websocket v1.4.2
 	github.com/jinzhu/copier v0.3.5
 	github.com/minio/minio-go v6.0.14+incompatible
 	github.com/pkg/errors v0.9.1

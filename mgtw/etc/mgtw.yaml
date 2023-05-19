@@ -1,5 +1,5 @@
 Name: mgtw.rpc
-ListenOn: 0.0.0.0:1007
+ListenOn: 0.0.0.0:1005
 Etcd:
   Hosts:
   - 127.0.0.1:2379
@@ -13,7 +13,7 @@ Telemetry:
 RestConfig:
   Name: mgtw
   Host: 0.0.0.0
-  Port: 21007
+  Port: 21005
   Timeout: 4000
   MaxBytes: 1073741824
   #链路追踪
