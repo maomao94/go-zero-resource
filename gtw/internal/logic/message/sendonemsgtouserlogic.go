@@ -2,6 +2,7 @@ package message
 
 import (
 	"context"
+	"github.com/hehanpeng/go-zero-resource/message/pb"
 
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/gtw/internal/types"
@@ -23,8 +24,14 @@ func NewSendOneMsgToUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 	}
 }
 
-func (l *SendOneMsgToUserLogic) SendOneMsgToUser(req *types.SendOneMsgToUserReq) (resp *types.EmptyReply, err error) {
-	// todo: add your logic here and delete this line
-
-	return
+func (l *SendOneMsgToUserLogic) SendOneMsgToUser(req *types.SendOneMsgToUserReq) (resp *types.SendOneMsgToUserRes, err error) {
+	sendOneMsgToUserResp, err := l.svcCtx.MessageRpc.SendOneMsgToUser(l.ctx, &pb.SendOneMsgToUserReq{
+		FromUserId: req.FromUserId,
+		ToUerId:    req.ToUserId,
+		Msg:        req.Msg,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &types.SendOneMsgToUserRes{Seq: sendOneMsgToUserResp.Seq}, nil
 }

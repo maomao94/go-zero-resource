@@ -16,8 +16,13 @@ type (
     }
 
     SendOneMsgToUserReq {
-        UserId string `json:"userId"` // 用户id
-        Msg string `json:"msg"` // 消息
+        FromUserId int64 `json:"fromUserId"` // 发送者id
+        ToUserId int64 `json:"toUserId"`     // 接收者id
+        Msg string `json:"msg"`              // 消息
+    }
+
+    SendOneMsgToUserRes {
+        Seq int64 `json:"seq"` // 消息id
     }
 )
 
@@ -32,5 +37,5 @@ service gtw {
 
     @doc "发送单条用户消息"
     @handler sendOneMsgToUser
-    post /sendOneMsgToUser (SendOneMsgToUserReq) returns (EmptyReply)
+    post /sendOneMsgToUser (SendOneMsgToUserReq) returns (SendOneMsgToUserRes)
 }

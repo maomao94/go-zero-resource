@@ -13,7 +13,18 @@ message KqSendReq{
   string msg = 1;
 }
 
+message SendOneMsgToUserReq{
+  int64 FromUserId = 1;
+  int64 ToUerId  = 2;
+  string msg = 3;
+}
+
+message SendOneMsgToUserResp{
+  int64 seq = 1;
+}
+
 service message {
   rpc ping (Empty) returns (PingResp);
-  rpc KqSend (KqSendReq) returns (Empty);
+  rpc kqSend (KqSendReq) returns (Empty);
+  rpc SendOneMsgToUser(SendOneMsgToUserReq) returns (SendOneMsgToUserResp);
 }
