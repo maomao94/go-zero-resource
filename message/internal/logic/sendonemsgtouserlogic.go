@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"github.com/hehanpeng/go-zero-resource/common/errorx"
+	pb2 "github.com/hehanpeng/go-zero-resource/mgtw/pb"
 	"time"
 
 	"github.com/hehanpeng/go-zero-resource/message/internal/svc"
@@ -26,5 +28,18 @@ func NewSendOneMsgToUserLogic(ctx context.Context, svcCtx *svc.ServiceContext) *
 
 func (l *SendOneMsgToUserLogic) SendOneMsgToUser(in *pb.SendOneMsgToUserReq) (*pb.SendOneMsgToUserResp, error) {
 	seq := time.Now().UnixNano()
-	return &pb.SendOneMsgToUserResp{Seq: seq}, nil
+	rpcList := l.svcCtx.PubContainer.MGtwRpcList
+	if len(rpcList) > 0 {
+		for _, v := range rpcList {
+			_, err := v.PushOneWsMsgToUser(l.ctx, &pb2.PushOneMsgToUserReq{
+				Seq: seq,
+			})
+			if err != nil {
+				return nil, err
+			}
+		}
+		return &pb.SendOneMsgToUserResp{Seq: seq}, nil
+	} else {
+		return nil, errorx.NewEnumErrorf(errorx.Code_Err, "发送失败")
+	}
 }

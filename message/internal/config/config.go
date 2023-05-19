@@ -7,5 +7,6 @@ import (
 
 type Config struct {
 	zrpc.RpcServerConf
-	Kafka kq.KqConf
+	Kafka       kq.KqConf
+	MGtwRpcConf zrpc.RpcClientConf
 }
