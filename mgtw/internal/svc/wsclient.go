@@ -94,9 +94,9 @@ func ProcessData(c *Client, message []byte) (err error) {
 	if err != nil {
 		return
 	}
-	logx.Infof("ProcessData: message:%s^size:%d", ws.String(), len(message))
 	seq := ws.Seq
 	cmd := ws.Cmd
+	logx.Infof("%s-ProcessData: message:%s^size:%d", seq, ws.String(), len(message))
 
 	switch cmd {
 	case "login":
@@ -114,7 +114,7 @@ func ProcessData(c *Client, message []byte) (err error) {
 		}
 		c.SvcCtx.ClientManager.PublishLogin(login)
 	default:
-		logx.Errorf("cmd not found:%s", cmd)
+		logx.Errorf("%s-cmd not found:%s", seq, cmd)
 	}
 	return
 }
@@ -142,8 +142,8 @@ func (c *Client) Write() {
 	}
 }
 
-func (c *Client) SendMsg(msg []byte) error {
-	logx.Infof("sendMsg msg:%s^size:%d", msg, len(msg))
+func (c *Client) SendSeqMsg(seq string, msg []byte) error {
+	logx.Infof("%s-sendMsg msg:%s^size:%d", seq, msg, len(msg))
 	var isSuccess bool
 	if c == nil {
 		return errors.New("client is nil")
@@ -156,6 +156,10 @@ func (c *Client) SendMsg(msg []byte) error {
 		return errors.New("send msg fail")
 	}
 	return nil
+}
+
+func (c *Client) SendMsg(msg []byte) error {
+	return c.SendSeqMsg("", msg)
 }
 
 func (c *Client) closeSend() {

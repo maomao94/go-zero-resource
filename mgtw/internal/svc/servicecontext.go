@@ -104,12 +104,12 @@ func (manager *ClientManager) EventLogin(l *Login) {
 		userKey := l.GetKey()
 		manager.AddUsers(userKey, l.Client)
 	}
-	logx.Infof("eventLogin addr:%s^appId:%d^userId:%s", client.Addr, l.AppId, l.UserId)
+	logx.Infof("%s-eventLogin addr:%s^appId:%d^userId:%s", l.Seq, client.Addr, l.AppId, l.UserId)
 	resp := &ctxdata.WsResponse{
 		Seq: l.Seq,
 		Cmd: l.Cmd,
 	}
-	client.SendMsg([]byte(resp.String()))
+	client.SendSeqMsg(l.Seq, []byte(resp.String()))
 }
 
 func (manager *ClientManager) EventUnregister(client *Client) {
