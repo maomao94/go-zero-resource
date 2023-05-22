@@ -65,7 +65,7 @@ func (c *Client) GetKey() (key string) {
 func (c *Client) Read() {
 	defer func() {
 		if r := recover(); r != nil {
-			logx.Errorf("read error: %v", r)
+			logx.Errorf("read error:%v", r)
 		}
 	}()
 	defer func() {
@@ -75,19 +75,19 @@ func (c *Client) Read() {
 	for {
 		_, message, err := c.socket.ReadMessage()
 		if err != nil {
-			logx.Errorf("socket error addr: %s: %v", c.Addr, err)
+			logx.Errorf("socket error addr:%s:^err:%v", c.Addr, err)
 			return
 		}
 		err = ProcessData(c, message)
 		if err != nil {
-			logx.Errorf("ProcessData error: %v", err)
+			logx.Errorf("ProcessData error:%v", err)
 			return
 		}
 	}
 }
 
 func ProcessData(c *Client, message []byte) (err error) {
-	logx.Infof("ProcessData: %s", string(message))
+	logx.Infof("ProcessData: message:%s", string(message))
 	ws := &ctxdata.WsRequest{}
 	err = mapping.UnmarshalTomlBytes(message, ws)
 	if err != nil {
@@ -118,7 +118,7 @@ func ProcessData(c *Client, message []byte) (err error) {
 func (c *Client) Write() {
 	defer func() {
 		if r := recover(); r != nil {
-			logx.Errorf("write error: %v", r)
+			logx.Errorf("write error:%v", r)
 		}
 	}()
 	defer func() {
