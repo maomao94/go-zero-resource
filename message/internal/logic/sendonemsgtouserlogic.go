@@ -34,8 +34,9 @@ func (l *SendOneMsgToUserLogic) SendOneMsgToUser(in *pb.SendOneMsgToUserReq) (*p
 		for _, v := range pub {
 			_, err := v.PushOneWsMsgToUser(l.ctx, &pb2.PushOneMsgToUserReq{
 				Seq:        seq,
-				FromUserId: 10001,
-				ToUserId:   10001,
+				FromUserId: in.FromUserId,
+				ToUserId:   in.ToUerId,
+				Msg:        in.Msg,
 			})
 			if err != nil {
 				return nil, err

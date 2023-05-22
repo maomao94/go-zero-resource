@@ -29,7 +29,7 @@ func (l *PushOneWsMsgToUserLogic) PushOneWsMsgToUser(in *pb.PushOneMsgToUserReq)
 	if err != nil {
 		return nil, err
 	}
-	err = cli.SendMsg([]byte(in.Msg))
+	err = cli.SendSeqMsg(strconv.FormatInt(in.Seq, 10), []byte(in.Msg))
 	if err != nil {
 		return nil, err
 	}
