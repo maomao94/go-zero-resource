@@ -14,7 +14,7 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-func LoggerInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp interface{}, err error) {
+func LoggerInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (resp any, err error) {
 	resp, err = handler(ctx, req)
 	if err != nil {
 		causeErr := errors.Cause(err)

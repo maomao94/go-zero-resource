@@ -28,7 +28,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 	handler.RegisterHandlers(server, ctx)
 
-	httpx.SetErrorHandlerCtx(func(ctx context.Context, err error) (int, interface{}) {
+	httpx.SetErrorHandlerCtx(func(ctx context.Context, err error) (int, any) {
 		switch e := err.(type) {
 		case *errorx.CodeError:
 			return http.StatusBadRequest, e.Data()

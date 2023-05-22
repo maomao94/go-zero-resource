@@ -76,16 +76,16 @@ type OssFile struct {
 }
 
 type OssProperties struct {
-	Enabled    bool                   // 是否启用
-	name       string                 // 对象存储名称
-	TenantMode bool                   // 是否开启租户模式
-	Endpoint   string                 // 对象存储服务的URL
-	AppId      string                 // 应用ID TencentCOS需要
-	Region     string                 // 区域简称 TencentCOS需要
-	AccessKey  string                 // Access key就像用户ID，可以唯一标识你的账户
-	SecretKey  string                 // Secret key是你账户的密码
-	BucketName string                 // 默认的存储桶名称
-	Args       map[string]interface{} // 自定义属性
+	Enabled    bool           // 是否启用
+	name       string         // 对象存储名称
+	TenantMode bool           // 是否开启租户模式
+	Endpoint   string         // 对象存储服务的URL
+	AppId      string         // 应用ID TencentCOS需要
+	Region     string         // 区域简称 TencentCOS需要
+	AccessKey  string         // Access key就像用户ID，可以唯一标识你的账户
+	SecretKey  string         // Secret key是你账户的密码
+	BucketName string         // 默认的存储桶名称
+	Args       map[string]any // 自定义属性
 }
 
 type GetOssFn func(tenantId, code string) (oss *model.TOss, err error)

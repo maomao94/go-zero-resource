@@ -8,7 +8,7 @@ import (
 	"strconv"
 )
 
-func UnaryMetadataInterceptor(ctx context.Context, method string, req, reply interface{},
+func UnaryMetadataInterceptor(ctx context.Context, method string, req, reply any,
 	cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
 	md, ok := metadata.FromOutgoingContext(ctx)
 	if !ok {
