@@ -63,7 +63,6 @@ func (manager *ClientManager) StartListener() {
 			// 广播事件
 			clients := manager.GetClients()
 			for conn := range clients {
-				conn.closeSend()
 				err := conn.SendMsg(message)
 				if err != nil {
 					logx.Errorf("广播消息失败:%v", err)
