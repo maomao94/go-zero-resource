@@ -62,9 +62,9 @@ func GetUserIdFromMetadata(ctx context.Context) int64 {
 }
 
 type WsRequest struct {
-	Seq  string `json:"seq"`
-	Cmd  string `json:"cmd"`
-	Data any    `json:"data,omitempty"`
+	Seq  string         `json:"seq"`
+	Cmd  string         `json:"cmd"`
+	Data map[string]any `json:"data,omitempty"`
 }
 
 type WsResponse struct {
@@ -80,17 +80,17 @@ func (h *WsResponse) String() (headStr string) {
 }
 
 type Response struct {
-	Code uint32 `json:"code"`
-	Msg  string `json:"msg"`
-	Data any    `json:"data"`
+	Code uint32         `json:"code"`
+	Msg  string         `json:"msg"`
+	Data map[string]any `json:"data"`
 }
 
-type Login struct {
+type LoginReq struct {
 	token  string `json:"token"`
 	AppId  uint32 `json:"appId,omitempty"`
 	UserId string `json:"userId,omitempty"`
 }
 
-type HeartBeat struct {
+type HeartBeatReq struct {
 	UserId string `json:"userId,omitempty"`
 }

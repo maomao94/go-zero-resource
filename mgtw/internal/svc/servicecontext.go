@@ -25,7 +25,7 @@ type ClientManager struct {
 	Users       map[string]*Client // 登录的用户 // appId+uuid
 	UserLock    sync.RWMutex       // 读写锁
 	Register    chan *Client       // 连接连接处理
-	Login       chan *login        // 用户登录处理
+	Login       chan *Login        // 用户登录处理
 	Unregister  chan *Client       // 断开连接处理程序
 	Broadcast   chan []byte        // 广播 向全部成员发送数据
 }
@@ -35,7 +35,7 @@ func NewClientManager() (m *ClientManager) {
 		Clients:    make(map[*Client]bool),
 		Users:      make(map[string]*Client),
 		Register:   make(chan *Client, 1000),
-		Login:      make(chan *login, 1000),
+		Login:      make(chan *Login, 1000),
 		Unregister: make(chan *Client, 1000),
 		Broadcast:  make(chan []byte, 1000),
 	}
@@ -84,13 +84,19 @@ func (manager *ClientManager) PublishRegister(client *Client) {
 	})
 }
 
+func (manager *ClientManager) PublishLogin(l *Login) {
+	threading.RunSafe(func() {
+		manager.Login <- l
+	})
+}
+
 func (manager *ClientManager) AddClients(client *Client) {
 	manager.ClientsLock.Lock()
 	defer manager.ClientsLock.Unlock()
 	manager.Clients[client] = true
 }
 
-func (manager *ClientManager) EventLogin(l *login) {
+func (manager *ClientManager) EventLogin(l *Login) {
 	client := l.Client
 	// 连接存在，在添加
 	if manager.InClient(client) {
@@ -98,7 +104,6 @@ func (manager *ClientManager) EventLogin(l *login) {
 		manager.AddUsers(userKey, l.Client)
 	}
 	logx.Infof("eventLogin addr:%s^appId:%d^userId:%s", client.Addr, l.AppId, l.UserId)
-	manager.Broadcast <- []byte("有用户登录了")
 }
 
 func (manager *ClientManager) EventUnregister(client *Client) {

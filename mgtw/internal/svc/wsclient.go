@@ -4,7 +4,9 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/websocket"
+	"github.com/hehanpeng/go-zero-resource/common/ctxdata"
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/mapping"
 	"github.com/zeromicro/go-zero/core/threading"
 )
 
@@ -13,13 +15,14 @@ const (
 	heartbeatExpirationTime = 6 * 60
 )
 
-type login struct {
+type Login struct {
+	Seq    string
 	AppId  uint32
 	UserId string
 	Client *Client
 }
 
-func (l *login) GetKey() (key string) {
+func (l *Login) GetKey() (key string) {
 	key = GetUserKey(l.AppId, l.UserId)
 	return
 }
@@ -72,20 +75,43 @@ func (c *Client) Read() {
 	for {
 		_, message, err := c.socket.ReadMessage()
 		if err != nil {
-			logx.Errorf("socket 读取数组错误 addr: %s: %v", c.Addr, err)
+			logx.Errorf("socket error addr: %s: %v", c.Addr, err)
 			return
 		}
-		ProcessData(c, message)
+		err = ProcessData(c, message)
+		if err != nil {
+			logx.Errorf("ProcessData error: %v", err)
+			return
+		}
 	}
 }
 
-func ProcessData(c *Client, message []byte) {
+func ProcessData(c *Client, message []byte) (err error) {
 	logx.Infof("ProcessData: %s", string(message))
-	c.SvcCtx.ClientManager.Login <- &login{
-		AppId:  111,
-		UserId: string(message),
-		Client: c,
+	ws := &ctxdata.WsRequest{}
+	err = mapping.UnmarshalTomlBytes(message, ws)
+	if err != nil {
+		return
 	}
+	seq := ws.Seq
+	cmd := ws.Cmd
+
+	switch cmd {
+	case "login":
+		loginReq := &ctxdata.LoginReq{}
+		err = mapping.UnmarshalJsonMap(ws.Data, loginReq)
+		if err != nil {
+			return
+		}
+		login := &Login{
+			Seq:    seq,
+			AppId:  loginReq.AppId,
+			UserId: loginReq.UserId,
+			Client: c,
+		}
+		c.SvcCtx.ClientManager.PublishLogin(login)
+	}
+	return errors.New("cmd not found")
 }
 
 // 向客户端写数据
