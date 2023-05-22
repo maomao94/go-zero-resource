@@ -64,7 +64,7 @@ func (c *Client) Read() {
 		}
 	}()
 	defer func() {
-		logx.Error("read close send")
+		logx.Info("read send close")
 		close(c.Send)
 	}()
 	for {
@@ -96,7 +96,7 @@ func (c *Client) Write() {
 	defer func() {
 		c.SvcCtx.ClientManager.Unregister <- c
 		c.Socket.Close()
-		logx.Error("write socket close")
+		logx.Info("write socket close")
 	}()
 	for {
 		select {
