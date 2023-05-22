@@ -108,6 +108,10 @@ func (manager *ClientManager) EventLogin(l *Login) {
 	resp := &ctxdata.WsResponse{
 		Seq: l.Seq,
 		Cmd: l.Cmd,
+		Response: ctxdata.Response{
+			Code: 0,
+			Msg:  "登录成功",
+		},
 	}
 	client.SendSeqMsg(l.Seq, []byte(resp.String()))
 }
