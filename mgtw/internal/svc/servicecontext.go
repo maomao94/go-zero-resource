@@ -49,15 +49,15 @@ func NewClientManager() (m *ClientManager) {
 func (manager *ClientManager) StartListener() {
 	for {
 		select {
-		case conn := <-manager.Register:
+		case client := <-manager.Register:
 			// 建立连接事件
-			manager.EventRegister(conn)
+			manager.EventRegister(client)
 		case login := <-manager.Login:
 			// 用户登录
 			manager.EventLogin(login)
-		case conn := <-manager.Unregister:
+		case client := <-manager.Unregister:
 			// 断开连接事件
-			manager.EventUnregister(conn)
+			manager.EventUnregister(client)
 		case message := <-manager.Broadcast:
 			// 广播事件
 			clients := manager.GetClients()

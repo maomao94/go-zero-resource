@@ -115,7 +115,7 @@ func (c *Client) SendMsg(msg []byte) {
 	}
 	defer func() {
 		if r := recover(); r != nil {
-			logx.Errorf("SendMsg: %s")
+			logx.Errorf("sendMsg: %s")
 		}
 	}()
 	c.Send <- msg
