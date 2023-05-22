@@ -3,6 +3,7 @@ package svc
 import (
 	"github.com/hehanpeng/go-zero-resource/mgtw/internal/config"
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/threading"
 	"sync"
 )
 
@@ -38,12 +39,14 @@ func NewClientManager() (m *ClientManager) {
 		Unregister: make(chan *Client, 1000),
 		Broadcast:  make(chan []byte, 1000),
 	}
-	go m.start()
+	threading.RunSafe(func() {
+		m.StartListener()
+	})
 	return
 }
 
 // 管道处理程序
-func (manager *ClientManager) start() {
+func (manager *ClientManager) StartListener() {
 	for {
 		select {
 		case conn := <-manager.Register:
@@ -61,8 +64,6 @@ func (manager *ClientManager) start() {
 			for conn := range clients {
 				select {
 				case conn.Send <- message:
-				default:
-					close(conn.Send)
 				}
 			}
 		}
@@ -72,7 +73,7 @@ func (manager *ClientManager) start() {
 // 用户建立连接事件
 func (manager *ClientManager) EventRegister(client *Client) {
 	manager.AddClients(client)
-	logx.WithContext(client.Ctx).Infof("EventRegister addr:%s", client.Addr)
+	logx.Infof("eventRegister addr:%s", client.Addr)
 }
 
 // 添加客户端
@@ -89,7 +90,7 @@ func (manager *ClientManager) EventLogin(l *login) {
 		userKey := l.GetKey()
 		manager.AddUsers(userKey, l.Client)
 	}
-	logx.WithContext(client.Ctx).Infof("EventLogin addr:%s^appId:%d^userId:%s", client.Addr, l.AppId, l.UserId)
+	logx.Infof("eventLogin addr:%s^appId:%d^userId:%s", client.Addr, l.AppId, l.UserId)
 }
 
 func (manager *ClientManager) EventUnregister(client *Client) {

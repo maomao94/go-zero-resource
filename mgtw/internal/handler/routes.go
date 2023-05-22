@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/hehanpeng/go-zero-resource/mgtw/internal/handler/wss"
+	"github.com/hehanpeng/go-zero-resource/mgtw/internal/handler/ws"
 	"github.com/hehanpeng/go-zero-resource/mgtw/internal/svc"
 	"github.com/zeromicro/go-zero/rest"
 	"net/http"
@@ -13,7 +13,7 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			{
 				Method:  http.MethodGet,
 				Path:    "/webSocket",
-				Handler: wss.WsHandler(serverCtx),
+				Handler: ws.WsHandler(serverCtx),
 			},
 		},
 	)

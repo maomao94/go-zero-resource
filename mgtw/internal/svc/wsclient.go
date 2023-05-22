@@ -2,11 +2,8 @@ package svc
 
 import (
 	"fmt"
-	"github.com/zeromicro/go-zero/core/logx"
-	"golang.org/x/net/context"
-	"runtime/debug"
-
 	"github.com/gorilla/websocket"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 const (
@@ -31,7 +28,7 @@ func GetUserKey(appId uint32, userId string) (key string) {
 }
 
 type Client struct {
-	Ctx           context.Context // 上下文
+	SvcCtx        *ServiceContext
 	Addr          string          // 客户端地址
 	Socket        *websocket.Conn // 用户连接
 	Send          chan []byte     // 待发送的数据
@@ -42,9 +39,9 @@ type Client struct {
 	LoginTime     uint64          // 登录时间 登录以后才有
 }
 
-func NewClientCtx(ctx context.Context, addr string, socket *websocket.Conn, firstTime uint64) (client *Client) {
-	client = &Client{
-		Ctx:           ctx,
+func NewClientCtx(svcCtx *ServiceContext, addr string, socket *websocket.Conn, firstTime uint64) (c *Client) {
+	c = &Client{
+		SvcCtx:        svcCtx,
 		Addr:          addr,
 		Socket:        socket,
 		Send:          make(chan []byte, 100),
@@ -60,51 +57,51 @@ func (c *Client) GetKey() (key string) {
 }
 
 // 读取客户端数据
-func (c *Client) Read(svcCtx *ServiceContext) {
+func (c *Client) Read() {
 	defer func() {
 		if r := recover(); r != nil {
-			logx.Info("write stop", string(debug.Stack()), r)
+			logx.Errorf("read error: %s", r)
 		}
 	}()
 	defer func() {
-		logx.Info("读取客户端数据 关闭send", c)
+		logx.Error("read close send")
 		close(c.Send)
 	}()
 	for {
 		_, message, err := c.Socket.ReadMessage()
 		if err != nil {
-			logx.Error("读取客户端数据 错误", c.Addr, err)
+			logx.Errorf("socket 读取数组错误 addr: %s: %s", c.Addr, err)
 			return
 		}
-		// 处理程序
-		logx.Info("读取客户端数据 处理:", string(message))
-		//ProcessData(c, message)
-		svcCtx.ClientManager.Login <- &login{
-			AppId:  111,
-			UserId: "2222",
-			Client: c,
-		}
+		ProcessData(c, message)
+	}
+}
+
+func ProcessData(c *Client, message []byte) {
+	logx.Infof("收到数据: %s", string(message))
+	c.SvcCtx.ClientManager.Login <- &login{
+		AppId:  111,
+		UserId: string(message),
+		Client: c,
 	}
 }
 
 // 向客户端写数据
-func (c *Client) Write(svcCtx *ServiceContext) {
+func (c *Client) Write() {
 	defer func() {
 		if r := recover(); r != nil {
-			logx.Info("write stop", string(debug.Stack()), r)
+			logx.Errorf("write error: %s", r)
 		}
 	}()
 	defer func() {
-		svcCtx.ClientManager.Unregister <- c
+		c.SvcCtx.ClientManager.Unregister <- c
 		c.Socket.Close()
-		logx.Info("Client发送数据 defer", c)
+		logx.Error("write socket close")
 	}()
 	for {
 		select {
 		case message, ok := <-c.Send:
 			if !ok {
-				// 发送数据错误 关闭连接
-				logx.Info("Client发送数据 关闭连接", c.Addr, "ok", ok)
 				return
 			}
 			c.Socket.WriteMessage(websocket.TextMessage, message)
@@ -118,7 +115,7 @@ func (c *Client) SendMsg(msg []byte) {
 	}
 	defer func() {
 		if r := recover(); r != nil {
-			logx.Error("SendMsg stop:", r, string(debug.Stack()))
+			logx.Errorf("SendMsg: %s")
 		}
 	}()
 	c.Send <- msg
