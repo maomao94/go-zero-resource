@@ -98,6 +98,16 @@ func (manager *ClientManager) EventUnregister(client *Client) {
 
 }
 
+func (manager *ClientManager) GetClientsLen() (clientsLen int) {
+	clientsLen = len(manager.Clients)
+	return
+}
+
+func (manager *ClientManager) GetUsersLen() (userLen int) {
+	userLen = len(manager.Users)
+	return
+}
+
 func (manager *ClientManager) InClient(client *Client) (ok bool) {
 	manager.ClientsLock.RLock()
 	defer manager.ClientsLock.RUnlock()
@@ -131,4 +141,87 @@ func (manager *ClientManager) ClientsRange(f func(client *Client, value bool) (r
 		}
 	}
 	return
+}
+
+func (manager *ClientManager) DelClients(client *Client) {
+	manager.ClientsLock.Lock()
+	defer manager.ClientsLock.Unlock()
+	if _, ok := manager.Clients[client]; ok {
+		delete(manager.Clients, client)
+	}
+}
+
+func (manager *ClientManager) GetUserClient(appId uint32, userId string) (client *Client) {
+	manager.UserLock.RLock()
+	defer manager.UserLock.RUnlock()
+	userKey := GetUserKey(appId, userId)
+	if value, ok := manager.Users[userKey]; ok {
+		client = value
+	}
+	return
+}
+
+func (manager *ClientManager) DelUsers(client *Client) (result bool) {
+	manager.UserLock.Lock()
+	defer manager.UserLock.Unlock()
+	key := GetUserKey(client.AppId, client.UserId)
+	if value, ok := manager.Users[key]; ok {
+		// 判断是否为相同的用户
+		if value.Addr != client.Addr {
+			return
+		}
+		delete(manager.Users, key)
+		result = true
+	}
+	return
+}
+
+func (manager *ClientManager) GetUserKeys() (userKeys []string) {
+	userKeys = make([]string, 0)
+	manager.UserLock.RLock()
+	defer manager.UserLock.RUnlock()
+	for key := range manager.Users {
+		userKeys = append(userKeys, key)
+	}
+	return
+}
+
+func (manager *ClientManager) GetUserList(appId uint32) (userList []string) {
+	userList = make([]string, 0)
+	manager.UserLock.RLock()
+	defer manager.UserLock.RUnlock()
+	for _, v := range manager.Users {
+		if v.AppId == appId {
+			userList = append(userList, v.UserId)
+		}
+	}
+	return
+}
+
+func (manager *ClientManager) GetUserClients() (clients []*Client) {
+	clients = make([]*Client, 0)
+	manager.UserLock.RLock()
+	defer manager.UserLock.RUnlock()
+	for _, v := range manager.Users {
+		clients = append(clients, v)
+	}
+	return
+}
+
+func (manager *ClientManager) sendAll(message []byte, ignoreClient *Client) {
+	clients := manager.GetUserClients()
+	for _, conn := range clients {
+		if conn != ignoreClient {
+			conn.SendMsg(message)
+		}
+	}
+}
+
+func (manager *ClientManager) sendAppIdAll(message []byte, appId uint32, ignoreClient *Client) {
+	clients := manager.GetUserClients()
+	for _, conn := range clients {
+		if conn != ignoreClient && conn.AppId == appId {
+			conn.SendMsg(message)
+		}
+	}
 }
