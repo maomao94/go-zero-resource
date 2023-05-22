@@ -18,7 +18,8 @@ https://www.apifox.cn/apidoc/shared-6c1c58fe-fc04-45f9-abac-a4b7b71bbc62/api-714
 - mgtw 1005 21005 (websocket 网关服务)
 ## 编译错误码
 protoc errcode.proto --go_out=.
-### 如何使用websocket
+## websocket 网关服务集成
+- 连接 ws://127.0.0.1:21005/webSocket
 - 登录
 ```json
 {
