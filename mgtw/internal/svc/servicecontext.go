@@ -62,9 +62,7 @@ func (manager *ClientManager) StartListener() {
 			// 广播事件
 			clients := manager.GetClients()
 			for conn := range clients {
-				select {
-				case conn.Send <- message:
-				}
+				conn.send <- message
 			}
 		}
 	}

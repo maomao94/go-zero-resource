@@ -1,9 +1,11 @@
 package svc
 
 import (
+	"errors"
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/core/threading"
 )
 
 const (
@@ -30,23 +32,23 @@ func GetUserKey(appId uint32, userId string) (key string) {
 type Client struct {
 	SvcCtx        *ServiceContext
 	Addr          string          // 客户端地址
-	Socket        *websocket.Conn // 用户连接
-	Send          chan []byte     // 待发送的数据
 	AppId         uint32          // 登录的平台Id app/web/ios
 	UserId        string          // 用户Id，用户登录以后才有
 	FirstTime     uint64          // 首次连接事件
 	HeartbeatTime uint64          // 用户上次心跳时间
 	LoginTime     uint64          // 登录时间 登录以后才有
+	socket        *websocket.Conn // 用户连接
+	send          chan []byte     // 待发送的数据
 }
 
 func NewClientCtx(svcCtx *ServiceContext, addr string, socket *websocket.Conn, firstTime uint64) (c *Client) {
 	c = &Client{
 		SvcCtx:        svcCtx,
 		Addr:          addr,
-		Socket:        socket,
-		Send:          make(chan []byte, 100),
 		FirstTime:     firstTime,
 		HeartbeatTime: firstTime,
+		socket:        socket,
+		send:          make(chan []byte, 100),
 	}
 	return
 }
@@ -65,10 +67,10 @@ func (c *Client) Read() {
 	}()
 	defer func() {
 		logx.Info("read send close")
-		close(c.Send)
+		close(c.send)
 	}()
 	for {
-		_, message, err := c.Socket.ReadMessage()
+		_, message, err := c.socket.ReadMessage()
 		if err != nil {
 			logx.Errorf("socket 读取数组错误 addr: %s: %s", c.Addr, err)
 			return
@@ -95,34 +97,32 @@ func (c *Client) Write() {
 	}()
 	defer func() {
 		c.SvcCtx.ClientManager.Unregister <- c
-		c.Socket.Close()
+		c.socket.Close()
 		logx.Info("write socket close")
 	}()
 	for {
 		select {
-		case message, ok := <-c.Send:
+		case message, ok := <-c.send:
 			if !ok {
 				return
 			}
-			c.Socket.WriteMessage(websocket.TextMessage, message)
+			c.socket.WriteMessage(websocket.TextMessage, message)
 		}
 	}
 }
 
-func (c *Client) SendMsg(msg []byte) {
+func (c *Client) SendMsg(msg []byte) error {
 	if c == nil {
-		return
+		return errors.New("client is nil")
 	}
-	defer func() {
-		if r := recover(); r != nil {
-			logx.Errorf("sendMsg: %s")
-		}
-	}()
-	c.Send <- msg
+	threading.RunSafe(func() {
+		c.send <- msg
+	})
+	return nil
 }
 
-func (c *Client) close() {
-	close(c.Send)
+func (c *Client) closeSend() {
+	close(c.send)
 }
 
 func (c *Client) Login(appId uint32, userId string, loginTime uint64) {
