@@ -57,6 +57,10 @@ func NewClientCtx(svcCtx *ServiceContext, addr string, socket *websocket.Conn, f
 	return
 }
 
+func (c *Client) closeSend() {
+	close(c.send)
+}
+
 func (c *Client) GetKey() (key string) {
 	key = GetUserKey(c.AppId, c.UserId)
 	return
@@ -160,17 +164,6 @@ func (c *Client) SendSeqMsg(seq string, msg []byte) error {
 
 func (c *Client) SendMsg(msg []byte) error {
 	return c.SendSeqMsg("", msg)
-}
-
-func (c *Client) closeSend() {
-	close(c.send)
-}
-
-func (c *Client) Login(appId uint32, userId string, loginTime uint64) {
-	c.AppId = appId
-	c.UserId = userId
-	c.LoginTime = loginTime
-	c.Heartbeat(loginTime)
 }
 
 func (c *Client) Heartbeat(currentTime uint64) {
