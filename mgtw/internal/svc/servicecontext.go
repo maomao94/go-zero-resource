@@ -39,7 +39,7 @@ func NewClientManager() (m *ClientManager) {
 		Unregister: make(chan *Client, 1000),
 		Broadcast:  make(chan []byte, 1000),
 	}
-	threading.RunSafe(func() {
+	threading.GoSafe(func() {
 		m.StartListener()
 	})
 	return
@@ -74,6 +74,7 @@ func (manager *ClientManager) StartListener() {
 func (manager *ClientManager) EventRegister(client *Client) {
 	manager.AddClients(client)
 	logx.Infof("eventRegister addr:%s", client.Addr)
+	client.Send <- []byte("eventRegister")
 }
 
 // 添加客户端
