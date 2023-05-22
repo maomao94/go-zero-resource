@@ -1,6 +1,7 @@
 package svc
 
 import (
+	"errors"
 	"github.com/hehanpeng/go-zero-resource/common/ctxdata"
 	"github.com/hehanpeng/go-zero-resource/mgtw/internal/config"
 	"github.com/zeromicro/go-zero/core/logx"
@@ -181,7 +182,7 @@ func (manager *ClientManager) GetUserClient(appId uint32, userId string) (client
 	if value, ok := manager.Users[userKey]; ok {
 		client = value
 	}
-	return
+	return client, errors.New("ws client not found")
 }
 
 func (manager *ClientManager) DelUsers(client *Client) (result bool) {
