@@ -62,7 +62,7 @@ func (c *Client) GetKey() (key string) {
 func (c *Client) Read() {
 	defer func() {
 		if r := recover(); r != nil {
-			logx.Errorf("read error: %s", r)
+			logx.Errorf("read error: %v", r)
 		}
 	}()
 	defer func() {
@@ -72,7 +72,7 @@ func (c *Client) Read() {
 	for {
 		_, message, err := c.socket.ReadMessage()
 		if err != nil {
-			logx.Errorf("socket 读取数组错误 addr: %s: %s", c.Addr, err)
+			logx.Errorf("socket 读取数组错误 addr: %s: %v", c.Addr, err)
 			return
 		}
 		ProcessData(c, message)
@@ -92,7 +92,7 @@ func ProcessData(c *Client, message []byte) {
 func (c *Client) Write() {
 	defer func() {
 		if r := recover(); r != nil {
-			logx.Errorf("write error: %s", r)
+			logx.Errorf("write error: %v", r)
 		}
 	}()
 	defer func() {

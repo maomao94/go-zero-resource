@@ -25,7 +25,7 @@ func (l KafkaTest) Consume(key, value string) error {
 	ctx := context.Background()
 	var msg ctxdata.MsgBody
 	if err := json.Unmarshal([]byte(value), &msg); err != nil {
-		logx.Errorf(" consumer err : %v", err)
+		logx.Errorf(" consumer err: %v", err)
 	} else {
 		wireContext := otel.GetTextMapPropagator().Extract(ctx, msg.Carrier)
 		tracer := otel.GetTracerProvider().Tracer(trace2.TraceName)

@@ -63,6 +63,7 @@ func (manager *ClientManager) StartListener() {
 			// 广播事件
 			clients := manager.GetClients()
 			for conn := range clients {
+				conn.closeSend()
 				err := conn.SendMsg(message)
 				if err != nil {
 					logx.Errorf("广播消息失败:%v", err)
@@ -221,7 +222,7 @@ func (manager *ClientManager) sendAll(message []byte, ignoreClient *Client) {
 		if conn != ignoreClient {
 			err := conn.SendMsg(message)
 			if err != nil {
-				logx.Errorf("sendAll key:%s^err:%s", conn.GetKey(), err)
+				logx.Errorf("sendAll key:%s^err:%v", conn.GetKey(), err)
 			}
 		}
 	}
@@ -233,7 +234,7 @@ func (manager *ClientManager) sendAppIdAll(message []byte, appId uint32, ignoreC
 		if conn != ignoreClient && conn.AppId == appId {
 			err := conn.SendMsg(message)
 			if err != nil {
-				logx.Errorf("sendAppIdAll key:%s^err:%s", conn.GetKey(), err)
+				logx.Errorf("sendAppIdAll key:%s^err:%v", conn.GetKey(), err)
 			}
 		}
 	}
