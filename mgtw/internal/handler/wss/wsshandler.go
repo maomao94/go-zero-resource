@@ -22,8 +22,8 @@ func WsHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		logx.WithContext(r.Context()).Info("webSocket 建立连接:", conn.RemoteAddr().String())
 		currentTime := uint64(time.Now().Unix())
 		client := svc.NewClientCtx(r.Context(), conn.RemoteAddr().String(), conn, currentTime)
-		go client.Read(r.Context(), svcCtx)
-		go client.Write(r.Context(), svcCtx)
+		go client.Read(svcCtx)
+		go client.Write(svcCtx)
 		svcCtx.ClientManager.Register <- client
 	}
 }
