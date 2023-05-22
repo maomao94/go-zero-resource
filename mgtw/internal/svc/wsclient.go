@@ -94,7 +94,7 @@ func ProcessData(c *Client, message []byte) (err error) {
 	if err != nil {
 		return
 	}
-	logx.Infof("ProcessData: message:%s", ws.String())
+	logx.Infof("ProcessData: message:%s^size:%d", ws.String(), len(message))
 	seq := ws.Seq
 	cmd := ws.Cmd
 
@@ -143,6 +143,7 @@ func (c *Client) Write() {
 }
 
 func (c *Client) SendMsg(msg []byte) error {
+	logx.Infof("sendMsg msg:%s^size:%d", msg, len(msg))
 	var isSuccess bool
 	if c == nil {
 		return errors.New("client is nil")
