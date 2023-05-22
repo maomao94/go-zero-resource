@@ -60,3 +60,37 @@ func GetUserIdFromMetadata(ctx context.Context) int64 {
 	}
 	return uid
 }
+
+type WsRequest struct {
+	Seq  string `json:"seq"`
+	Cmd  string `json:"cmd"`
+	Data any    `json:"data,omitempty"`
+}
+
+type WsResponse struct {
+	Seq      string   `json:"seq"`
+	Cmd      string   `json:"cmd"`
+	Response Response `json:"response"`
+}
+
+func (h *WsResponse) String() (headStr string) {
+	headBytes, _ := json.Marshal(h)
+	headStr = string(headBytes)
+	return
+}
+
+type Response struct {
+	Code uint32 `json:"code"`
+	Msg  string `json:"msg"`
+	Data any    `json:"data"`
+}
+
+type Login struct {
+	token  string `json:"token"`
+	AppId  uint32 `json:"appId,omitempty"`
+	UserId string `json:"userId,omitempty"`
+}
+
+type HeartBeat struct {
+	UserId string `json:"userId,omitempty"`
+}
