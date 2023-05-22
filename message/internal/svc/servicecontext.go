@@ -32,7 +32,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	return &ServiceContext{
 		Config:          c,
 		KafkaTestPusher: kq.NewPusher(c.Kafka.Brokers, c.Kafka.Topic),
-		PubContainer:    NewEtcdPubContainer(c.MGtwRpcConf),
+		PubContainer:    NewPubContainer(c.MGtwRpcConf),
 		MGtwRpc: mgtw.NewMgtw(zrpc.MustNewClient(
 			c.MGtwRpcConf, zrpc.WithUnaryClientInterceptor(rpcclient.UnaryMetadataInterceptor))),
 	}
@@ -43,7 +43,7 @@ type PubContainer struct {
 	lock   sync.Mutex
 }
 
-func NewEtcdPubContainer(c zrpc.RpcClientConf) *PubContainer {
+func NewPubContainer(c zrpc.RpcClientConf) *PubContainer {
 	p := &PubContainer{
 		PubMap: make(map[string]mgtw.Mgtw),
 	}
@@ -52,6 +52,7 @@ func NewEtcdPubContainer(c zrpc.RpcClientConf) *PubContainer {
 		if err != nil {
 			log.Fatal(err.Error())
 		}
+		return p
 	}
 	err := p.getConn4Etcd(c)
 	if err != nil {
