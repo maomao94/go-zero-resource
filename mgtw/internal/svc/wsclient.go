@@ -80,7 +80,7 @@ func (c *Client) Read() {
 }
 
 func ProcessData(c *Client, message []byte) {
-	logx.Infof("收到数据: %s", string(message))
+	logx.Infof("ProcessData: %s", string(message))
 	c.SvcCtx.ClientManager.Login <- &login{
 		AppId:  111,
 		UserId: string(message),
@@ -112,12 +112,17 @@ func (c *Client) Write() {
 }
 
 func (c *Client) SendMsg(msg []byte) error {
+	var isSuccess bool
 	if c == nil {
 		return errors.New("client is nil")
 	}
 	threading.RunSafe(func() {
 		c.send <- msg
+		isSuccess = true
 	})
+	if !isSuccess {
+		return errors.New("send msg fail")
+	}
 	return nil
 }
 
@@ -129,7 +134,6 @@ func (c *Client) Login(appId uint32, userId string, loginTime uint64) {
 	c.AppId = appId
 	c.UserId = userId
 	c.LoginTime = loginTime
-	// 登录成功=心跳一次
 	c.Heartbeat(loginTime)
 }
 
@@ -146,7 +150,6 @@ func (c *Client) IsHeartbeatTimeout(currentTime uint64) (timeout bool) {
 }
 
 func (c *Client) IsLogin() (isLogin bool) {
-	// 用户登录了
 	if c.UserId != "" {
 		isLogin = true
 		return
