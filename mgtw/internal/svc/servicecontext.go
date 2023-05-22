@@ -119,7 +119,13 @@ func (manager *ClientManager) EventLogin(l *Login) {
 }
 
 func (manager *ClientManager) EventUnregister(client *Client) {
-
+	manager.DelClients(client)
+	result := manager.DelUsers(client)
+	if result {
+		return
+	}
+	// todo
+	logx.Infof("eventUnregister addr:%s^appId:%d^userId:%s", client.Addr, client.AppId, client.UserId)
 }
 
 func (manager *ClientManager) PublishUnregister(client *Client) {
