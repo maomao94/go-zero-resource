@@ -86,12 +86,6 @@ func (manager *ClientManager) PublishRegister(client *Client) {
 	})
 }
 
-func (manager *ClientManager) PublishLogin(l *Login) {
-	threading.RunSafe(func() {
-		manager.Login <- l
-	})
-}
-
 func (manager *ClientManager) AddClients(client *Client) {
 	manager.ClientsLock.Lock()
 	defer manager.ClientsLock.Unlock()
@@ -118,10 +112,16 @@ func (manager *ClientManager) EventLogin(l *Login) {
 	client.SendSeqMsg(l.Seq, []byte(resp.String()))
 }
 
+func (manager *ClientManager) PublishLogin(l *Login) {
+	threading.RunSafe(func() {
+		manager.Login <- l
+	})
+}
+
 func (manager *ClientManager) EventUnregister(client *Client) {
 	manager.DelClients(client)
 	result := manager.DelUsers(client)
-	if result {
+	if !result {
 		return
 	}
 	// todo

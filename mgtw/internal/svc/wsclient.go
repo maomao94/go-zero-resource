@@ -8,6 +8,7 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/mapping"
 	"github.com/zeromicro/go-zero/core/threading"
+	"time"
 )
 
 const (
@@ -57,6 +58,15 @@ func NewClientCtx(svcCtx *ServiceContext, addr string, socket *websocket.Conn, f
 	return
 }
 
+func (c *Client) Login(seq string, appId uint32, userId string, loginTime uint64) {
+	logx.Infof("%s-Login: appId:%d^userId:%s^loginTime:%d", seq, appId, userId, loginTime)
+	c.AppId = appId
+	c.UserId = userId
+	c.LoginTime = loginTime
+	// 登录成功=心跳一次
+	c.Heartbeat(loginTime)
+}
+
 func (c *Client) closeSend() {
 	close(c.send)
 }
@@ -92,6 +102,7 @@ func (c *Client) Read() {
 }
 
 func ProcessData(c *Client, message []byte) (err error) {
+	currentTime := uint64(time.Now().Unix())
 	logx.Infof("ProcessData: len(message)=%d", len(message))
 	ws := &wsx.WsRequest{}
 	err = mapping.UnmarshalYamlBytes(message, ws)
@@ -109,6 +120,7 @@ func ProcessData(c *Client, message []byte) (err error) {
 		if err != nil {
 			return
 		}
+		c.Login(seq, loginReq.AppId, loginReq.UserId, currentTime)
 		login := &Login{
 			Seq:    seq,
 			Cmd:    cmd,
