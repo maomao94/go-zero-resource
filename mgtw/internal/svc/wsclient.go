@@ -103,7 +103,6 @@ func (c *Client) Read() {
 
 func ProcessData(c *Client, message []byte) (err error) {
 	currentTime := uint64(time.Now().Unix())
-	logx.Infof("ProcessData: len(message)=%d", len(message))
 	ws := &wsx.WsRequest{}
 	err = mapping.UnmarshalYamlBytes(message, ws)
 	if err != nil {
