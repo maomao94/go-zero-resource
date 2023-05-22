@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/gorilla/websocket"
-	"github.com/hehanpeng/go-zero-resource/common/ctxdata"
+	"github.com/hehanpeng/go-zero-resource/common/wsx"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/mapping"
 	"github.com/zeromicro/go-zero/core/threading"
@@ -89,7 +89,7 @@ func (c *Client) Read() {
 
 func ProcessData(c *Client, message []byte) (err error) {
 	logx.Infof("ProcessData: len(message)=%d", len(message))
-	ws := &ctxdata.WsRequest{}
+	ws := &wsx.WsRequest{}
 	err = mapping.UnmarshalYamlBytes(message, ws)
 	if err != nil {
 		return
@@ -100,7 +100,7 @@ func ProcessData(c *Client, message []byte) (err error) {
 
 	switch cmd {
 	case "login":
-		loginReq := &ctxdata.LoginReq{}
+		loginReq := &wsx.LoginReq{}
 		err = mapping.UnmarshalJsonMap(ws.Data, loginReq)
 		if err != nil {
 			return

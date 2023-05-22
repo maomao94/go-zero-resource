@@ -2,7 +2,7 @@ package svc
 
 import (
 	"errors"
-	"github.com/hehanpeng/go-zero-resource/common/ctxdata"
+	"github.com/hehanpeng/go-zero-resource/common/wsx"
 	"github.com/hehanpeng/go-zero-resource/mgtw/internal/config"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/threading"
@@ -106,10 +106,10 @@ func (manager *ClientManager) EventLogin(l *Login) {
 		manager.AddUsers(userKey, l.Client)
 	}
 	logx.Infof("%s-eventLogin addr:%s^appId:%d^userId:%s", l.Seq, client.Addr, l.AppId, l.UserId)
-	resp := &ctxdata.WsResponse{
+	resp := &wsx.WsResponse{
 		Seq: l.Seq,
 		Cmd: l.Cmd,
-		Response: ctxdata.Response{
+		Response: &wsx.Response{
 			Code: 0,
 			Msg:  "登录成功",
 			Data: map[string]any{},
