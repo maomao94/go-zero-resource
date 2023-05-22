@@ -67,15 +67,21 @@ type WsRequest struct {
 	Data map[string]any `json:"data,omitempty"`
 }
 
+func (h *WsRequest) String() (str string) {
+	bytes, _ := json.Marshal(h)
+	str = string(bytes)
+	return
+}
+
 type WsResponse struct {
 	Seq      string   `json:"seq"`
 	Cmd      string   `json:"cmd"`
 	Response Response `json:"response"`
 }
 
-func (h *WsResponse) String() (headStr string) {
-	headBytes, _ := json.Marshal(h)
-	headStr = string(headBytes)
+func (h *WsResponse) String() (str string) {
+	bytes, _ := json.Marshal(h)
+	str = string(bytes)
 	return
 }
 

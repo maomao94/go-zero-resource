@@ -87,12 +87,13 @@ func (c *Client) Read() {
 }
 
 func ProcessData(c *Client, message []byte) (err error) {
-	logx.Infof("ProcessData: message:%s", string(message))
+	logx.Infof("ProcessData: len(message):%d", len(message))
 	ws := &ctxdata.WsRequest{}
 	err = mapping.UnmarshalTomlBytes(message, ws)
 	if err != nil {
 		return
 	}
+	logx.Infof("ProcessData: message:%s", ws.String())
 	seq := ws.Seq
 	cmd := ws.Cmd
 
