@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"strconv"
 
 	"github.com/hehanpeng/go-zero-resource/mgtw/internal/svc"
 	"github.com/hehanpeng/go-zero-resource/mgtw/pb"
@@ -24,6 +25,13 @@ func NewPushOneWsMsgToUserLogic(ctx context.Context, svcCtx *svc.ServiceContext)
 }
 
 func (l *PushOneWsMsgToUserLogic) PushOneWsMsgToUser(in *pb.PushOneMsgToUserReq) (*pb.PushOneMsgToUserRes, error) {
-	l.Logger.Infof("收到消息：fromUserId:%d^toUserId:%d^seq:%d^msg:%s", in.FromUserId, in.ToUserId, in.Seq, in.Msg)
+	cli, err := l.svcCtx.ClientManager.GetUserClient(12138, strconv.FormatInt(in.ToUserId, 10))
+	if err != nil {
+		return nil, err
+	}
+	err = cli.SendMsg([]byte(in.Msg))
+	if err != nil {
+		return nil, err
+	}
 	return &pb.PushOneMsgToUserRes{}, nil
 }

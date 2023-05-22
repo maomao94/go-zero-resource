@@ -174,7 +174,7 @@ func (manager *ClientManager) DelClients(client *Client) {
 	}
 }
 
-func (manager *ClientManager) GetUserClient(appId uint32, userId string) (client *Client) {
+func (manager *ClientManager) GetUserClient(appId uint32, userId string) (client *Client, err error) {
 	manager.UserLock.RLock()
 	defer manager.UserLock.RUnlock()
 	userKey := GetUserKey(appId, userId)
