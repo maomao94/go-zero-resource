@@ -19,7 +19,7 @@ https://www.apifox.cn/apidoc/shared-6c1c58fe-fc04-45f9-abac-a4b7b71bbc62/api-714
 ## 编译错误码
 protoc errcode.proto --go_out=.
 ## websocket 网关服务集成
-- 连接 ws://127.0.0.1:21005/webSocket
+- 连接 ws://127.0.0.1:21005/wsx
 - 登录
 ```json
 {
