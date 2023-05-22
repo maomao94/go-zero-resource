@@ -17,6 +17,7 @@ const (
 
 type Login struct {
 	Seq    string
+	Cmd    string
 	AppId  uint32
 	UserId string
 	Client *Client
@@ -106,6 +107,7 @@ func ProcessData(c *Client, message []byte) (err error) {
 		}
 		login := &Login{
 			Seq:    seq,
+			Cmd:    cmd,
 			AppId:  loginReq.AppId,
 			UserId: loginReq.UserId,
 			Client: c,

@@ -1,6 +1,7 @@
 package svc
 
 import (
+	"github.com/hehanpeng/go-zero-resource/common/ctxdata"
 	"github.com/hehanpeng/go-zero-resource/mgtw/internal/config"
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/core/threading"
@@ -104,6 +105,11 @@ func (manager *ClientManager) EventLogin(l *Login) {
 		manager.AddUsers(userKey, l.Client)
 	}
 	logx.Infof("eventLogin addr:%s^appId:%d^userId:%s", client.Addr, l.AppId, l.UserId)
+	resp := &ctxdata.WsResponse{
+		Seq: l.Seq,
+		Cmd: l.Cmd,
+	}
+	client.SendMsg([]byte(resp.String()))
 }
 
 func (manager *ClientManager) EventUnregister(client *Client) {
