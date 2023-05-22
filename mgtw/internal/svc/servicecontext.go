@@ -70,14 +70,17 @@ func (manager *ClientManager) StartListener() {
 	}
 }
 
-// 用户建立连接事件
 func (manager *ClientManager) EventRegister(client *Client) {
 	manager.AddClients(client)
 	logx.Infof("eventRegister addr:%s", client.Addr)
-	client.Send <- []byte("eventRegister")
 }
 
-// 添加客户端
+func (manager *ClientManager) PublishRegister(client *Client) {
+	threading.RunSafe(func() {
+		manager.Register <- client
+	})
+}
+
 func (manager *ClientManager) AddClients(client *Client) {
 	manager.ClientsLock.Lock()
 	defer manager.ClientsLock.Unlock()
@@ -92,6 +95,7 @@ func (manager *ClientManager) EventLogin(l *login) {
 		manager.AddUsers(userKey, l.Client)
 	}
 	logx.Infof("eventLogin addr:%s^appId:%d^userId:%s", client.Addr, l.AppId, l.UserId)
+	manager.Broadcast <- []byte("有用户登录了")
 }
 
 func (manager *ClientManager) EventUnregister(client *Client) {

@@ -29,6 +29,6 @@ func WsHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		threading.GoSafe(func() {
 			client.Write()
 		})
-		svcCtx.ClientManager.Register <- client
+		svcCtx.ClientManager.PublishRegister(client)
 	}
 }
