@@ -161,14 +161,14 @@ func (c *Client) SendSeqMsg(seq string, msg []byte) error {
 	logx.Infof("%s-sendMsg msg:%s^size:%d", seq, msg, len(msg))
 	var isSuccess bool
 	if c == nil {
-		return errors.New("client is nil")
+		return errors.New(fmt.Sprintf("%s-client is nil", seq))
 	}
 	threading.RunSafe(func() {
 		c.send <- msg
 		isSuccess = true
 	})
 	if !isSuccess {
-		return errors.New("send msg fail")
+		return errors.New(fmt.Sprintf("%s-sendMsg fail addr:%s^appId:%d^userId:%s", seq, c.Addr, c.AppId, c.UserId))
 	}
 	return nil
 }
