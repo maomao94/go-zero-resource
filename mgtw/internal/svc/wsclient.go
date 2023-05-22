@@ -131,7 +131,7 @@ func (c *Client) Write() {
 		}
 	}()
 	defer func() {
-		c.SvcCtx.ClientManager.Unregister <- c
+		c.SvcCtx.ClientManager.PublishUnregister(c)
 		c.socket.Close()
 		logx.Info("write socket close")
 	}()

@@ -122,6 +122,12 @@ func (manager *ClientManager) EventUnregister(client *Client) {
 
 }
 
+func (manager *ClientManager) PublishUnregister(client *Client) {
+	threading.RunSafe(func() {
+		manager.Unregister <- client
+	})
+}
+
 func (manager *ClientManager) GetClientsLen() (clientsLen int) {
 	clientsLen = len(manager.Clients)
 	return
