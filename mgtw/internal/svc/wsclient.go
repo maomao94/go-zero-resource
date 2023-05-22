@@ -87,7 +87,7 @@ func (c *Client) Read() {
 }
 
 func ProcessData(c *Client, message []byte) (err error) {
-	logx.Infof("ProcessData: len(message):%d", len(message))
+	logx.Infof("ProcessData: len(message)=%d", len(message))
 	ws := &ctxdata.WsRequest{}
 	err = mapping.UnmarshalYamlBytes(message, ws)
 	if err != nil {
@@ -111,8 +111,10 @@ func ProcessData(c *Client, message []byte) (err error) {
 			Client: c,
 		}
 		c.SvcCtx.ClientManager.PublishLogin(login)
+	default:
+		logx.Errorf("cmd not found:%s", cmd)
 	}
-	return errors.New("cmd not found")
+	return
 }
 
 // 向客户端写数据
