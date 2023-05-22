@@ -110,7 +110,7 @@ func ProcessData(c *Client, message []byte) (err error) {
 	}
 	seq := ws.Seq
 	cmd := ws.Cmd
-	logx.Infof("%s-ProcessData: message:%s^size:%d", seq, ws.String(), len(message))
+	logx.Infof("%s-ProcessData message:%s^size:%d", seq, ws.String(), len(message))
 
 	switch cmd {
 	case "login":
