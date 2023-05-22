@@ -59,7 +59,7 @@ func NewClientCtx(svcCtx *ServiceContext, addr string, socket *websocket.Conn, f
 }
 
 func (c *Client) Login(seq string, appId uint32, userId string, loginTime uint64) {
-	logx.Infof("%s-Login: appId:%d^userId:%s^loginTime:%d", seq, appId, userId, loginTime)
+	logx.Infof("%s-login: appId:%d^userId:%s^loginTime:%d", seq, appId, userId, loginTime)
 	c.AppId = appId
 	c.UserId = userId
 	c.LoginTime = loginTime
@@ -110,7 +110,7 @@ func ProcessData(c *Client, message []byte) (err error) {
 	}
 	seq := ws.Seq
 	cmd := ws.Cmd
-	logx.Infof("%s-ProcessData message:%s^size:%d", seq, ws.String(), len(message))
+	logx.Infof("%s-processData message:%s^size:%d", seq, ws.String(), len(message))
 
 	switch cmd {
 	case "login":
