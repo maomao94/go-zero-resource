@@ -181,6 +181,7 @@ func (manager *ClientManager) GetUserClient(appId uint32, userId string) (client
 	userKey := GetUserKey(appId, userId)
 	if value, ok := manager.Users[userKey]; ok {
 		client = value
+		return client, nil
 	}
 	return client, errors.New("ws client not found")
 }
