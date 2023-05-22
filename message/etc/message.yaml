@@ -12,14 +12,14 @@ Telemetry:
   #  Sampler: 1.0
   Batcher: jaeger
 MGtwRpcConf:
-#  Endpoints:
-#    - 127.0.0.1:1005
+  Endpoints:
+    - 127.0.0.1:1005
   NonBlock: true
   Timeout: 3000
-  Etcd:
-    Hosts:
-      - 127.0.0.1:2379
-    Key: mgtw.rpc
+#  Etcd:
+#    Hosts:
+#      - 127.0.0.1:2379
+#    Key: mgtw.rpc
 Kafka:
   Name: kafkaTest
   Brokers:

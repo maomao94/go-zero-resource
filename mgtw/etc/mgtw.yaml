@@ -1,9 +1,9 @@
 Name: mgtw.rpc
 ListenOn: 0.0.0.0:1005
-Etcd:
-  Hosts:
-  - 127.0.0.1:2379
-  Key: mgtw.rpc
+#Etcd:
+#  Hosts:
+#  - 127.0.0.1:2379
+#  Key: mgtw.rpc
 #链路追踪
 Telemetry:
   Name: mgtw
