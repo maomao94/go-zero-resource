@@ -6,6 +6,7 @@ import (
 	"github.com/hehanpeng/go-zero-resource/mgtw/mgtw"
 	"github.com/zeromicro/go-queue/kq"
 	"github.com/zeromicro/go-zero/core/discov"
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/zrpc"
 	"log"
 	"math/rand"
@@ -95,6 +96,7 @@ func (p *PubContainer) getConn4Etcd(c zrpc.RpcClientConf) error {
 		for _, val := range remove {
 			delete(p.PubMap, val)
 		}
+		logx.Info("update len(pubMap)=%d", len(p.PubMap))
 		p.lock.Unlock()
 	}
 	sub.AddListener(update)
