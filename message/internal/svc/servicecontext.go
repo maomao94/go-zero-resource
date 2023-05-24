@@ -96,7 +96,7 @@ func (p *PubContainer) getConn4Etcd(c zrpc.RpcClientConf) error {
 		for _, val := range remove {
 			delete(p.PubMap, val)
 		}
-		logx.Info("update len(pubMap)=%d", len(p.PubMap))
+		logx.Infof("update len(pubMap)=%d", len(p.PubMap))
 		p.lock.Unlock()
 	}
 	sub.AddListener(update)
