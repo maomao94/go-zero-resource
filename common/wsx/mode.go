@@ -3,9 +3,9 @@ package wsx
 import "encoding/json"
 
 type WsRequest struct {
-	Seq  string `json:"seq"`
-	Cmd  string `json:"cmd"`
-	Data any    `json:"data,omitempty"`
+	Seq  string         `json:"seq"`
+	Cmd  string         `json:"cmd"`
+	Data map[string]any `json:"data,omitempty"`
 }
 
 func (h *WsRequest) String() (str string) {
@@ -27,9 +27,9 @@ func (h *WsResponse) String() (str string) {
 }
 
 type Response struct {
-	Code uint32 `json:"code"`
-	Msg  string `json:"msg"`
-	Data any    `json:"data"`
+	Code uint32         `json:"code"`
+	Msg  string         `json:"msg"`
+	Data map[string]any `json:"data"`
 }
 
 type LoginReq struct {
