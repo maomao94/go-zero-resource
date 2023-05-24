@@ -106,7 +106,7 @@ func (manager *ClientManager) EventLogin(l *Login) {
 		Response: &wsx.Response{
 			Code: 0,
 			Msg:  "登录成功",
-			Data: map[string]any{},
+			Data: new(any),
 		},
 	}
 	client.SendSeqMsg(l.Seq, []byte(resp.String()))

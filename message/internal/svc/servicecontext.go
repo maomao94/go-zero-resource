@@ -71,7 +71,7 @@ func (p *PubContainer) getConn4Etcd(c zrpc.RpcClientConf) error {
 		var add []string
 		var remove []string
 		p.lock.Lock()
-		m := make(map[string]any)
+		m := make(map[string]bool)
 		for _, val := range subset(sub.Values(), subsetSize) {
 			m[val] = true
 		}
