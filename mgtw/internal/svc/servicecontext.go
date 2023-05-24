@@ -100,13 +100,14 @@ func (manager *ClientManager) EventLogin(l *Login) {
 		manager.AddUsers(userKey, l.Client)
 	}
 	logx.Infof("%s-eventLogin addr:%s^appId:%d^userId:%s", l.Seq, client.Addr, l.AppId, l.UserId)
+	data := make(map[string]any)
 	resp := &wsx.WsResponse{
 		Seq: l.Seq,
 		Cmd: l.Cmd,
 		Response: &wsx.Response{
 			Code: 0,
 			Msg:  "登录成功",
-			Data: map[string]any{},
+			Data: data,
 		},
 	}
 	client.SendSeqMsg(l.Seq, []byte(resp.String()))
