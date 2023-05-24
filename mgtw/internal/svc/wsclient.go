@@ -1,6 +1,7 @@
 package svc
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/gorilla/websocket"
@@ -104,7 +105,8 @@ func (c *Client) Read() {
 func ProcessData(c *Client, message []byte) (err error) {
 	currentTime := uint64(time.Now().Unix())
 	ws := &wsx.WsRequest{}
-	err = mapping.UnmarshalYamlBytes(message, ws)
+	err = mapping.UnmarshalJsonBytes(message, ws)
+	err = json.Unmarshal(message, ws)
 	if err != nil {
 		return
 	}
@@ -114,20 +116,25 @@ func ProcessData(c *Client, message []byte) (err error) {
 
 	switch cmd {
 	case "login":
-		loginReq := &wsx.LoginReq{}
-		err = mapping.UnmarshalJsonMap(ws.Data, loginReq)
-		if err != nil {
-			return
+		data, ok := ws.Data.(map[string]any)
+		if ok {
+			loginReq := &wsx.LoginReq{}
+			err = mapping.UnmarshalJsonMap(data, loginReq)
+			if err != nil {
+				return
+			}
+			c.Login(seq, loginReq.AppId, loginReq.UserId, currentTime)
+			login := &Login{
+				Seq:    seq,
+				Cmd:    cmd,
+				AppId:  loginReq.AppId,
+				UserId: loginReq.UserId,
+				Client: c,
+			}
+			c.SvcCtx.ClientManager.PublishLogin(login)
+		} else {
+			logx.Errorf("%s-login data error", seq)
 		}
-		c.Login(seq, loginReq.AppId, loginReq.UserId, currentTime)
-		login := &Login{
-			Seq:    seq,
-			Cmd:    cmd,
-			AppId:  loginReq.AppId,
-			UserId: loginReq.UserId,
-			Client: c,
-		}
-		c.SvcCtx.ClientManager.PublishLogin(login)
 	default:
 		logx.Errorf("%s-cmd not found:%s", seq, cmd)
 	}

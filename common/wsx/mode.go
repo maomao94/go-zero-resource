@@ -3,9 +3,9 @@ package wsx
 import "encoding/json"
 
 type WsRequest struct {
-	Seq  string         `json:"seq"`
-	Cmd  string         `json:"cmd"`
-	Data map[string]any `json:"data,omitempty"`
+	Seq  string `json:"seq"`
+	Cmd  string `json:"cmd"`
+	Data any    `json:"data,omitempty"`
 }
 
 func (h *WsRequest) String() (str string) {
