@@ -42,7 +42,7 @@ func NewClientManager() (m *ClientManager) {
 		Broadcast:  make(chan []byte, 1000),
 	}
 	threading.GoSafe(func() {
-		logx.Info("start webSocket listener")
+		logx.Info("start websocket listener")
 		m.StartListener()
 	})
 	return

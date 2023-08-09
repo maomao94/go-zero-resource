@@ -20,7 +20,7 @@ func WsHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		}
-		logx.WithContext(r.Context()).Infof("webSocket 建立连接: %s", conn.RemoteAddr().String())
+		logx.WithContext(r.Context()).Infof("websocket 建立连接: %s", conn.RemoteAddr().String())
 		currentTime := uint64(time.Now().Unix())
 		client := svc.NewClientCtx(svcCtx, conn.RemoteAddr().String(), conn, currentTime)
 		threading.GoSafe(func() {
