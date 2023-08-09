@@ -23,12 +23,20 @@ protoc errcode.proto --go_out=.
 - 登录
 ```json
 {
-    "seq": "12222",
-    "cmd": "login",
-    "data":{
-        "token":"aaaaa",
-        "appId": 12138,
-        "userId": "10001"
-     }
+  "seq": "12222",
+  "cmd": "login",
+  "data":{
+    "token":"aaaaa",
+    "appId": 12138,
+    "userId": "10001"
+  }
+}
+```
+- 发送 POST http://127.0.0.1:1001/gtw/message/v1/sendOneMsgToUser
+```json
+{
+  "fromUserId": "12138",
+  "toUserId": "10001",
+  "msg": "测试websocket消息"
 }
 ```
